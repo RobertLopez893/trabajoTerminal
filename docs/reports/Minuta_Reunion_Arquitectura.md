@@ -44,9 +44,9 @@ Para evitar cuellos de botella (el "Bus Factor") y asegurar que el proyecto fluy
 
 ## 4. Notas sobre la Base de Datos y Seguridad
 
-Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma excelente el cifrado (`iv_nonce`, `tag`) y la arquitectura Append-Only. Se mantiene la seguridad de grado industrial con estas optimizaciones:
-1.  **Application-Layer Encryption (ALE):** Implementaremos un cifrado AES-GCM desde Godot hacia FastAPI, protegiendo los mensajes en tránsito incluso ante proxies inversos.
-2.  **Firmas ECDSA y Refactorización de BD:** Se eliminaron las columnas de `ecdsa_signature` de la base de datos. La firma no se guardará en tablas; en su lugar, el servidor usará una llave estática del `.env` para firmar los *Tokens de Sesión (JWT)* en memoria.
+Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma excelente el cifrado (`iv_nonce`, `tag`) y la arquitectura Append-Only. Se generó el documento **Servicios de Seguridad V3.md** con las siguientes optimizaciones de grado industrial:
+1.  **Application-Layer Encryption (ALE):** Implementaremos un cifrado AES-GCM desde Godot hacia FastAPI, usando un protocolo idéntico al Handshake de TLS 1.3 con intercambio de llaves **ECDHE (X25519)** para asegurar Perfect Forward Secrecy.
+2.  **Firmas EdDSA y Refactorización de BD:** Se eliminaron las columnas de `ecdsa_signature` de la base de datos. La firma no se guardará en tablas; en su lugar, el servidor usará la curva más avanzada de la industria **Twisted Edwards (Ed25519)** desde el `.env` para firmar los *Tokens de Sesión (JWT)* en memoria.
 
 ## 5. Próximos Pasos (Siguientes 2 Semanas)
 1.  **Silvia:** Iniciar experimentación de entrenamiento del modelo.
