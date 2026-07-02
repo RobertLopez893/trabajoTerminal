@@ -48,7 +48,12 @@ Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma
 1.  **Application-Layer Encryption (ALE):** Implementaremos un cifrado AES-GCM desde Godot hacia FastAPI, usando un protocolo idéntico al Handshake de TLS 1.3 con intercambio de llaves **ECDHE (X25519)** para asegurar Perfect Forward Secrecy.
 2.  **Firmas EdDSA y Refactorización de BD:** Se eliminaron las columnas de `ecdsa_signature` de la base de datos. La firma no se guardará en tablas; en su lugar, el servidor usará la curva más avanzada de la industria **Twisted Edwards (Ed25519)** desde el `.env` para firmar los *Tokens de Sesión (JWT)* en memoria.
 
-## 5. Próximos Pasos (Siguientes 2 Semanas)
+## 5. Puntos Adicionales a Discutir en la Reunión
+1.  **Zero Knowledge Machine Learning (ZKML) vs Aviso de Privacidad:** Debatir el enfoque de privacidad. Elegir entre implementar ZKML (sacrificando transparencia vía aviso de privacidad) o redactar un aviso de privacidad explícito (aceptando que los atacantes sabrán que están siendo analizados).
+2.  **Enfoque y Paradigma de Programación:** Definir el paradigma a utilizar, ya que esto influirá directamente en la decisión final de migrar el frontend (Kotlin vs Godot vs Dart/Flutter).
+3.  **Estado del Modelo de IA:** Considerar un posible cambio de modelo base y revisar exhaustivamente el estatus actual del corpus.
+
+## 6. Próximos Pasos (Siguientes 2 Semanas)
 1.  **Silvia:** Iniciar experimentación de entrenamiento del modelo.
 2.  **Eduardo y Moy:** Levantar el *Hola Mundo* de FastAPI y conectarlo a una base de datos local en PostgreSQL.
 3.  **López:** Inicializar la estructura base del proyecto Godot y crear los scripts (Pruebas de Concepto) de Criptografía en Python para asegurar la viabilidad matemática.
