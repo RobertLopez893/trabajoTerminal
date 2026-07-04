@@ -49,7 +49,11 @@ Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma
 2.  **Firmas EdDSA y Refactorización de BD:** Se eliminaron las columnas de `ecdsa_signature` de la base de datos. La firma no se guardará en tablas; en su lugar, el servidor usará la curva más avanzada de la industria **Twisted Edwards (Ed25519)** desde el `.env` para firmar los *Tokens de Sesión (JWT)* en memoria.
 
 ## 5. Puntos Adicionales a Discutir en la Reunión
-1.  **Zero Knowledge Machine Learning (ZKML) vs Aviso de Privacidad:** Debatir el enfoque de privacidad. Elegir entre implementar ZKML (sacrificando transparencia vía aviso de privacidad) o redactar un aviso de privacidad explícito (aceptando que los atacantes sabrán que están siendo analizados).
+1.  **Enfoque de Privacidad (ZKML + Cifrado Híbrido):** Presentar la propuesta de combinar ZKML con un "sobre criptográfico" para manejar las evidencias de forma ciega:
+    *   *Generación de evidencia:* El entorno de inferencia detecta grooming y cifra simétricamente la conversación (AES-256-GCM).
+    *   *Protección de llave:* La clave simétrica temporal se cifra asimétricamente usando la llave pública exclusiva del módulo de administradores (ej. curva elíptica).
+    *   *Almacenamiento ciego:* La BD guarda la prueba ZKML, el texto cifrado y la llave cifrada. Ante cualquier filtración de la BD, la privacidad de los menores queda intacta.
+    *   *Resolución de apelación:* Solo el administrador, al usar su llave privada, desencripta la clave simétrica para revelar la conversación y emitir un veredicto.
 2.  **Enfoque y Paradigma de Programación:** Definir el paradigma a utilizar, ya que esto influirá directamente en la decisión final de migrar el frontend (Kotlin vs Godot vs Dart/Flutter).
 3.  **Estado del Modelo de IA:** Considerar un posible cambio de modelo base y revisar exhaustivamente el estatus actual del corpus.
 
