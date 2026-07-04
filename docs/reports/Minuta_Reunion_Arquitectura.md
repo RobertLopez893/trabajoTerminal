@@ -38,7 +38,7 @@ Para evitar cuellos de botella (el "Bus Factor") y asegurar que el proyecto fluy
 | **Silvia** | Líder de Inteligencia Artificial | 100% dedicada al modelo PLN: limpieza del corpus, preprocesamiento, fine-tuning de BERT y pruebas del modelo. |
 | **Eduardo** | Líder de Backend | Creación de la API en FastAPI, gestión de endpoints (login, registro) y levantamiento del servidor de WebSockets para el chat. |
 | **Moy** | Base de Datos y Diseño UI/UX | Estructurar PostgreSQL. Proveer **todos los assets visuales** (botones, sprites, mapas) para el frontend. Apoyo en lógica de backend. |
-| **López** | Líder de Frontend y Criptografía | Construir la app interactiva en Godot (ensamblando los assets de Moy). Programar el núcleo de seguridad matemática (AES-GCM, TLS, Argon2). |
+| **Roberto** | Líder de Frontend y Criptografía | Construir la app interactiva en Godot (ensamblando los assets de Moy). Programar el núcleo de seguridad matemática (AES-GCM, TLS, Argon2). |
 
 ---
 
@@ -60,4 +60,4 @@ Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma
 ## 6. Próximos Pasos (Siguientes 2 Semanas)
 1.  **Silvia:** Iniciar experimentación de entrenamiento del modelo.
 2.  **Eduardo y Moy:** Levantar el *Hola Mundo* de FastAPI y conectarlo a una base de datos local en PostgreSQL.
-3.  **López:** Inicializar la estructura base del proyecto Godot y crear los scripts (Pruebas de Concepto) de Criptografía en Python para asegurar la viabilidad matemática.
+3.  **Roberto:** Inicializar la estructura base del proyecto Godot y crear los scripts (Pruebas de Concepto) de Criptografía en Python para asegurar la viabilidad matemática.
