@@ -54,7 +54,7 @@ Se validó el diseño de la base de datos (`bd_v2.sql`), que implementa de forma
     *   *Protección de llave:* La clave simétrica temporal se cifra asimétricamente usando la llave pública exclusiva del módulo de administradores (ej. curva elíptica).
     *   *Almacenamiento ciego:* La BD guarda la prueba ZKML, el texto cifrado y la llave cifrada. Ante cualquier filtración de la BD, la privacidad de los menores queda intacta.
     *   *Resolución de apelación:* Solo el administrador, al usar su llave privada, desencripta la clave simétrica para revelar la conversación y emitir un veredicto.
-2.  **Enfoque y Paradigma de Programación:** Definir el paradigma a utilizar, ya que esto influirá directamente en la decisión final de migrar el frontend (Kotlin vs Godot vs Dart/Flutter).
+2.  **Enfoque y Paradigma de Programación:** Definir el paradigma a utilizar, ya que esto influirá directamente en la decisión final de migrar el frontend (Kotlin vs Godot vs Dart/Flutter vs Android NDK C++).
 3.  **Estado del Modelo de IA:** Considerar un posible cambio de modelo base y revisar exhaustivamente el estatus actual del corpus.
 
 ## 6. Próximos Pasos (Siguientes 2 Semanas)
