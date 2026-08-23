@@ -78,7 +78,7 @@ Este proyecto es desarrollado como parte de la titulación en Ingeniería en Sis
 
 Actualmente, el proyecto se encuentra en desarrollo bajo la normativa **ISO/IEC 12207**, dividido en fases (TT1 y TT2):
 - [x] **Iteración 0:** Formulación y Análisis (Actual).
-- [ ] **Iteración 1:** Entrenamiento del modelo NLP y diseño.
+- [x] **Iteración 1:** Entrenamiento del modelo NLP y diseño.
 - [ ] **Iteración 2:** Módulos de Registro y Login.
 - [ ] **Iteración 3:** Chat y Minijuegos.
 - [ ] **Iteración 4:** Integración y Pruebas.
