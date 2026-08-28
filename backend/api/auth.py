@@ -7,8 +7,7 @@ from backend.database.db import get_db
 from security.aes.aes_gcm import AESGCMCipher
 from security.argon2.argon_hasher import ArgonHasher
 
-aes_cipher = AESGCMCipher(
-    hex_key="00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff")  # Clave mock, usar .env
+aes_cipher = AESGCMCipher()  # Utiliza la llave AES_MASTER_KEY del archivo .env
 argon_hasher = ArgonHasher()
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
