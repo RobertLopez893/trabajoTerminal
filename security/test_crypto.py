@@ -1,12 +1,12 @@
 import os
 import sys
+from security.aes.aes_gcm import AESGCMCipher
+from security.argon2.argon_hasher import ArgonHasher
+from security.eddsa.eddsa_signer import EdDSASigner
 
 # Agregar la raíz del proyecto al sys.path para importar correctamente
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from security.aes.aes_gcm import AESGCMCipher
-from security.argon2.argon_hasher import ArgonHasher
-from security.eddsa.eddsa_signer import EdDSASigner
 
 def run_tests():
     print("=== INICIANDO PRUEBAS DEL MOTOR CRIPTOGRÁFICO ===\n")
@@ -68,6 +68,7 @@ def run_tests():
     print("    [OK] Firma rechazada al alterar los datos del payload.\n")
 
     print("=== TODAS LAS PRUEBAS CRIPTOGRÁFICAS PASARON CON ÉXITO ===")
+
 
 if __name__ == "__main__":
     run_tests()

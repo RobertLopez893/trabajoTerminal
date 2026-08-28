@@ -5,28 +5,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-class AESGCMCipher:
-    """
-    Motor criptográfico para cifrado simétrico AES-256-GCM.
-    Se utiliza para el cifrado Application-Layer Encryption (ALE) y 
-    para proteger información sensible en reposo (ej. teléfonos).
-    """
 
+class AESGCMCipher:
     def __init__(self, hex_key: str = None):
         # Si no se provee llave, lee del .env
         key_str = hex_key or os.getenv("AES_MASTER_KEY")
         if not key_str:
             raise ValueError("No se encontró la llave maestra AES_MASTER_KEY")
         
-        # La llave debe ser de 32 bytes (64 caracteres hex) para AES-256
+        # La llave debe ser de 32 bytes
         self.key = bytes.fromhex(key_str)
         self.aesgcm = AESGCM(self.key)
 
     def encrypt(self, plaintext: str) -> dict:
-        """
-        Cifra un texto plano y retorna un diccionario con el 
-        texto cifrado, el nonce y el tag de autenticación.
-        """
         # Generar un Nonce criptográficamente seguro de 12 bytes
         nonce = os.urandom(12)
         
@@ -45,10 +36,6 @@ class AESGCMCipher:
         }
 
     def decrypt(self, ciphertext_b64: str, nonce_b64: str, tag_b64: str) -> str:
-        """
-        Descifra usando el texto cifrado, el nonce y el tag.
-        Lanza excepción si el tag de autenticación no coincide (integridad comprometida).
-        """
         ciphertext = base64.b64decode(ciphertext_b64)
         nonce = base64.b64decode(nonce_b64)
         tag = base64.b64decode(tag_b64)
