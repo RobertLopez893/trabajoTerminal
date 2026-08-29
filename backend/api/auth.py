@@ -48,7 +48,7 @@ def send_sms_code(req: schemas.SmsSendRequest, db: Session = Depends(get_db)):
 
 @router.post("/registro-final", response_model=schemas.DefaultResponse)
 def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_db)):
-    # 1. Validaciones
+    # Validaciones
     if not is_password_strong(req.password):
         raise HTTPException(status_code=400, detail="La contraseña no cumple con los requisitos de seguridad.")
 
@@ -84,7 +84,7 @@ def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_
     db.add(new_user)
     db.commit()
 
-    # 4. Guardar Avatar
+    # Guardar Avatar
     new_avatar = models.Avatar(
         id=str(uuid.uuid4()),
         usuario_id=new_user_id,
