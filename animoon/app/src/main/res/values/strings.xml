@@ -1,3 +1,88 @@
 <resources>
-    <string name="app_name">animoon</string>
+
+    <string name="app_name">ANIMOON</string>
+
+    <!-- Login -->
+
+    <string name="login_title">Inicia sesión 🌙</string>
+
+    <string name="welcome_back">
+        ¡Bienvenido de regreso, explorador!
+    </string>
+
+    <string name="child_alias">
+        Apelativo del niño
+    </string>
+
+    <string name="password">
+        Contraseña
+    </string>
+
+    <string name="forgot_password">
+        ¿Olvidaste tu contraseña?
+    </string>
+
+    <string name="login_button">
+        🚀 Entrar a ANIMOON
+    </string>
+
+    <string name="no_account">
+        ¿No tienes cuenta?
+    </string>
+
+    <string name="create_account">
+        Crear cuenta nueva
+    </string>
+
+
+    <!-- Registro -->
+
+    <string name="register_title">
+        Registro del tutor
+    </string>
+
+    <string name="register_subtitle">
+        El tutor crea la cuenta para proteger al menor
+    </string>
+
+    <string name="register_secure">
+        Registro seguro
+    </string>
+
+    <string name="step_data">
+        1  Datos del tutor
+    </string>
+
+    <string name="step_sms">
+        2  Verificación SMS
+    </string>
+
+    <string name="step_avatar">
+        3  Avatar del niño
+    </string>
+
+    <string name="data_protected">
+        🔒 Tus datos están protegidos. Solo se usan para validar la cuenta y enviar alertas.
+    </string>
+
+    <string name="tutor_phone">
+        Teléfono del tutor
+    </string>
+
+    <string name="confirm_password">
+        Confirmar contraseña
+    </string>
+
+    <string name="terms_text">
+        Acepto los Términos de uso y el Aviso de Privacidad. Confirmo que soy el tutor del menor.
+    </string>
+
+    <string name="cancel">
+        Cancelar
+    </string>
+
+    <string name="send_sms">
+        Enviar código SMS →
+    </string>
+
 </resources>
