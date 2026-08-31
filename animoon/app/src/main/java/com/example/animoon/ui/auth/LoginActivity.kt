@@ -9,6 +9,12 @@ import com.example.animoon.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import android.util.Log
+
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,14 +46,34 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            /*
-             * Más adelante aquí llamaremos al backend
-             */
-            Toast.makeText(
-                this,
-                "Inicio de sesión listo para conectar al backend",
-                Toast.LENGTH_SHORT
-            ).show()
+            btnLogin.isEnabled = false
+
+            // Estructura lista para cuando el backend tenga endpoint de login
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    // TODO: val request = LoginRequest(apelativo, password)
+                    // TODO: val response = ApiClient.authService.login(request)
+                    
+                    withContext(Dispatchers.Main) {
+                        btnLogin.isEnabled = true
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Función de login conectada a corrutinas. Falta endpoint.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        btnLogin.isEnabled = true
+                        Log.e("LoginActivity", "Error de red", e)
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Error de conexión",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
         btnCreateAccount.setOnClickListener {

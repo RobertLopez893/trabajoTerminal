@@ -8,6 +8,13 @@ import com.example.animoon.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
+import androidx.lifecycle.lifecycleScope
+import com.example.animoon.data.network.ApiClient
+import com.example.animoon.data.model.FinalRegisterRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,19 +118,54 @@ class RegisterActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            /*
-             * Más adelante:
-             *
-             * 1. Enviaremos los datos al backend.
-             * 2. El backend solicitará el SMS.
-             * 3. Navegaremos a la pantalla de verificación.
-             */
+            // Deshabilitamos el botón mientras carga
+            btnSendSms.isEnabled = false
 
-            Toast.makeText(
-                this,
-                "Formulario listo para conectar al backend",
-                Toast.LENGTH_SHORT
-            ).show()
+            // Llamada asíncrona a la API
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    // Por ahora mockeamos los datos que faltan en la UI (código y avatar)
+                    val request = FinalRegisterRequest(
+                        nickname = apelativo,
+                        telefono = phone,
+                        codigo_verificacion = "123456", // Simulado
+                        password = password,
+                        avatar_especie = "gato", // Simulado
+                        avatar_color = "naranja" // Simulado
+                    )
+
+                    val response = ApiClient.authService.finalRegister(request)
+
+                    withContext(Dispatchers.Main) {
+                        btnSendSms.isEnabled = true
+                        if (response.isSuccessful) {
+                            val body = response.body()
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "¡Éxito! ${body?.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            // Regresar al Login
+                            finish()
+                        } else {
+                            Toast.makeText(
+                                this@RegisterActivity,
+                                "Error del servidor: ${response.code()}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        btnSendSms.isEnabled = true
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "Error de red: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
         }
     }
 }

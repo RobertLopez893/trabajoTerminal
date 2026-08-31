@@ -73,6 +73,46 @@ Nuestra innovación central es un **guardián inteligente**: un modelo de **Proc
 
 ---
 
+## 🚀 Guía de Ejecución (Frontend y Backend)
+
+Para probar la comunicación entre la aplicación móvil (Frontend) y nuestro servidor de autenticación/IA (Backend), sigue estos pasos:
+
+### 1. Levantar el Backend (Servidor)
+El backend está "dockerizado" para evitar problemas de instalación. 
+1. Asegúrate de tener Docker instalado y abierto.
+2. Abre una terminal en la raíz del proyecto y ejecuta:
+   ```bash
+   docker-compose up -d --build
+   ```
+3. Esto levantará la API de FastAPI (puerto `8000`) y la base de datos PostgreSQL de forma automática.
+
+### 2. Configurar la App de Android (Frontend)
+La app necesita saber a qué dirección IP comunicarse. Para evitar conflictos de código en Git, la IP se configura de forma local en tu computadora:
+
+1. Abre el archivo `animoon/local.properties`.
+2. Agrega la variable `API_BASE_URL` dependiendo de dónde vayas a probar:
+
+**Opción A: Probar en el Emulador de Android Studio**
+El emulador usa una IP especial para "ver" el localhost de tu computadora.
+```properties
+API_BASE_URL=http://10.0.2.2:8000/
+```
+
+**Opción B: Probar en un Celular Físico o Tableta**
+Tu dispositivo móvil y tu computadora deben estar en la **misma red Wi-Fi**.
+1. Abre una consola y averigua la dirección IPv4 de tu computadora (usando el comando `ipconfig` en Windows). Ejemplo: `192.168.1.50`.
+2. Pon esa IP exacta en tu archivo `local.properties`:
+```properties
+API_BASE_URL=http://192.168.1.50:8000/
+```
+> ⚠️ **Atención:** En Windows, el Firewall de Defender suele bloquear las peticiones por defecto. Si pruebas en físico y marca error de red, desactiva temporalmente el firewall privado o añade una regla de entrada para el puerto `8000`.
+
+### 3. Sincronizar y Correr
+1. En Android Studio, da clic en **Sync Project with Gradle Files** (el ícono del elefante 🐘).
+2. Selecciona tu emulador o tu celular físico y dale clic a Play (▶️) para instalar la app.
+
+---
+
 ## 📈 Ruta de Desarrollo
 
 Construyendo el futuro paso a paso bajo la normativa **ISO/IEC 12207**:

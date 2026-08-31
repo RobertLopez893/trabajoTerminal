@@ -1,11 +1,11 @@
 import sys
 import os
-from backend.database import models, models_auditoria
-from backend.database.db import engine, engine_auditoria
 
 # Agregar la raíz del proyecto
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from backend.database import models, models_auditoria
+from backend.database.db import engine, engine_auditoria
 
 def init_db():
     print("=== INICIALIZANDO TABLAS EN LA BASE DE DATOS ===")
