@@ -6,7 +6,7 @@ import sys
 import websockets
 
 # Agregar la raíz del proyecto al sys.path para importar correctamente el motor criptográfico
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from security.aes.aes_gcm import AESGCMCipher
 
 # Inicializar el cifrador AES-GCM
