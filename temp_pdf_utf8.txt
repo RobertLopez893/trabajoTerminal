@@ -1,0 +1,82 @@
+﻿Servicios de Seguridad 
+Confidencialidad: Garantizar que la informaci¾n solo sea accesible para las 
+personas autorizadas. 
+ò Los mensajes del chat no pueden ser leÝdos por atacantes.  
+ò Las contrase±as no deben ser legibles para nadie. 
+ò Los n·meros telef¾nicos de los tutores no deben ser legibles para nadie con 
+acceso directo a la base de datos. 
+ò Consola de Administraci¾n: Restricci¾n estricta de acceso mediante 
+Control de Acceso Basado en Roles (RBAC), garantizando que solo el 
+personal autorizado pueda visualizar las apelaciones y los datos sensibles 
+vinculados a las infracciones. 
+ò Datos en Trßnsito: Cifrado SimÚtrico AES en el m¾dulo de Chat (Backend), 
+estableciendo el canal seguro y el acuerdo de claves mediante ECDHE 
+(Elliptic-Curve Diffie-Hellman Ephemeral) para garantizar el Perfect Forward 
+Secrecy (Secreto Hacia Adelante). 
+ò Datos en Reposo: Funci¾n de derivaci¾n de claves Argon2 (Hashing) en el 
+m¾dulo de Registro (Base de Datos). Adicionalmente, uso de Cifrado 
+SimÚtrico AES en modo GCM para cifrar el n·mero telef¾nico del tutor en la 
+base de datos operacional. 
+Autenticaci¾n: Verificar las identidades de cada usuario que interact·a con el 
+sistema. 
+ò Comprobar que el inicio de sesi¾n es del due±o legÝtimo de la cuenta. 
+ò Validar que existe un tutor respaldando la cuenta mediante su n·mero 
+telef¾nico. 
+ò Usuarios: Verificaci¾n criptogrßfico con comparaci¾n con el Hash Argon2 en 
+el m¾dulo de Inicio de Sesi¾n. 
+ò Tutores: Token de Verificaci¾n (OTP) enviado por SMS para el m¾dulo de 
+Registro (Backend), firmado digitalmente usando ECDSA (Elliptic Curve 
+Digital 
+Signature 
+Algorithm) 
+para 
+garantizar 
+la 
+autenticidad 
+del 
+consentimiento y evitar falsificaciones. 
+ò Administradores: Implementaci¾n de niveles de autenticaci¾n superiores 
+para el acceso a la consola de apelaciones, requiriendo un segundo factor 
+de autenticaci¾n estßtico (PIN maestro de seguridad) validado directamente 
+contra las variables de entorno del servidor. 
+Integridad: Asegurar que la informaci¾n no sea modificada, destruida o alterada de 
+forma no autorizada durante su almacenamiento o transmisi¾n. 
+ò Los mensajes deben ser los mismos que recibe el modelo BERT y el usuario 
+remitente. 
+ò Los registros de la auditorÝa no deben ser alterados para evitar pÚrdida de 
+evidencia. 
+ò Mensajes: Modo de operaci¾n GCM (Galois/Counter Mode) con AES en el 
+m¾dulo de Chat (Modelo PLN). 
+ò Evidencia: Arquitectura de base de datos Append-Only (solo inserci¾n) y 
+cifrado en reposo en la Base de Datos (Bitßcora de Logs). 
+ò TelÚfonos: Verificaci¾n de la Etiqueta de Autenticaci¾n (Tag) generada por 
+AES-GCM al momento de descifrar el n·mero en memoria, garantizando que 
+el dato no fue alterado maliciosamente en la base de datos. 
+ò Revisi¾n de Apelaciones: Verificaci¾n en memoria de la Etiqueta de 
+Autenticaci¾n (Tag) de los mensajes almacenados en el bloque de anßlisis, 
+garantizando que el registro presentado al administrador es una copia 
+criptogrßficamente exacta e inalterada de los logs originales. 
+No Repudio: Proveer evidencia de una acci¾n o evento especÝfico fue realizado por 
+una entidad especÝfica. 
+ò Sistema de auditorÝa de logs para el guardado de mensajes de alerta. 
+ò Generaci¾n de Logs transaccionales inyectando la informaci¾n adecuada 
+(ID, Timestamp, mensaje) en el m¾dulo de Chat (Motor de AuditorÝas). 
+ò Acciones Administrativas: Generaci¾n de logs de auditorÝa en la 
+arquitectura Append-Only para cada resoluci¾n de apelaci¾n, inyectando la 
+decisi¾n tomada, las notas internas de justificaci¾n, el identificador del 
+administrador responsable y la marca de tiempo exacta. 
+Privacidad: Recolectar, procesar y almacenar datos necesarios sin comprometer la 
+identidad de los usuarios vulnerables (ni±os). 
+ò No pedir nombres reales, edades o ubicaciones. El ·nico dato externo es el 
+n·mero telef¾nico del tutor. 
+ò 
+Aplicar el Principio de Privacidad por Dise±o (Data Minimization) con el uso 
+exclusivo de Nicknames internos sin PII sensible (Arquitectura general y 
+frontend). El telÚfono, al ser informaci¾n personal identificable (PII) crÝtica, se 
+almacena estrictamente bajo cifrado reversible de grado industrial.  
+ò Minimizaci¾n en AuditorÝa: Durante la revisi¾n fÝsica de una infracci¾n, la 
+interfaz expone estrictamente el bloque delimitado de mensajes analizados 
+por el modelo, restringiendo el acceso del administrador al historial completo 
+de conversaciones del usuario para proteger su privacidad general. 
+ 
+

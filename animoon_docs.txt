@@ -1,0 +1,182 @@
+ANIMOON — Trabajo Terminal 2026-B109
+Especificaciones de Desarrollo e Implementación
+Módulos del sistema, stack tecnológico y ramas de conocimiento asociadas
+Este documento sintetiza, a partir del Reporte Técnico Final del Trabajo Terminal 2026-B109 (Instituto Politécnico Nacional – ESCOM), "Prototipo de entorno virtual para niños de 6 a 13 años de la República Mexicana para dispositivos móviles Android implementando seguridad anti-grooming a través de Procesamiento de Lenguaje Natural" (ANIMOON), únicamente las especificaciones de desarrollo e implementación de cada módulo del sistema, el stack tecnológico empleado y la rama de conocimiento asociada a cada componente. Se excluyen los apartados de justificación teórica, estado del arte, factibilidad y pruebas de usabilidad detalladas en el documento original.
+1. Stack Tecnológico General del Proyecto
+El sistema se construye sobre un stack heterogéneo que combina desarrollo móvil nativo, ciencia de datos/IA, persistencia relacional y criptografía de grado industrial.
+Frontend / Cliente móvil
+Android Studio + Kotlin — lenguaje elegido por su seguridad de nulidad (null-safety) y concisión, necesario para gestionar conexiones en tiempo real (WebSockets) y operaciones de cifrado en el dispositivo.
+Compatibilidad mínima: Android 8.0 (API nivel 26), 2 GB de RAM y 100 MB de almacenamiento disponible; rendimiento objetivo ≥30 fps.
+Backend / Comunicación en tiempo real
+API REST para la comunicación backend–modelo de PLN y para los flujos de autenticación, registro y administración.
+WebSockets para la mensajería de chat en tiempo real, con reconexión automática ante pérdida de canal.
+API de traducción externa, utilizada en el pipeline de preprocesamiento de mensajes previo a la clasificación PLN.
+Ciencia de datos / Modelo de PLN
+Python y Jupyter Notebook — estándar de la industria para limpieza del corpus, entrenamiento experimental del modelo y visualización de métricas antes de integrarlo al backend.
+BERT (Bidirectional Encoder Representations from Transformers), optimizado en inferencia mediante PyTorch o TensorFlow, seleccionado por su comprensión bidireccional del contexto y su capacidad de ajuste fino (fine-tuning) y transfer learning sobre el corpus específico del proyecto.
+Persistencia de datos
+MySQL como gestor relacional, dividido en dos esquemas independientes: base de datos operacional (CRUD completo) y base de datos de auditoría (arquitectura Append-Only, solo INSERT).
+Seguridad y criptografía
+TLS 1.3 con intercambio de claves ECDHE — protege el canal cliente–backend y garantiza Secreto Hacia Adelante (Perfect Forward Secrecy).
+AES-256 en modo GCM (AES-GCM) — cifrado simétrico autenticado de mensajes de chat y datos personales en tránsito y en reposo.
+Argon2 — función derivadora de claves para el hashing de contraseñas, resistente a ataques de fuerza bruta.
+ECDSA — firma digital de tokens de un solo uso (OTP) para verificación de identidad del tutor.
+2. Arquitectura General del Sistema
+La arquitectura se organiza en cinco capas: (1) Capa Cliente (Android), donde el usuario se registra e inicia sesión; (2) Capa de Red y Cifrado, que transporta las peticiones mediante TLS 1.3 y AES-256; (3) Capa Backend, encargada de validar credenciales y conceder acceso al entorno virtual; (4) Capa de IA (Anti-Grooming), aislada del resto del sistema, que ejecuta un pipeline de PLN basado en BERT complementado con un filtro de modismos mexicanos sobre bloques de mensajes agrupados desde el búfer local del chat; y (5) Capa de Datos (MySQL), donde toda la información operativa y las alertas de seguridad se almacenan mediante una bitácora inmutable y cifrada. Cuando el modelo detecta un intento de grooming, el backend suspende de inmediato al usuario agresor y notifica al tutor por SMS.
+3. Especificaciones de Desarrollo e Implementación por Módulo
+3.1. Módulo de Registro
+Rama de conocimiento: 
+Ingeniería de software (gestión de identidad) y criptografía aplicada.
+Stack / componentes técnicos: 
+Kotlin/Android (formularios y vista previa de avatar), backend REST, SMS gateway (OTP), MySQL, Argon2.
+Especificaciones de desarrollo e implementación
+Registro delegado: el tutor inicia el alta junto con el menor; la cuenta queda vinculada de forma permanente al número telefónico verificado del tutor.
+Verificación de identidad mediante código OTP enviado por SMS, con validez máxima de 2 minutos y límite de 3 reenvíos por sesión de registro.
+Las contraseñas se almacenan exclusivamente mediante hash Argon2 (mínimo 8 caracteres, mayúscula, minúscula, número y carácter especial); no se permite texto plano.
+El único dato de identificación visible del menor es su apelativo; no se capturan ni exponen nombre real, dirección o escuela.
+Personalización de avatar de única ocasión (4 especies × 3 colores) con vista previa inmediata sin tiempos de carga perceptibles.
+Aceptación explícita y no preseleccionada de los lineamientos de privacidad como requisito bloqueante para completar el alta.
+3.2. Módulo de Inicio de Sesión
+Rama de conocimiento: 
+Ingeniería de software (control de acceso) y seguridad informática.
+Stack / componentes técnicos: 
+Backend de autenticación, hashing Argon2, SMS gateway, bitácora de auditoría (MySQL).
+Especificaciones de desarrollo e implementación
+Autenticación por usuario/contraseña contra hash almacenado; mensajes de error genéricos que no revelan cuál credencial fue incorrecta.
+Bloqueo temporal de cuenta (15–30 min) tras 5 intentos fallidos consecutivos, con notificación SMS automática al tutor.
+Recuperación de contraseña únicamente vía número telefónico del tutor (sin correo ni preguntas de seguridad), con código OTP de un solo uso.
+Cierre de sesión automático tras 15 minutos de inactividad continua.
+Registro en bitácora de auditoría de cada intento de inicio de sesión (identificador, fecha, hora, resultado).
+Carga de pantalla objetivo menor a 2 segundos en condiciones normales de red.
+3.3. Módulo de Mundo y Escenarios
+Rama de conocimiento: 
+Desarrollo de videojuegos / diseño de interacción humano-computadora infantil (CCI).
+Stack / componentes técnicos: 
+Motor de renderizado del cliente Android, gestión de estado de sesión, sincronización multijugador ligera.
+Especificaciones de desarrollo e implementación
+Cuatro zonas del MVP: Base principal (lobby), Cráteres gigantes, Aldea lunática y El lado oscuro de la luna.
+El jugador siempre inicia en la Base principal, independientemente de la última zona visitada.
+Renderizado simultáneo del avatar propio y de otros jugadores conectados dentro de la misma zona.
+Carga inicial de cada escenario ≤5 segundos; estabilidad garantizada durante el cambio de zona (sin cierres inesperados).
+Aislamiento de interacción social: la convivencia visual no habilita comunicación directa fuera del flujo de solicitud de chat del Módulo de Chat.
+3.4. Módulo de Mapa y Cambio de Zonas
+Rama de conocimiento: 
+Diseño de interacción humano-computadora / usabilidad infantil.
+Stack / componentes técnicos: 
+Componente de navegación superpuesto (overlay) sobre el motor de escenarios; datos de sesión locales, sin llamadas de red adicionales.
+Especificaciones de desarrollo e implementación
+Mapa como capa de navegación superpuesta al escenario activo, sin abandonar la sesión en curso.
+Muestra únicamente las zonas implementadas en el MVP, con indicación visual de la zona actual del jugador.
+Elementos táctiles con tamaño mínimo de 48×48 dp para adecuarse a usuarios infantiles.
+Transiciones entre zonas (incluida la carga del nuevo escenario) en un máximo de 5 segundos.
+3.5. Módulo de Perfil del Jugador
+Rama de conocimiento: 
+Ingeniería de software (gestión de perfiles) y privacidad por diseño.
+Stack / componentes técnicos: 
+Componente de UI de perfil (dos vistas: propio / ajeno), consulta a base de datos operacional.
+Especificaciones de desarrollo e implementación
+Dos vistas diferenciadas —perfil propio y perfil de otro jugador— que comparten estructura pero difieren en acciones disponibles.
+Exposición mínima de datos: únicamente apelativo y avatar; ningún dato de progreso o identificación personal en el perfil ajeno.
+El botón «Chatear» solo aparece en el perfil de otro jugador y dispara el flujo de solicitud de chat del Módulo de Chat.
+Carga de ambas vistas en menos de 3 segundos.
+3.6. Módulo de Chat e Interacción Social
+Rama de conocimiento: 
+Ingeniería de software de sistemas distribuidos en tiempo real, criptografía aplicada e integración con IA.
+Stack / componentes técnicos: 
+WebSockets (mensajería en tiempo real), AES-256-GCM con intercambio de claves ECDHE por sesión, API REST hacia el modelo de PLN, SMS gateway, MySQL (bitácora Append-Only).
+Especificaciones de desarrollo e implementación
+Chat basado en solicitud/aceptación explícita entre jugadores; sin otro mecanismo de apertura de conversación.
+Mensajería en tiempo real vía WebSockets con confirmación visual de envío y reconexión automática ante pérdida de canal.
+Límite de 150 caracteres por mensaje; acumulación de mensajes en bloques de 20 que se envían mediante API REST al modelo de PLN para su clasificación (el análisis opera sobre el bloque completo, no mensaje por mensaje).
+Cifrado end-to-end de cada mensaje con AES-256-GCM y claves efímeras ECDHE por sesión (Perfect Forward Secrecy); uso de librerías nativas optimizadas para no degradar el rendimiento en el dispositivo.
+Ante clasificación positiva de grooming: identificación automática del agresor, suspensión inmediata de cuenta, alerta SMS al tutor del menor agredido y registro del incidente en bitácora Append-Only (solo INSERT, sin UPDATE/DELETE a nivel de gestor MySQL).
+Distinción funcional entre «Terminar chat» (acción neutra, sin sanción) y «Reportar abuso» (formulario con motivos predefinidos, cierre automático del chat y bloqueo unilateral permanente del jugador reportado).
+Latencia objetivo: entrega de mensaje ≤500 ms; moderación automática posterior a la clasificación positiva ≤5 segundos.
+Registro en bitácora de auditoría de cada evento de moderación (umbral de confianza, timestamp, identificadores de participantes) para garantizar no repudio.
+3.7. Módulo de Moderación y Seguridad Anti-Grooming
+Rama de conocimiento: 
+Procesamiento de Lenguaje Natural (PLN) / Inteligencia Artificial aplicada a ciberseguridad infantil.
+Stack / componentes técnicos: 
+Modelo BERT servido vía API REST del backend, diccionario curado de modismos mexicanos, API de traducción externa, motor de reglas de umbral de confianza.
+Especificaciones de desarrollo e implementación
+Alcance acotado a la detección de grooming (no bullying general ni groserías), mediante un diccionario de modismos asociados a conducta predatoria incorporado al corpus de entrenamiento.
+Preprocesamiento en dos etapas antes de la inferencia: (1) marcado y preservación sin traducir de los tokens del diccionario de modismos; (2) traducción al inglés del resto del bloque mediante API de traducción externa. El bloque combinado resultante es la entrada al modelo BERT.
+El diccionario de modismos es actualizable de forma independiente al ciclo de reentrenamiento del modelo.
+Umbral de confianza mínimo configurable para activar acciones automáticas; clasificaciones por debajo del umbral se registran en bitácora sin sanción.
+Ante timeout de la API del modelo, el sistema pausa temporalmente el envío de mensajes del chat afectado y notifica a los usuarios.
+Tiempo de respuesta objetivo del modelo ≤10 segundos; toda incidencia queda registrada junto con su umbral de confianza para auditoría y reentrenamiento futuro.
+Pantallas de advertencia y salida segura para el menor agredido, sin exponer detalles técnicos del funcionamiento del modelo.
+3.8. Módulo de Minijuegos
+Rama de conocimiento: 
+Desarrollo de videojuegos y diseño instruccional (gamificación de seguridad digital).
+Stack / componentes técnicos: 
+Motor de minijuegos embebido en el cliente Android, controles táctiles, almacenamiento de récords en base de datos operacional.
+Especificaciones de desarrollo e implementación
+Cada minijuego está asociado a una zona específica y precedido de una introducción narrativa breve.
+Registro de un único récord personal por minijuego; una partida abandonada no sobrescribe el récord previo (actualización solo en servidor/lógica de partida, no editable desde la interfaz).
+Controles exclusivamente táctiles, con opciones de pausa (detiene mecánicas, temporizadores y animaciones) y salida en cualquier momento sin pérdida de sesión.
+Cada minijuego integra al menos un elemento educativo de seguridad digital (reconocimiento de riesgos, privacidad de datos o comunicación segura con adultos de confianza).
+Rendimiento objetivo: carga ≤5 segundos, ≥30 fps sostenidos en dispositivos con Android 8.0+, 2 GB RAM y 100 MB de almacenamiento.
+3.9. Módulo de Sección para Padres (Tutores)
+Rama de conocimiento: 
+Seguridad informática (autenticación de doble factor) y diseño de interfaces para adultos.
+Stack / componentes técnicos: 
+SMS gateway (OTP de acceso), backend de consulta de alertas, MySQL (lectura de bitácora de auditoría, panel de solo lectura).
+Especificaciones de desarrollo e implementación
+Acceso protegido por verificación en dos pasos: código OTP enviado por SMS al número del tutor registrado, con validez máxima de 2 minutos.
+Notificaciones SMS únicamente ante incidencias de seguridad relevantes (no ante actividad normal del menor).
+Panel de solo lectura: el tutor no puede modificar ni eliminar el historial de incidencias.
+Detalle de alerta limitado a los últimos 20 mensajes del chat involucrado, más guía de actuación y medidas de prevención sugeridas.
+Cierre de sesión automático del panel tras 15 minutos de inactividad, exigiendo nuevo código SMS.
+SMS de verificación enviado en un máximo de 30 segundos; carga del detalle de incidencia ≤3 segundos.
+3.10. Módulo de Apelación de Sanciones
+Rama de conocimiento: 
+Ingeniería de software (seguridad de aplicaciones web) y ética de sistemas automatizados.
+Stack / componentes técnicos: 
+Formulario backend con sanitización de entrada, límite de tasa (rate limiting) por IP/cuenta, MySQL.
+Especificaciones de desarrollo e implementación
+El sistema nunca revela al usuario el mensaje o fragmento específico que detonó la expulsión, para prevenir ingeniería inversa sobre el modelo de detección.
+Una sola apelación activa permitida por incidencia; el estado de la cuenta permanece «Expulsado» hasta el dictamen de un administrador humano (ningún proceso automático reactiva la cuenta).
+Formulario de justificación con límite de 250 caracteres; sanitización estricta en backend contra inyección SQL y Cross-Site Scripting (XSS) antes de almacenar o mostrar el texto.
+Endpoint de recepción de apelaciones con Rate Limiting por IP y por cuenta para mitigar ataques de denegación de servicio (DoS) o envíos automatizados.
+Notificación SMS al tutor en un máximo de 30 segundos tras el dictamen del administrador.
+3.11. Módulo de Administración
+Rama de conocimiento: 
+Ingeniería de software (back-office / consolas administrativas) y auditoría de seguridad.
+Stack / componentes técnicos: 
+Consola administrativa con autenticación challenge-response independiente del flujo de usuarios finales, verificación de Tag de autenticación AES-GCM, MySQL.
+Especificaciones de desarrollo e implementación
+Único perfil con acceso sin censura a la evidencia completa (mensajes que detonaron alerta o denuncia) tras autenticación de nivel superior.
+Interfaz de resolución binaria («Procede» / «No procede») que dispara de forma inmediata: actualización de estado de cuenta, notificación SMS al tutor (≤30 segundos) y registro en bitácora de auditoría.
+Autenticación de la consola mediante mecanismo challenge-response validado en servidor, independiente del login de usuarios finales.
+Verificación en memoria del Tag de autenticación generado por AES-GCM sobre los mensajes analizados, antes de su presentación al administrador.
+Minimización de datos: la vista del administrador se limita estrictamente al bloque de mensajes delimitado por la alerta.
+Expiración de sesión administrativa tras 30 minutos de inactividad; registro íntegro (quién, qué decisión, cuándo) de cada acción.
+3.12. Módulo de Ajustes y Soporte
+Rama de conocimiento: 
+Ingeniería de software (preferencias de usuario) y diseño de interfaces infantiles.
+Stack / componentes técnicos: 
+Almacenamiento local/persistente de preferencias en el cliente Android, sección de ayuda estática (FAQ).
+Especificaciones de desarrollo e implementación
+Preferencias limitadas a sonido y notificaciones locales; sin exposición de configuraciones técnicas o de seguridad al usuario final.
+Persistencia de preferencias entre sesiones, con aplicación inmediata de los cambios sin reiniciar la aplicación.
+Cierre de sesión seguro que elimina los datos de sesión activa del dispositivo, en menos de 2 segundos.
+Sección de ayuda como orientación básica de uso (FAQ), sin canal de soporte técnico en tiempo real.
+4. Diseño de la Base de Datos
+El sistema implementa una arquitectura de bases de datos relacionales en MySQL, dividida en dos esquemas independientes para garantizar la integridad y confidencialidad de los datos de los menores:
+Base de datos operacional (CRUD completo): gestiona autenticación y sesiones (con derivación de claves para proteger credenciales), personalización de avatares, acceso a salas, progresión en minijuegos, y el módulo de mensajería, cuyo contenido de chat se almacena cifrado con AES-GCM. También agrupa los bloques de mensajes enviados al modelo de PLN para su análisis.
+Base de datos de auditoría (solo INSERT): resguarda un historial inalterable de eventos críticos y alertas de grooming detectadas. No emplea llaves foráneas físicas hacia la base operacional; utiliza referencias cruzadas mediante identificadores únicos universales (UUID) para mantener un aislamiento estricto entre operación diaria y auditoría de seguridad.
+5. Diseño de la Seguridad Criptográfica
+5.1. Arquitectura general de seguridad
+La protección se distribuye en capas: la Capa de Transporte usa TLS 1.3 con intercambio de claves ECDHE (Secreto Hacia Adelante); el API Gateway enruta hacia el Módulo de Autenticación o el Motor Criptográfico (cifrado simétrico AES-GCM); el modelo BERT opera aislado en una capa dedicada de IA; y la Capa de Datos se divide físicamente en base operacional y bitácora Append-Only para auditoría.
+5.2. Flujo criptográfico de autenticación y registro
+El registro genera una contraseña de un solo uso (OTP) firmada digitalmente con ECDSA para validar la tenencia del número telefónico del tutor. Superado el desafío, la contraseña del tutor se procesa con Argon2 para su almacenamiento seguro en reposo, mientras que la información de identificación personal (PII), como el número telefónico, se cifra con AES-GCM antes de persistirse en la base de datos operacional.
+5.3. Ciclo de vida y auditoría de mensajes
+Todo mensaje entra cifrado al backend, se descifra temporalmente en memoria para su evaluación por el modelo BERT y, si supera el umbral de riesgo de grooming, dispara una Alerta de Seguridad automática. El mensaje, su marca de tiempo y el identificador de la alerta se inyectan de inmediato en el motor de auditorías bajo arquitectura Append-Only, que bloquea a nivel de base de datos cualquier modificación o borrado posterior, garantizando el no repudio de la evidencia.
+6. Desarrollo del Modelo de Procesamiento de Lenguaje Natural (PLN)
+El núcleo del sistema de moderación se implementa sobre BERT, entrenado mediante fine-tuning sobre un corpus específico. Como fuente de datos se utilizó el dataset Perverted Justice (PJ), con conversaciones reales entre depredadores y señuelos, sometido a un pipeline de preprocesamiento de cuatro etapas:
+Estructuración (parsing): asignación sistemática de turnos mediante un algoritmo de alternancia (Usuario A / Groomer en turnos impares, Usuario B / Víctima en turnos pares) para dar coherencia conversacional a archivos de texto plano sin etiquetas claras.
+Limpieza y normalización: eliminación de metadatos, URLs, correos y etiquetas HTML mediante expresiones regulares (regex); expansión de modismos de internet en inglés (p. ej. "u", "wanna", "b4") mediante diccionario especializado.
+Traducción y adaptación regional: traducción masiva del corpus (originalmente en inglés) al español, con un filtro de adaptación lingüística que sustituye términos ibéricos o neutros por vocabulario mexicano (p. ej. "computadora" en lugar de "ordenador", "celular" en lugar de "móvil").
+Etiquetado: transformación de las interacciones a un formato numérico procesable por la red neuronal, clasificando los mensajes en tres niveles de riesgo (0 = bajo, 1 = medio, 2 = alto) según la presencia de fases de acercamiento, aislamiento o propuestas explícitas.
+Esta preparación del corpus constituye la base de entrenamiento sobre la cual se ajusta el modelo BERT que posteriormente se integra al backend a través de la API REST descrita en el Módulo de Moderación.

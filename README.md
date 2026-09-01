@@ -87,25 +87,24 @@ El backend está "dockerizado" para evitar problemas de instalación.
 3. Esto levantará la API de FastAPI (puerto `8000`) y la base de datos PostgreSQL de forma automática.
 
 ### 2. Configurar la App de Android (Frontend)
-La app necesita saber a qué dirección IP comunicarse. Para evitar conflictos de código en Git, la IP se configura de forma local en tu computadora:
+¡Buenas noticias! **Por defecto, la app ya está apuntando al servidor de pruebas en AWS** (`http://18.217.21.239:8000/`).
+Solo dale "Play" en Android Studio y estarás probando en la nube con el resto del equipo.
+
+Si algún día AWS se apaga y quieres **probar en tu computadora local**, la IP se configura de forma local para evitar conflictos en Git:
 
 1. Abre el archivo `animoon/local.properties`.
 2. Agrega la variable `API_BASE_URL` dependiendo de dónde vayas a probar:
 
-**Opción A: Probar en el Emulador de Android Studio**
-El emulador usa una IP especial para "ver" el localhost de tu computadora.
+**Opción A: Probar en el Emulador de Android Studio (Local)**
 ```properties
 API_BASE_URL=http://10.0.2.2:8000/
 ```
 
-**Opción B: Probar en un Celular Físico o Tableta**
-Tu dispositivo móvil y tu computadora deben estar en la **misma red Wi-Fi**.
-1. Abre una consola y averigua la dirección IPv4 de tu computadora (usando el comando `ipconfig` en Windows). Ejemplo: `192.168.1.50`.
-2. Pon esa IP exacta en tu archivo `local.properties`:
+**Opción B: Probar en Celular Físico conectado a tu PC (Local)**
 ```properties
-API_BASE_URL=http://192.168.1.50:8000/
+API_BASE_URL=http://T.U.I.P:8000/
 ```
-> ⚠️ **Atención:** En Windows, el Firewall de Defender suele bloquear las peticiones por defecto. Si pruebas en físico y marca error de red, desactiva temporalmente el firewall privado o añade una regla de entrada para el puerto `8000`.
+*(Y presiona el botón del elefante 🐘 en Gradle para aplicar).*
 
 ### 3. Sincronizar y Correr
 1. En Android Studio, da clic en **Sync Project with Gradle Files** (el ícono del elefante 🐘).
