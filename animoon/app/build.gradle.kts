@@ -7,7 +7,7 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 // Por defecto apuntamos al servidor de AWS (para que todo el equipo pruebe fácil)
-val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://18.217.21.239:8000/"
+val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://3.142.143.72:8000/"
 
 plugins {
     alias(libs.plugins.android.application)

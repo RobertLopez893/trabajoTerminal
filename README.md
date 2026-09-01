@@ -87,7 +87,7 @@ El backend está "dockerizado" para evitar problemas de instalación.
 3. Esto levantará la API de FastAPI (puerto `8000`) y la base de datos PostgreSQL de forma automática.
 
 ### 2. Configurar la App de Android (Frontend)
-¡Buenas noticias! **Por defecto, la app ya está apuntando al servidor de pruebas en AWS** (`http://18.217.21.239:8000/`).
+¡Buenas noticias! **Por defecto, la app ya está apuntando al servidor de pruebas en AWS** (`http://3.142.143.72:8000/`).
 Solo dale "Play" en Android Studio y estarás probando en la nube con el resto del equipo.
 
 Si algún día AWS se apaga y quieres **probar en tu computadora local**, la IP se configura de forma local para evitar conflictos en Git:
