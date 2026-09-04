@@ -67,10 +67,22 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         } else {
+                            var errorMsg = "Error en el inicio de sesión"
+                            try {
+                                val errorBody = response.errorBody()?.string()
+                                if (errorBody != null) {
+                                    val jsonObject = org.json.JSONObject(errorBody)
+                                    if (jsonObject.has("detail")) {
+                                        errorMsg = jsonObject.getString("detail")
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Credenciales incorrectas",
-                                Toast.LENGTH_SHORT
+                                errorMsg,
+                                Toast.LENGTH_LONG
                             ).show()
                         }
                     }

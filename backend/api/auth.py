@@ -107,10 +107,13 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
     user = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
     
     if not user:
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas.")
+        raise HTTPException(status_code=404, detail="El apelativo no existe.")
         
     if not argon_hasher.verify_password(user.argon2id_hash, req.password):
-        raise HTTPException(status_code=401, detail="Credenciales incorrectas.")
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta.")
+        
+    if not user.is_verified:
+        raise HTTPException(status_code=403, detail="Tu cuenta no ha sido verificada con SMS.")
         
     if not user.is_active:
         raise HTTPException(status_code=403, detail="El usuario está inactivo o bloqueado.")
