@@ -63,9 +63,9 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             // Aquí puedes navegar a la MainActivity
-                            // val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            // startActivity(intent)
-                            // finish()
+                            val intent = Intent(this@LoginActivity, com.example.animoon.MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         } else {
                             Toast.makeText(
                                 this@LoginActivity,
