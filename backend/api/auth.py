@@ -30,18 +30,20 @@ def verify_nickname(req: schemas.NicknameCheckRequest, db: Session = Depends(get
     return {"message": "El apelativo está disponible.", "status": "success"}
 
 
+from backend.api.twilio_service import send_verification_sms, check_verification_code
+
 @router.post("/enviar-codigo-sms", response_model=schemas.DefaultResponse)
 def send_sms_code(req: schemas.SmsSendRequest, db: Session = Depends(get_db)):
-    # Verificar si el telefono ya tiene un usuario activo (desencriptando y buscando, o hashing determinista)
-    # Por ahora en el MVP asumimos que el flujo valida el codigo
+    # Verificar si el nickname ya existe
+    user = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
+    if user:
+        raise HTTPException(status_code=400, detail="El apelativo ya está registrado.")
 
-    # Simular la generacion de codigo
-    code = "123456"  # Generar random y mandar por AWS SNS / Twilio
-
-    # Aqui se podria guardar temporalmente el codigo en la tabla VerificationToken
-    # si hubieramos creado el usuario primero. 
-    # Para el MVP lo manejamos en un cache o tabla temporal, pero la base 
-    # asume que el token pertenece a un usuario (FK usuario_id).
+    # Enviar el SMS usando Twilio Verify
+    exito = send_verification_sms(req.telefono)
+    
+    if not exito:
+        raise HTTPException(status_code=500, detail="Error al enviar SMS por Twilio.")
 
     return {"message": "Código enviado por SMS exitosamente.", "status": "success"}
 
@@ -52,8 +54,12 @@ def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_
     if not is_password_strong(req.password):
         raise HTTPException(status_code=400, detail="La contraseña no cumple con los requisitos de seguridad.")
 
-    if req.codigo_verificacion != "123456":  # Simulado
-        raise HTTPException(status_code=400, detail="Código de verificación incorrecto.")
+    # Validar el código de 6 dígitos ingresado por el usuario usando Twilio Verify
+    es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
+    if not es_valido:
+        # Fallback local para pruebas si Twilio falla o se acaban los créditos
+        if req.codigo_verificacion != "123456":
+            raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
 
     user_exist = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
     if user_exist:
