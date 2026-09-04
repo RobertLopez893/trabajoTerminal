@@ -51,16 +51,28 @@ class LoginActivity : AppCompatActivity() {
             // Estructura lista para cuando el backend tenga endpoint de login
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    // TODO: val request = LoginRequest(apelativo, password)
-                    // TODO: val response = ApiClient.authService.login(request)
+                    val request = com.example.animoon.data.model.LoginRequest(apelativo, password)
+                    val response = com.example.animoon.data.network.ApiClient.authService.login(request)
                     
                     withContext(Dispatchers.Main) {
                         btnLogin.isEnabled = true
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Función de login conectada a corrutinas. Falta endpoint.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                response.body()?.message ?: "Login exitoso",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            // Aquí puedes navegar a la MainActivity
+                            // val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            // startActivity(intent)
+                            // finish()
+                        } else {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Credenciales incorrectas",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {

@@ -4,6 +4,11 @@ data class NicknameCheckRequest(
     val nickname: String
 )
 
+data class LoginRequest(
+    val nickname: String,
+    val password: String
+)
+
 data class SmsSendRequest(
     val nickname: String,
     val telefono: String

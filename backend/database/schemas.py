@@ -5,6 +5,11 @@ class NicknameCheckRequest(BaseModel):
     nickname: str = Field(..., min_length=3, max_length=50)
 
 
+class LoginRequest(BaseModel):
+    nickname: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(...)
+
+
 class SmsSendRequest(BaseModel):
     nickname: str = Field(..., min_length=3, max_length=50)
     telefono: constr(pattern=r'^\d{10}$')

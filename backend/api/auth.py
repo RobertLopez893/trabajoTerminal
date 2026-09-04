@@ -94,3 +94,19 @@ def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_
     db.commit()
 
     return {"message": "Registro completado exitosamente.", "status": "success"}
+
+
+@router.post("/login", response_model=schemas.DefaultResponse)
+def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
+    user = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
+    
+    if not user:
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas.")
+        
+    if not argon_hasher.verify_password(user.argon2id_hash, req.password):
+        raise HTTPException(status_code=401, detail="Credenciales incorrectas.")
+        
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="El usuario está inactivo o bloqueado.")
+        
+    return {"message": f"Bienvenido de vuelta, {user.nickname}", "status": "success"}

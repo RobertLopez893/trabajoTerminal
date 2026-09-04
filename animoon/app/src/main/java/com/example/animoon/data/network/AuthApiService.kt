@@ -15,6 +15,11 @@ interface AuthApiService {
         @Body request: NicknameCheckRequest
     ): Response<DefaultResponse>
 
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body request: com.example.animoon.data.model.LoginRequest
+    ): Response<DefaultResponse>
+
     @POST("/api/auth/enviar-codigo-sms")
     suspend fun sendSmsCode(
         @Body request: SmsSendRequest
