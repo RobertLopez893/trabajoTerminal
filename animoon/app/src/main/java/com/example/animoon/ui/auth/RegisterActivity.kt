@@ -1,5 +1,6 @@
 package com.example.animoon.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.CheckBox
 import android.widget.Toast
@@ -8,164 +9,281 @@ import com.example.animoon.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-import androidx.lifecycle.lifecycleScope
-import com.example.animoon.data.network.ApiClient
-import com.example.animoon.data.model.FinalRegisterRequest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 class RegisterActivity : AppCompatActivity() {
+
+    private lateinit var etRegisterApelativo: TextInputEditText
+    private lateinit var etTutorPhone: TextInputEditText
+    private lateinit var etRegisterPassword: TextInputEditText
+    private lateinit var etConfirmPassword: TextInputEditText
+
+    private lateinit var checkTerms: CheckBox
+
+    private lateinit var btnSendSms: MaterialButton
+    private lateinit var btnCancel: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-        val etApelativo =
-            findViewById<TextInputEditText>(R.id.etRegisterApelativo)
+        initViews()
+        configureListeners()
+    }
 
-        val etPhone =
-            findViewById<TextInputEditText>(R.id.etTutorPhone)
+    /**
+     * Relaciona las variables Kotlin con los elementos
+     * definidos en activity_register.xml.
+     */
+    private fun initViews() {
 
-        val etPassword =
-            findViewById<TextInputEditText>(R.id.etRegisterPassword)
+        etRegisterApelativo =
+            findViewById(R.id.etRegisterApelativo)
 
-        val etConfirmPassword =
-            findViewById<TextInputEditText>(R.id.etConfirmPassword)
+        etTutorPhone =
+            findViewById(R.id.etTutorPhone)
 
-        val checkTerms =
-            findViewById<CheckBox>(R.id.checkTerms)
+        etRegisterPassword =
+            findViewById(R.id.etRegisterPassword)
 
-        val btnSendSms =
-            findViewById<MaterialButton>(R.id.btnSendSms)
+        etConfirmPassword =
+            findViewById(R.id.etConfirmPassword)
 
-        val btnCancel =
-            findViewById<MaterialButton>(R.id.btnCancel)
+        checkTerms =
+            findViewById(R.id.checkTerms)
 
-        /*
-         * Terminos y condiciones
-         */
+        btnSendSms =
+            findViewById(R.id.btnSendSms)
+
+        btnCancel =
+            findViewById(R.id.btnCancel)
+
+        // Al iniciar, no se puede continuar
+        // hasta aceptar los términos.
         btnSendSms.isEnabled = false
+        btnSendSms.alpha = 0.5f
+    }
+
+    /**
+     * Configura las acciones de los botones
+     * y otros elementos interactivos.
+     */
+    private fun configureListeners() {
 
         checkTerms.setOnCheckedChangeListener { _, isChecked ->
+
             btnSendSms.isEnabled = isChecked
+
+            btnSendSms.alpha =
+                if (isChecked) {
+                    1f
+                } else {
+                    0.5f
+                }
         }
 
         btnCancel.setOnClickListener {
+
+            // Regresa a la pantalla anterior.
             finish()
         }
 
         btnSendSms.setOnClickListener {
 
-            val apelativo =
-                etApelativo.text.toString().trim()
-
-            val phone =
-                etPhone.text.toString().trim()
-
-            val password =
-                etPassword.text.toString()
-
-            val confirmPassword =
-                etConfirmPassword.text.toString()
-
-            if (
-                apelativo.isEmpty() ||
-                phone.isEmpty() ||
-                password.isEmpty() ||
-                confirmPassword.isEmpty()
-            ) {
-
-                Toast.makeText(
-                    this,
-                    "Completa todos los campos",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            if (phone.length != 10) {
-
-                Toast.makeText(
-                    this,
-                    "El teléfono debe tener 10 dígitos",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            if (password.length < 8) {
-
-                Toast.makeText(
-                    this,
-                    "La contraseña debe tener al menos 8 caracteres",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            if (password != confirmPassword) {
-
-                Toast.makeText(
-                    this,
-                    "Las contraseñas no coinciden",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                return@setOnClickListener
-            }
-
-            // Deshabilitamos el botón mientras carga
-            btnSendSms.isEnabled = false
-
-            // Llamada asíncrona a la API
-            lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    // Por ahora mockeamos los datos que faltan en la UI (código y avatar)
-                    val request = FinalRegisterRequest(
-                        nickname = apelativo,
-                        telefono = phone,
-                        codigo_verificacion = "123456", // Simulado
-                        password = password,
-                        avatar_especie = "gato", // Simulado
-                        avatar_color = "naranja" // Simulado
-                    )
-
-                    val response = ApiClient.authService.finalRegister(request)
-
-                    withContext(Dispatchers.Main) {
-                        btnSendSms.isEnabled = true
-                        if (response.isSuccessful) {
-                            val body = response.body()
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "¡Éxito! ${body?.message}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            // Regresar al Login
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Error del servidor: ${response.code()}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        btnSendSms.isEnabled = true
-                        Toast.makeText(
-                            this@RegisterActivity,
-                            "Error de red: ${e.message}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
+            validateRegisterData()
         }
+    }
+
+    /**
+     * Valida la información capturada
+     * antes de continuar a la verificación SMS.
+     */
+    private fun validateRegisterData() {
+
+        val apelativo =
+            etRegisterApelativo.text
+                ?.toString()
+                ?.trim()
+                .orEmpty()
+
+        val phone =
+            etTutorPhone.text
+                ?.toString()
+                ?.trim()
+                .orEmpty()
+
+        val password =
+            etRegisterPassword.text
+                ?.toString()
+                .orEmpty()
+
+        val confirmPassword =
+            etConfirmPassword.text
+                ?.toString()
+                .orEmpty()
+
+        // -----------------------------------------
+        // APelativo
+        // -----------------------------------------
+
+        if (apelativo.isEmpty()) {
+
+            etRegisterApelativo.error =
+                "Ingresa un apelativo"
+
+            etRegisterApelativo.requestFocus()
+
+            return
+        }
+
+        // -----------------------------------------
+        // TELÉFONO
+        // -----------------------------------------
+
+        if (phone.isEmpty()) {
+
+            etTutorPhone.error =
+                "Ingresa el número del tutor"
+
+            etTutorPhone.requestFocus()
+
+            return
+        }
+
+        if (phone.length != 10 ||
+            !phone.all { it.isDigit() }
+        ) {
+
+            etTutorPhone.error =
+                "Ingresa un número de 10 dígitos"
+
+            etTutorPhone.requestFocus()
+
+            return
+        }
+
+        // -----------------------------------------
+        // CONTRASEÑA
+        // -----------------------------------------
+
+        if (password.isEmpty()) {
+
+            etRegisterPassword.error =
+                "Ingresa una contraseña"
+
+            etRegisterPassword.requestFocus()
+
+            return
+        }
+
+        if (password.length < 8) {
+
+            etRegisterPassword.error =
+                "La contraseña debe tener al menos 8 caracteres"
+
+            etRegisterPassword.requestFocus()
+
+            return
+        }
+
+        // -----------------------------------------
+        // CONFIRMAR CONTRASEÑA
+        // -----------------------------------------
+
+        if (confirmPassword.isEmpty()) {
+
+            etConfirmPassword.error =
+                "Confirma la contraseña"
+
+            etConfirmPassword.requestFocus()
+
+            return
+        }
+
+        if (password != confirmPassword) {
+
+            etConfirmPassword.error =
+                "Las contraseñas no coinciden"
+
+            etConfirmPassword.requestFocus()
+
+            return
+        }
+
+        // -----------------------------------------
+        // TÉRMINOS
+        // -----------------------------------------
+
+        if (!checkTerms.isChecked) {
+
+            Toast.makeText(
+                this,
+                "Debes aceptar los lineamientos de privacidad",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            return
+        }
+
+        /*
+         * =========================================
+         * BACKEND - SE IMPLEMENTARÁ DESPUÉS
+         * =========================================
+         *
+         * Aquí posteriormente se realizará algo como:
+         *
+         * 1. Comprobar que el apelativo esté disponible.
+         *
+         * 2. Mandar los datos del registro al backend.
+         *
+         * 3. Solicitar el envío del SMS.
+         *
+         * Ejemplo futuro:
+         *
+         * api.sendVerificationCode(
+         *     apelativo,
+         *     phone,
+         *     password
+         * )
+         *
+         * Por ahora solamente navegamos
+         * a la pantalla de verificación.
+         */
+
+        goToVerification(
+            apelativo = apelativo,
+            phone = phone
+        )
+    }
+
+    /**
+     * Abre la pantalla de verificación SMS.
+     */
+    private fun goToVerification(
+        apelativo: String,
+        phone: String
+    ) {
+
+        val intent =
+            Intent(
+                this,
+                VerificationActivity::class.java
+            )
+
+        /*
+         * Mandamos los datos que posiblemente
+         * necesitaremos durante el resto
+         * del proceso de registro.
+         */
+
+        intent.putExtra(
+            "APELATIVO",
+            apelativo
+        )
+
+        intent.putExtra(
+            "PHONE_NUMBER",
+            phone
+        )
+
+        startActivity(intent)
     }
 }

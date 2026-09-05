@@ -3,84 +3,175 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    tools:context=".ui.auth.RegisterActivity">
+    android:background="#17152F">
 
-    <!-- ========================= -->
-    <!-- PANEL IZQUIERDO           -->
-    <!-- ========================= -->
+    <!-- ===================================================== -->
+    <!-- PANEL IZQUIERDO - PROGRESO DEL REGISTRO              -->
+    <!-- ===================================================== -->
 
-    <com.google.android.material.card.MaterialCardView
+    <LinearLayout
         android:id="@+id/registerStepsCard"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="24dp"
-        app:cardCornerRadius="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="#302451"
+        android:orientation="vertical"
+        android:padding="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- TÍTULO -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Registro\nseguro"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+
+        <!-- ================================================= -->
+        <!-- PASO 1 - ACTUAL                                  -->
+        <!-- ================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="24dp">
+            android:layout_height="64dp"
+            android:background="#57418C"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="#BCA6FF"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="#302451"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_secure"
-                android:textSize="26sp"
+                android:layout_marginStart="16dp"
+                android:text="Datos del tutor"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="@string/step_data"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/step_sms"
-                android:textSize="18sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/step_avatar"
-                android:textSize="18sp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/data_protected"
-                android:textSize="14sp" />
 
         </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
 
-    <!-- ========================= -->
-    <!-- FORMULARIO                -->
-    <!-- ========================= -->
+        <!-- ================================================= -->
+        <!-- PASO 2 - PENDIENTE                               -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:alpha="0.55"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:alpha="0.55"
+                android:text="Verificación SMS"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 3 - PENDIENTE                               -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:alpha="0.55"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:alpha="0.55"
+                android:text="Avatar del niño"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+
+        <!-- DIVISOR -->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="18dp"
+            android:background="#70668A" />
+
+
+        <!-- MENSAJE INFORMATIVO -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:text="👨‍🚀 Empecemos creando la cuenta. El tutor deberá proporcionar su número telefónico para verificar el registro."
+            android:textColor="#D9D3E5"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL                                  -->
+    <!-- ===================================================== -->
 
     <ScrollView
+        android:id="@+id/registerScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/registerStepsCard"
@@ -89,139 +180,220 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:paddingStart="36dp"
+            android:paddingEnd="36dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+
+
+            <!-- ================================================= -->
+            <!-- TÍTULO                                           -->
+            <!-- ================================================= -->
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/register_title"
+                android:text="Crea tu cuenta"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
                 android:textSize="30sp"
                 android:textStyle="bold" />
 
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="@string/register_subtitle"
+                android:text="Un adulto responsable debe acompañar este proceso"
+                android:textAlignment="center"
+                android:textColor="#C8C3D6"
                 android:textSize="16sp" />
 
-            <!-- Primera fila -->
 
-            <LinearLayout
+            <!-- ================================================= -->
+            <!-- APELATIVO                                        -->
+            <!-- ================================================= -->
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:orientation="horizontal">
+                android:hint="Apelativo del niño"
+                android:textColorHint="#BEB8CB"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="#A98BEC"
+                app:hintTextColor="#BEB8CB">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterApelativo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:hint="@string/child_alias">
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#8E8998" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etRegisterApelativo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:hint="@string/tutor_phone">
+            <!-- ================================================= -->
+            <!-- TELÉFONO DEL TUTOR                               -->
+            <!-- ================================================= -->
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etTutorPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:maxLength="10"
-                        android:maxLines="1" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <!-- Segunda fila -->
-
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="12dp"
+                android:hint="Número telefónico del tutor"
+                android:textColorHint="#BEB8CB"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="#A98BEC"
+                app:hintTextColor="#BEB8CB"
+                app:prefixText="+52 ">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTutorPhone"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:hint="@string/password"
-                    app:endIconMode="password_toggle">
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#8E8998" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etRegisterPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
+            <!-- ================================================= -->
+            <!-- CONTRASEÑA                                       -->
+            <!-- ================================================= -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Contraseña"
+                android:textColorHint="#BEB8CB"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="#A98BEC"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="#BEB8CB">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etRegisterPassword"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:hint="@string/confirm_password"
-                    app:endIconMode="password_toggle">
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#8E8998" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etConfirmPassword"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
 
-            </LinearLayout>
+            <!-- ================================================= -->
+            <!-- CONFIRMAR CONTRASEÑA                             -->
+            <!-- ================================================= -->
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Confirmar contraseña"
+                android:textColorHint="#BEB8CB"
+                app:boxBackgroundMode="outline"
+                app:boxStrokeColor="#A98BEC"
+                app:endIconMode="password_toggle"
+                app:hintTextColor="#BEB8CB">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="#8E8998" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <!-- ================================================= -->
+            <!-- REQUISITOS DE CONTRASEÑA                         -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="La contraseña debe tener al menos 8 caracteres."
+                android:textColor="#AFA9BC"
+                android:textSize="12sp" />
+
+
+            <!-- ================================================= -->
+            <!-- TÉRMINOS                                         -->
+            <!-- ================================================= -->
 
             <CheckBox
                 android:id="@+id/checkTerms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/terms_text" />
+                android:layout_marginTop="12dp"
+                android:buttonTint="#B99AF4"
+                android:text="El tutor acepta los lineamientos de privacidad y uso de datos."
+                android:textColor="#E0DBE8"
+                android:textSize="14sp" />
 
-            <!-- Botones -->
+
+            <!-- ================================================= -->
+            <!-- BOTONES                                          -->
+            <!-- ================================================= -->
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:gravity="end"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
                 android:orientation="horizontal">
+
+
+                <!-- CANCELAR -->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCancel"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:text="@string/cancel" />
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:backgroundTint="#3A3450"
+                    android:text="← Cancelar"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:cornerRadius="18dp"
+                    app:strokeColor="#807494"
+                    app:strokeWidth="2dp" />
+
+
+                <!-- CONTINUAR / ENVIAR SMS -->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnSendSms"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="56dp"
-                    android:layout_marginStart="16dp"
-                    android:text="@string/send_sms" />
+                    android:layout_weight="1.35"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="#8E61D6"
+                    android:enabled="false"
+                    android:text="Enviar código SMS →"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="18dp" />
 
             </LinearLayout>
 

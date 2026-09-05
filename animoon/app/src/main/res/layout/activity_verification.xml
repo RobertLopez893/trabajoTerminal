@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#17152F">
+
+    <!-- ========================================= -->
+    <!-- PANEL IZQUIERDO: PROGRESO DEL REGISTRO   -->
+    <!-- ========================================= -->
+
+    <LinearLayout
+        android:id="@+id/registerStepsCard"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="28dp"
+        android:background="#302451"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Registro\nseguro"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:textSize="28sp"
+            android:layout_marginBottom="30dp"/>
+
+        <!-- PASO 1 COMPLETADO -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:text="✓"
+                android:textSize="22sp"
+                android:textColor="@android:color/white"
+                android:background="#63DDA5"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Datos del tutor"
+                android:textColor="#E5E0EE"
+                android:textSize="17sp"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
+        <!-- PASO 2 ACTIVO -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:background="#57418C"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:text="2"
+                android:textSize="20sp"
+                android:textColor="#302451"
+                android:background="#BCA6FF"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Verificación SMS"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
+        <!-- PASO 3 PENDIENTE -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:gravity="center"
+                android:text="3"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:alpha="0.55"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Avatar del niño"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:alpha="0.55"
+                android:layout_marginStart="16dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#70668A"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="18dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📱 Se envió un código de 6 dígitos al número del tutor. Vigencia: 2 minutos."
+            android:textColor="#D9D3E5"
+            android:textSize="15sp"
+            android:lineSpacingExtra="5dp"/>
+
+    </LinearLayout>
+
+
+    <!-- ========================================= -->
+    <!-- CONTENIDO PRINCIPAL                      -->
+    <!-- ========================================= -->
+
+    <LinearLayout
+        android:id="@+id/verificationContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="32dp"
+        app:layout_constraintStart_toEndOf="@id/registerStepsCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingresa el código"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Código de 6 dígitos · Vigencia 2 min"
+            android:textColor="#D5D1E5"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:id="@+id/txtPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+52 •••••• 4521"
+            android:textColor="#FFE174"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"/>
+
+        <LinearLayout
+            android:id="@+id/codeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="25dp">
+
+            <EditText
+                android:id="@+id/edtCode1"
+                style="@style/CodeInput"/>
+
+            <EditText
+                android:id="@+id/edtCode2"
+                style="@style/CodeInput"/>
+
+            <EditText
+                android:id="@+id/edtCode3"
+                style="@style/CodeInput"/>
+
+            <EditText
+                android:id="@+id/edtCode4"
+                style="@style/CodeInput"/>
+
+            <EditText
+                android:id="@+id/edtCode5"
+                style="@style/CodeInput"/>
+
+            <EditText
+                android:id="@+id/edtCode6"
+                style="@style/CodeInput"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtResend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reenviar código en 02:00"
+            android:textColor="#BBA6FF"
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="25dp">
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="220dp"
+                android:layout_height="56dp"
+                android:text="← Atrás"
+                android:textAllCaps="false"/>
+
+            <Button
+                android:id="@+id/btnVerify"
+                android:layout_width="280dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="20dp"
+                android:text="Verificar código →"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

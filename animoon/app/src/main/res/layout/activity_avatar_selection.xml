@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#17152F">
+
+    <!-- ===================================================== -->
+    <!-- PANEL IZQUIERDO - PROGRESO DEL REGISTRO              -->
+    <!-- ===================================================== -->
+
+    <LinearLayout
+        android:id="@+id/registerStepsCard"
+        android:layout_width="300dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="#302451"
+        android:orientation="vertical"
+        android:padding="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- TÍTULO -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:text="Registro\nseguro"
+            android:textColor="@android:color/white"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+
+        <!-- ================================================= -->
+        <!-- PASO 1 - COMPLETADO                              -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="#63DDA5"
+                android:gravity="center"
+                android:text="✓"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Datos del tutor"
+                android:textColor="#E5E0EE"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 2 - COMPLETADO                              -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="#63DDA5"
+                android:gravity="center"
+                android:text="✓"
+                android:textColor="@android:color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Verificación SMS"
+                android:textColor="#E5E0EE"
+                android:textSize="17sp" />
+
+        </LinearLayout>
+
+
+        <!-- ================================================= -->
+        <!-- PASO 3 - ACTUAL                                  -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="8dp"
+            android:background="#57418C"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="#BCA6FF"
+                android:gravity="center"
+                android:text="3"
+                android:textColor="#302451"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Avatar del niño"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <!-- DIVISOR -->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="18dp"
+            android:background="#70668A" />
+
+
+        <!-- MENSAJE -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="5dp"
+            android:text="🚀 ¡Último paso! Elige una especie y un color para tu traje espacial."
+            android:textColor="#D9D3E5"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL                                  -->
+    <!-- ===================================================== -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/avatarContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/registerStepsCard"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!-- ================================================= -->
+        <!-- TÍTULO                                           -->
+        <!-- ================================================= -->
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¡Crea tu explorador!"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Elige especie y traje espacial"
+            android:textColor="#C8C3D6"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/txtTitle"
+            app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+
+
+        <!-- ================================================= -->
+        <!-- VISTA PREVIA                                     -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:id="@+id/previewContainer"
+            android:layout_width="250dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:background="#332753"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/optionsContainer"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VISTA PREVIA"
+                android:textColor="#C4A6FF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+
+            <!--
+                De momento usamos un símbolo.
+                Después aquí pondremos la imagen real
+                del avatar seleccionado.
+            -->
+
+            <TextView
+                android:id="@+id/txtAvatarPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="?"
+                android:textColor="#8E84A6"
+                android:textSize="76sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/txtPreviewSpecies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Especie: Sin selección"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/txtPreviewColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:text="Traje: Sin selección"
+                android:textColor="#C8C3D6"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+        <!-- ================================================= -->
+        <!-- OPCIONES                                         -->
+        <!-- ================================================= -->
+
+        <LinearLayout
+            android:id="@+id/optionsContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/previewContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtSubtitle">
+
+
+            <!-- ============================================= -->
+            <!-- ESPECIE                                      -->
+            <!-- ============================================= -->
+
+            <TextView
+                android:id="@+id/txtSpeciesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="1. ESPECIE"
+                android:textColor="#B99AF4"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/speciesContainer"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <!-- CONEJO -->
+
+                <Button
+                    android:id="@+id/btnRabbit"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:text="🐰&#10;Conejo"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+
+                <!-- GATO -->
+
+                <Button
+                    android:id="@+id/btnCat"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:text="🐱&#10;Gato"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+
+                <!-- PERRO -->
+
+                <Button
+                    android:id="@+id/btnDog"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:text="🐶&#10;Perro"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+
+                <!-- ZORRO -->
+
+                <Button
+                    android:id="@+id/btnFox"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="6dp"
+                    android:layout_weight="1"
+                    android:text="🦊&#10;Zorro"
+                    android:textAllCaps="false"
+                    android:textSize="15sp" />
+
+            </LinearLayout>
+
+
+            <!-- ============================================= -->
+            <!-- COLOR                                        -->
+            <!-- ============================================= -->
+
+            <TextView
+                android:id="@+id/txtColorTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="2. COLOR DEL TRAJE"
+                android:textColor="#B99AF4"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+            <TextView
+                android:id="@+id/txtColorDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Selecciona uno de los colores disponibles"
+                android:textColor="#AFA9BC"
+                android:textSize="13sp" />
+
+
+            <LinearLayout
+                android:id="@+id/colorContainer"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="10dp"
+                android:gravity="start|center_vertical"
+                android:orientation="horizontal">
+
+
+                <!-- BLANCO -->
+
+                <Button
+                    android:id="@+id/btnWhite"
+                    android:layout_width="110dp"
+                    android:layout_height="58dp"
+                    android:text="Blanco"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+
+                <!-- AZUL -->
+
+                <Button
+                    android:id="@+id/btnBlue"
+                    android:layout_width="110dp"
+                    android:layout_height="58dp"
+                    android:layout_marginStart="12dp"
+                    android:text="Azul"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+
+                <!-- NARANJA -->
+
+                <Button
+                    android:id="@+id/btnOrange"
+                    android:layout_width="110dp"
+                    android:layout_height="58dp"
+                    android:layout_marginStart="12dp"
+                    android:text="Naranja"
+                    android:textAllCaps="false"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
+            <!-- ESPACIO FLEXIBLE -->
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+            <!-- ============================================= -->
+            <!-- BOTÓN FINAL                                  -->
+            <!-- ============================================= -->
+
+            <Button
+                android:id="@+id/btnContinue"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:text="¡Entrar a ANIMOON! 🚀"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

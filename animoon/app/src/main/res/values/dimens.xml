@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Logo -->
+    <dimen name="splash_logo_width">280dp</dimen>
+    <dimen name="splash_logo_height">100dp</dimen>
+
+    <!-- Texto -->
+    <dimen name="splash_subtitle_text_size">18sp</dimen>
+
+    <!-- Botón -->
+    <dimen name="splash_button_width">300dp</dimen>
+    <dimen name="splash_button_height">58dp</dimen>
+    <dimen name="splash_button_text_size">20sp</dimen>
+
+    <!-- Márgenes -->
+    <dimen name="splash_subtitle_margin_bottom">18dp</dimen>
+    <dimen name="splash_button_margin_bottom">42dp</dimen>
+
+</resources>
