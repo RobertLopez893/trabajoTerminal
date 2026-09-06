@@ -9,6 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.animoon.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class VerificationActivity : AppCompatActivity() {
 
@@ -116,45 +118,40 @@ class VerificationActivity : AppCompatActivity() {
             return
         }
 
-        /*
-         * TEMPORAL
-         *
-         * Después aquí irá la llamada al backend.
-         *
-         * Ejemplo futuro:
-         *
-         * api.verifySms(code)
-         */
-
-        Toast.makeText(
-            this,
-            "Código verificado",
-            Toast.LENGTH_SHORT
-        ).show()
+        // Recuperar datos
+        val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+        val apelativo = intent.getStringExtra("APELATIVO") ?: ""
+        val password = intent.getStringExtra("PASSWORD") ?: ""
 
         val intent = Intent(
             this,
             AvatarSelectionActivity::class.java
         )
+        intent.putExtra("PHONE_NUMBER", phoneNumber)
+        intent.putExtra("APELATIVO", apelativo)
+        intent.putExtra("PASSWORD", password)
+        intent.putExtra("VERIFICATION_CODE", code)
 
         startActivity(intent)
     }
 
     private fun resendCode() {
+        val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+        val apelativo = intent.getStringExtra("APELATIVO") ?: ""
 
-        /*
-         * TEMPORAL
-         *
-         * Después aquí irá:
-         * api.resendSms(...)
-         */
-
-        Toast.makeText(
-            this,
-            "Código reenviado",
-            Toast.LENGTH_SHORT
-        ).show()
-
+        lifecycleScope.launch {
+            try {
+                val req = com.example.animoon.data.model.SmsSendRequest(apelativo, phoneNumber)
+                val res = com.example.animoon.data.network.ApiClient.authService.sendSmsCode(req)
+                if (res.isSuccessful) {
+                    Toast.makeText(this@VerificationActivity, "Código reenviado", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@VerificationActivity, "Error al reenviar SMS", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@VerificationActivity, "Error de red", Toast.LENGTH_SHORT).show()
+            }
+        }
         startResendTimer()
     }
 
