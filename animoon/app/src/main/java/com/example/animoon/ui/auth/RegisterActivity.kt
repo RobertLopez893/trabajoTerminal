@@ -8,7 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.animoon.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var etRegisterApelativo: TextInputEditText
@@ -223,35 +224,37 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        /*
-         * =========================================
-         * BACKEND - SE IMPLEMENTARÁ DESPUÉS
-         * =========================================
-         *
-         * Aquí posteriormente se realizará algo como:
-         *
-         * 1. Comprobar que el apelativo esté disponible.
-         *
-         * 2. Mandar los datos del registro al backend.
-         *
-         * 3. Solicitar el envío del SMS.
-         *
-         * Ejemplo futuro:
-         *
-         * api.sendVerificationCode(
-         *     apelativo,
-         *     phone,
-         *     password
-         * )
-         *
-         * Por ahora solamente navegamos
-         * a la pantalla de verificación.
-         */
+        // Llamadas al API (Corrutina)
+        btnSendSms.isEnabled = false
+        lifecycleScope.launch {
+            try {
+                // 1. Verificar apelativo
+                val nicknameReq = com.example.animoon.data.model.NicknameCheckRequest(apelativo)
+                val nicknameRes = com.example.animoon.data.network.ApiClient.authService.verifyNickname(nicknameReq)
+                
+                if (!nicknameRes.isSuccessful) {
+                    Toast.makeText(this@RegisterActivity, "El apelativo ya está en uso", Toast.LENGTH_SHORT).show()
+                    btnSendSms.isEnabled = true
+                    return@launch
+                }
 
-        goToVerification(
-            apelativo = apelativo,
-            phone = phone
-        )
+                // 2. Enviar SMS
+                val smsReq = com.example.animoon.data.model.SmsSendRequest(apelativo, phone)
+                val smsRes = com.example.animoon.data.network.ApiClient.authService.sendSmsCode(smsReq)
+                
+                if (!smsRes.isSuccessful) {
+                    Toast.makeText(this@RegisterActivity, "Error al enviar SMS", Toast.LENGTH_SHORT).show()
+                    btnSendSms.isEnabled = true
+                    return@launch
+                }
+
+                // 3. Continuar a la verificación SMS
+                goToVerification(apelativo, phone, password)
+            } catch (e: Exception) {
+                Toast.makeText(this@RegisterActivity, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
+                btnSendSms.isEnabled = true
+            }
+        }
     }
 
     /**
@@ -259,7 +262,8 @@ class RegisterActivity : AppCompatActivity() {
      */
     private fun goToVerification(
         apelativo: String,
-        phone: String
+        phone: String,
+        password: String
     ) {
 
         val intent =
@@ -268,21 +272,9 @@ class RegisterActivity : AppCompatActivity() {
                 VerificationActivity::class.java
             )
 
-        /*
-         * Mandamos los datos que posiblemente
-         * necesitaremos durante el resto
-         * del proceso de registro.
-         */
-
-        intent.putExtra(
-            "APELATIVO",
-            apelativo
-        )
-
-        intent.putExtra(
-            "PHONE_NUMBER",
-            phone
-        )
+        intent.putExtra("APELATIVO", apelativo)
+        intent.putExtra("PHONE_NUMBER", phone)
+        intent.putExtra("PASSWORD", password)
 
         startActivity(intent)
     }

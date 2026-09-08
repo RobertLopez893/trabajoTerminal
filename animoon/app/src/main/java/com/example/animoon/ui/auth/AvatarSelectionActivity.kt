@@ -6,6 +6,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.animoon.R
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class AvatarSelectionActivity : AppCompatActivity() {
 
@@ -131,27 +133,47 @@ class AvatarSelectionActivity : AppCompatActivity() {
 
     private fun saveAvatar() {
 
-        /*
-         *
-         * Aquí se mandará al backend:
-         *
-         * especie
-         * color
-         * id del perfil
-         */
+        val speciesStr = selectedSpecies?.lowercase() ?: return
+        val colorStr = selectedColor ?: return
 
-        Toast.makeText(
-            this,
-            "Avatar: $selectedSpecies - $selectedColor",
-            Toast.LENGTH_SHORT
-        ).show()
+        val phoneNumber = intent.getStringExtra("PHONE_NUMBER") ?: ""
+        val apelativo = intent.getStringExtra("APELATIVO") ?: ""
+        val password = intent.getStringExtra("PASSWORD") ?: ""
+        val verificationCode = intent.getStringExtra("VERIFICATION_CODE") ?: ""
 
-        /*
-         * Después:
-         *
-         * startActivity(
-         *     Intent(this, MainActivity::class.java)
-         * )
-         */
+        btnContinue.isEnabled = false
+        
+        lifecycleScope.launch {
+            try {
+                val req = com.example.animoon.data.model.FinalRegisterRequest(
+                    nickname = apelativo,
+                    telefono = phoneNumber,
+                    codigo_verificacion = verificationCode,
+                    password = password,
+                    avatar_especie = speciesStr,
+                    avatar_color = colorStr
+                )
+                
+                val res = com.example.animoon.data.network.ApiClient.authService.finalRegister(req)
+                
+                if (res.isSuccessful) {
+                    Toast.makeText(this@AvatarSelectionActivity, "Registro Exitoso", Toast.LENGTH_SHORT).show()
+                    val intent = android.content.Intent(
+                        this@AvatarSelectionActivity,
+                        com.example.animoon.MainActivity::class.java
+                    )
+                    // Limpiar el backstack
+                    intent.flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this@AvatarSelectionActivity, "Error en el registro", Toast.LENGTH_SHORT).show()
+                    btnContinue.isEnabled = true
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@AvatarSelectionActivity, "Error de red", Toast.LENGTH_SHORT).show()
+                btnContinue.isEnabled = true
+            }
+        }
     }
 }
