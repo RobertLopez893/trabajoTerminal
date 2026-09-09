@@ -6,7 +6,7 @@
         name="Theme.Animoon"
         parent="Theme.Material3.DayNight.NoActionBar">
 
-        <item name="android:fontFamily">sans</item>
+        <item name="android:fontFamily">sans-serif</item>
 
         <item name="android:windowActionModeOverlay">true</item>
 
