@@ -102,7 +102,11 @@ def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_
     return {"message": "Registro completado exitosamente.", "status": "success"}
 
 
-@router.post("/login", response_model=schemas.DefaultResponse)
+from datetime import datetime, timedelta
+from backend.api.jwt_manager import create_access_token, get_token_hash
+from backend.api.deps import get_current_user, get_current_session
+
+@router.post("/login", response_model=schemas.TokenResponse)
 def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
     user = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
     
@@ -117,5 +121,44 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
         
     if not user.is_active:
         raise HTTPException(status_code=403, detail="El usuario está inactivo o bloqueado.")
+
+    # 1. Crear el token JWT (Ed25519)
+    # Según documento de requerimientos: Cierre de sesión automático tras 15 minutos de inactividad
+    expires_delta = timedelta(minutes=15)
+    access_token = create_access_token(
+        data={"sub": user.id, "nickname": user.nickname},
+        expires_delta=expires_delta
+    )
+    
+    # 2. Registrar la sesión para estado inmutable y ECDHE
+    token_hash = get_token_hash(access_token)
+    nueva_sesion = models.Sesion(
+        id=str(uuid.uuid4()),
+        usuario_id=user.id,
+        ecdhe_public_key_ephemeral=req.client_ecdhe_public_key,
+        session_token_hash=token_hash,
+        expires_at=datetime.utcnow() + expires_delta,
+        is_active=True
+    )
+    db.add(nueva_sesion)
+    db.commit()
         
-    return {"message": f"Bienvenido de vuelta, {user.nickname}", "status": "success"}
+    return {
+        "access_token": access_token,
+        "token_type": "Bearer",
+        "message": f"Bienvenido de vuelta, {user.nickname}",
+        "status": "success"
+    }
+
+
+@router.post("/logout", response_model=schemas.DefaultResponse)
+def logout(
+    db: Session = Depends(get_db),
+    current_user: models.Usuario = Depends(get_current_user),
+    current_session: models.Sesion = Depends(get_current_session)
+):
+    # Invalida la sesión actual en la base de datos
+    current_session.is_active = False
+    db.commit()
+    
+    return {"message": "Sesión cerrada correctamente.", "status": "success"}

@@ -8,6 +8,7 @@ class NicknameCheckRequest(BaseModel):
 class LoginRequest(BaseModel):
     nickname: str = Field(..., min_length=3, max_length=50)
     password: str = Field(...)
+    client_ecdhe_public_key: str = Field(..., description="Llave pública efímera X25519 del cliente en Base64")
 
 
 class SmsSendRequest(BaseModel):
@@ -25,5 +26,12 @@ class FinalRegisterRequest(BaseModel):
 
 
 class DefaultResponse(BaseModel):
+    message: str
+    status: str = "success"
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "Bearer"
     message: str
     status: str = "success"
