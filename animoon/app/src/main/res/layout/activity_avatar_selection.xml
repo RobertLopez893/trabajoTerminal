@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="#17152F">
 
+
     <!-- ===================================================== -->
     <!-- PANEL IZQUIERDO - PROGRESO DEL REGISTRO              -->
     <!-- ===================================================== -->
@@ -25,13 +26,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- TÍTULO -->
+
+        <!-- ================================================= -->
+        <!-- TÍTULO                                           -->
+        <!-- ================================================= -->
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
-            android:text="Registro\nseguro"
+            android:text="Registro&#10;seguro"
             android:textColor="@android:color/white"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -136,7 +140,9 @@
         </LinearLayout>
 
 
-        <!-- DIVISOR -->
+        <!-- ================================================= -->
+        <!-- DIVISOR                                          -->
+        <!-- ================================================= -->
 
         <View
             android:layout_width="match_parent"
@@ -146,7 +152,9 @@
             android:background="#70668A" />
 
 
-        <!-- MENSAJE -->
+        <!-- ================================================= -->
+        <!-- MENSAJE                                          -->
+        <!-- ================================================= -->
 
         <TextView
             android:layout_width="match_parent"
@@ -183,24 +191,26 @@
 
         <TextView
             android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="¡Crea tu explorador!"
             android:textColor="@android:color/white"
             android:textSize="30sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/previewContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
             android:id="@+id/txtSubtitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text="Elige especie y traje espacial"
             android:textColor="#C8C3D6"
             android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/previewContainer"
             app:layout_constraintStart_toStartOf="@id/txtTitle"
             app:layout_constraintTop_toBottomOf="@id/txtTitle" />
 
@@ -233,22 +243,41 @@
                 android:textStyle="bold" />
 
 
-            <!--
-                De momento usamos un símbolo.
-                Después aquí pondremos la imagen real
-                del avatar seleccionado.
-            -->
+            <!-- ================================================= -->
+            <!-- AVATAR PREVISUALIZADO                            -->
+            <!-- ================================================= -->
 
-            <TextView
-                android:id="@+id/txtAvatarPlaceholder"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="?"
-                android:textColor="#8E84A6"
-                android:textSize="76sp"
-                android:textStyle="bold" />
+                android:layout_weight="1">
+
+
+                <!-- Se muestra mientras no haya especie -->
+
+                <TextView
+                    android:id="@+id/txtAvatarPlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="\?"
+                    android:textColor="#8E84A6"
+                    android:textSize="76sp"
+                    android:textStyle="bold" />
+
+
+                <!-- Imagen real del avatar -->
+
+                <ImageView
+                    android:id="@+id/imgAvatarPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="Vista previa del avatar"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter"
+                    android:visibility="gone" />
+
+            </FrameLayout>
 
 
             <TextView
@@ -282,20 +311,21 @@
             android:id="@+id/optionsContainer"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnContinue"
             app:layout_constraintEnd_toStartOf="@id/previewContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtSubtitle">
 
 
-            <!-- ============================================= -->
-            <!-- ESPECIE                                      -->
-            <!-- ============================================= -->
+            <!-- ================================================= -->
+            <!-- 1. ESPECIE                                      -->
+            <!-- ================================================= -->
 
             <TextView
                 android:id="@+id/txtSpeciesTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 android:text="1. ESPECIE"
@@ -307,75 +337,167 @@
             <LinearLayout
                 android:id="@+id/speciesContainer"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="120dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
 
-                <!-- CONEJO -->
+                <!-- ================================================= -->
+                <!-- CONEJO                                           -->
+                <!-- ================================================= -->
 
-                <Button
+                <LinearLayout
                     android:id="@+id/btnRabbit"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:text="🐰&#10;Conejo"
-                    android:textAllCaps="false"
-                    android:textSize="15sp" />
+                    android:background="#3B3157"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:contentDescription="Conejo"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/avatar_rabbit_white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Conejo"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
-                <!-- GATO -->
+                <!-- ================================================= -->
+                <!-- GATO                                             -->
+                <!-- ================================================= -->
 
-                <Button
+                <LinearLayout
                     android:id="@+id/btnCat"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:text="🐱&#10;Gato"
-                    android:textAllCaps="false"
-                    android:textSize="15sp" />
+                    android:background="#3B3157"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:contentDescription="Gato"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/avatar_cat_white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gato"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
-                <!-- PERRO -->
+                <!-- ================================================= -->
+                <!-- PERRO                                            -->
+                <!-- ================================================= -->
 
-                <Button
+                <LinearLayout
                     android:id="@+id/btnDog"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     android:layout_marginStart="6dp"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:text="🐶&#10;Perro"
-                    android:textAllCaps="false"
-                    android:textSize="15sp" />
+                    android:background="#3B3157"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:contentDescription="Perro"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/avatar_dog_white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perro"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
-                <!-- ZORRO -->
+                <!-- ================================================= -->
+                <!-- ZORRO                                            -->
+                <!-- ================================================= -->
 
-                <Button
+                <LinearLayout
                     android:id="@+id/btnFox"
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
+                    android:layout_height="110dp"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:text="🦊&#10;Zorro"
-                    android:textAllCaps="false"
-                    android:textSize="15sp" />
+                    android:background="#3B3157"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="78dp"
+                        android:contentDescription="Zorro"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/avatar_fox_white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zorro"
+                        android:textColor="@android:color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
 
-            <!-- ============================================= -->
-            <!-- COLOR                                        -->
-            <!-- ============================================= -->
+            <!-- ================================================= -->
+            <!-- 2. COLOR DEL TRAJE                               -->
+            <!-- ================================================= -->
 
             <TextView
                 android:id="@+id/txtColorTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:text="2. COLOR DEL TRAJE"
@@ -386,84 +508,100 @@
 
             <TextView
                 android:id="@+id/txtColorDescription"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="Selecciona uno de los colores disponibles"
+                android:text="Elige el color de tu traje espacial"
                 android:textColor="#AFA9BC"
                 android:textSize="13sp" />
 
 
+            <!-- ================================================= -->
+            <!-- BOTONES DE COLOR                                 -->
+            <!-- ================================================= -->
+
             <LinearLayout
                 android:id="@+id/colorContainer"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="82dp"
+                android:layout_marginTop="8dp"
                 android:gravity="start|center_vertical"
                 android:orientation="horizontal">
 
 
                 <!-- BLANCO -->
 
-                <Button
+                <View
                     android:id="@+id/btnWhite"
-                    android:layout_width="110dp"
-                    android:layout_height="58dp"
-                    android:text="Blanco"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:background="@drawable/bg_avatar_color_white"
+                    android:clickable="true"
+                    android:contentDescription="Traje blanco"
+                    android:focusable="true" />
 
 
                 <!-- AZUL -->
 
-                <Button
+                <View
                     android:id="@+id/btnBlue"
-                    android:layout_width="110dp"
-                    android:layout_height="58dp"
-                    android:layout_marginStart="12dp"
-                    android:text="Azul"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_avatar_color_blue"
+                    android:clickable="true"
+                    android:contentDescription="Traje azul"
+                    android:focusable="true" />
 
 
                 <!-- NARANJA -->
 
-                <Button
+                <View
                     android:id="@+id/btnOrange"
-                    android:layout_width="110dp"
-                    android:layout_height="58dp"
-                    android:layout_marginStart="12dp"
-                    android:text="Naranja"
-                    android:textAllCaps="false"
-                    android:textSize="14sp" />
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_avatar_color_orange"
+                    android:clickable="true"
+                    android:contentDescription="Traje naranja"
+                    android:focusable="true" />
+
+
+                <!-- VERDE -->
+
+                <View
+                    android:id="@+id/btnGreen"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/bg_avatar_color_green"
+                    android:clickable="true"
+                    android:contentDescription="Traje verde"
+                    android:focusable="true" />
 
             </LinearLayout>
 
-
-            <!-- ESPACIO FLEXIBLE -->
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-
-            <!-- ============================================= -->
-            <!-- BOTÓN FINAL                                  -->
-            <!-- ============================================= -->
-
-            <Button
-                android:id="@+id/btnContinue"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginBottom="2dp"
-                android:enabled="false"
-                android:text="¡Entrar a ANIMOON! 🚀"
-                android:textAllCaps="false"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
         </LinearLayout>
+
+
+        <!-- ================================================= -->
+        <!-- BOTÓN FINAL                                     -->
+        <!-- ================================================= -->
+
+        <Button
+            android:id="@+id/btnContinue"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="2dp"
+            android:enabled="false"
+            android:text="¡Entrar a ANIMOON! 🚀"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/previewContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_max="320dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
