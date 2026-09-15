@@ -21,19 +21,7 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:screenOrientation="landscape"
-            android:exported="true">
-
-            <intent-filter>
-
-                <action
-                    android:name="android.intent.action.MAIN" />
-
-                <category
-                    android:name="android.intent.category.LAUNCHER" />
-
-            </intent-filter>
-
-        </activity>
+            android:exported="false" />
 
         <!-- MENU -->
         <activity
@@ -62,6 +50,24 @@
             android:name=".ui.auth.LoginActivity"
             android:screenOrientation="landscape"
             android:exported="false" />
+
+        <!-- MINIJUEGO 1 - PRUEBA TEMPORAL -->
+        <activity
+            android:name=".ui.minigame.Game1Activity"
+            android:screenOrientation="landscape"
+            android:exported="true">
+
+            <intent-filter>
+
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+
+        </activity>
 
     </application>
 

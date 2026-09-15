@@ -1,0 +1,422 @@
+[
+  {
+    "id": 1,
+    "texto": "Mientras juegas, alguien te dice: “¡Hola! Quiero ser tu amigo. ¿Cómo te llamas y cuántos años tienes?” ¿Qué deberías responder?",
+    "opciones": [
+      {
+        "texto": "Le digo mi nombre y mi edad",
+        "retroalimentacion": "Aunque parezca una pregunta sencilla, tu nombre y edad son información personal. No tienes que compartirla con personas que no conoces.",
+        "correcta": false
+      },
+      {
+        "texto": "Le pregunto primero dónde vive",
+        "retroalimentacion": "Preguntarle dónde vive tampoco es necesario. Si no conoces a alguien en la vida real, lo mejor es no compartir información personal entre ustedes.",
+        "correcta": false
+      },
+      {
+        "texto": "No comparto esos datos y aviso a un adulto",
+        "retroalimentacion": "¡Correcto! Cuando alguien que no conoces pide información personal, puedes no responder y contárselo a un adulto.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "texto": "Estás jugando en línea y una persona que no conoces te pregunta: “¿En qué escuela estudias? Dime dónde está para conocerte algún día”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Decirle dónde está mi escuela",
+        "retroalimentacion": "¡Cuidado! La escuela es un lugar que forma parte de tu información personal. Las personas que conoces por internet no necesitan saber dónde estudias. Es mejor no compartirlo y avisarle a un adulto.",
+        "correcta": false
+      },
+      {
+        "texto": "No darle esa información y contárselo a un adulto de confianza",
+        "retroalimentacion": "¡Muy bien! No tienes que compartir dónde estudias con alguien que conociste por internet. Si algo te hace sentir incómodo, puedes contárselo a un adulto de confianza.",
+        "correcta": true
+      },
+      {
+        "texto": "Inventar el nombre de otra escuela",
+        "retroalimentacion": "Inventar una dirección puede parecer una buena idea, pero lo más seguro es no seguir hablando sobre lugares personales. Si alguien te pregunta eso, cuéntaselo a un adulto.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "texto": "Una persona que conociste en un juego te dice: “Lo que hablamos es nuestro secreto. No se lo cuentes a tus papás”. ¿Qué haces?",
+    "opciones": [
+      {
+        "texto": "Contárselo a un adulto de confianza",
+        "retroalimentacion": "¡Muy bien! Nadie puede obligarte a guardar secretos que te hagan sentir incómodo, preocupado o confundido.",
+        "correcta": true
+      },
+      {
+        "texto": "Guardar el secreto porque prometí no decir nada",
+        "retroalimentacion": "¡Ten cuidado! Los adultos no se van a enojar contigo por contarles algo que te preocupa. Si alguien te pide guardar un secreto, es importante pedir ayuda.",
+        "correcta": false
+      },
+      {
+        "texto": "Decirle que sí y seguir hablando",
+        "retroalimentacion": "Decir que sí puede hacer que esa persona siga intentando mantener la conversación en secreto. Es mejor detenerse y pedir ayuda.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "texto": "Alguien en el chat te dice: “Tengo un regalo especial para ti, pero no se lo digas a nadie, ¡es nuestro secreto!”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Acepto el regalo y guardo el secreto",
+        "retroalimentacion": "¡Alarma! Los secretos malos, como los que un adulto te pide guardar de tus padres, son peligrosos. ¡Nunca tengas secretos con personas desconocidas!",
+        "correcta": false
+      },
+      {
+        "texto": "Le digo que no quiero secretos y se lo cuento a mi mamá",
+        "retroalimentacion": "¡Eso es perfecto! Los adultos que te piden guardar secretos de tus padres están haciendo algo mal.",
+        "correcta": true
+      },
+      {
+        "texto": "Le pregunto cuál es el regalo antes de decidir",
+        "retroalimentacion": "Cuidado. Si un extraño te pide un secreto, no importa el regalo, no es seguro. Lo mejor es no aceptar tratos raros.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "texto": "Alguien que conociste jugando te dice: “Quiero saber cómo eres. Mándame una foto tuya. Te prometo que nadie la verá”. ¿Cómo reaccionarías?",
+    "opciones": [
+      {
+        "texto": "Mandarle una foto porque prometió guardarla",
+        "retroalimentacion": "Las promesas de internet no siempre pueden proteger una fotografía. Si no conoces a alguien en persona, no tienes que mandarle fotos tuyas.",
+        "correcta": false
+      },
+      {
+        "texto": "Decirle que prefiero no enviar fotos",
+        "retroalimentacion": "¡Muy bien! Puedes decir que no. Nadie puede obligarte a mandar una fotografía.",
+        "correcta": true
+      },
+      {
+        "texto": "Mandarle una foto, pero solamente de lejos",
+        "retroalimentacion": "Aunque estés lejos o no se vea muy bien, sigue siendo una fotografía tuya. Si no quieres compartirla, puedes decir que no.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "texto": "Estás jugando y alguien te dice: “Aquí todos pueden leer nuestros mensajes. Mejor vamos a hablar por otra aplicación. No le digas a nadie”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Ir a la otra aplicación para que nadie pueda leerlos",
+        "retroalimentacion": "¡Cuidado! Si alguien quiere llevar una conversación a otro lugar y además quiere mantenerla en secreto, es importante detenerse.",
+        "correcta": false
+      },
+      {
+        "texto": "Dejar la conversación y contarle a un adulto",
+        "retroalimentacion": "¡Excelente! Cuando alguien intenta esconder una conversación de los adultos, puedes alejarte y pedir ayuda.",
+        "correcta": true
+      },
+      {
+        "texto": "Preguntarle por qué no quiere que nadie se entere",
+        "retroalimentacion": "Es normal tener curiosidad, pero no necesitas seguir hablando para descubrirlo. Puedes pedir ayuda a un adulto.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "texto": "Una persona que conociste en un videojuego te dice: “Yo tengo la misma edad que tú. Por eso podemos contarnos todo”. ¿Qué pensarías?",
+    "opciones": [
+      {
+        "texto": "Si dice que tiene mi edad, entonces puedo confiar completamente en él",
+        "retroalimentacion": "En internet no siempre sabemos quién está detrás de una cuenta. Una persona puede decir que tiene nuestra edad, aunque no sea verdad.",
+        "correcta": false
+      },
+      {
+        "texto": "No puedo saber quién está realmente detrás de una cuenta",
+        "retroalimentacion": "¡Muy bien! Aunque alguien diga tener nuestra misma edad, debemos ser cuidadosos con la información que compartimos.",
+        "correcta": true
+      },
+      {
+        "texto": "Le digo mi nombre completo para que sepa que puede confiar en mí",
+        "retroalimentacion": "No necesitamos demostrar confianza dando tu nombre completo. Tu información personal debe mantenerse privada.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "texto": "Durante una conversación, alguien comienza a preguntarte cosas que te hacen sentir incómodo. Tú le dices: “No quiero hablar de eso”, pero responde: “¡No seas aburrido! Solo estamos jugando”. ¿Qué opción elegirías?",
+    "opciones": [
+      {
+        "texto": "Repetir que no quiero hablar y buscar ayuda si continúa",
+        "retroalimentacion": "¡Escogiste correctamente! Tu “no” es importante. Si alguien no respeta que no quieres hablar, puedes pedir ayuda.",
+        "correcta": true
+      },
+      {
+        "texto": "Seguir hablando para que no se enoje",
+        "retroalimentacion": "No tienes que continuar una conversación para evitar que alguien se enoje. Si algo te incomoda, puedes alejarte.",
+        "correcta": false
+      },
+      {
+        "texto": "Cambiar de tema sin decir nada",
+        "retroalimentacion": "Cambiar de tema puede ayudar, pero si la persona continúa insistiendo, recuerda que puedes alejarte y contárselo a un adulto.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "texto": "Una persona nueva te manda un mensaje que dice: “Creo que vivimos cerca. ¿Quieres que nos conozcamos mañana en el parque?”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Aceptar porque me gusta conocer personas nuevas",
+        "retroalimentacion": "Conocer a alguien por internet no significa que realmente sepamos quién es. No debes encontrarte a solas con alguien que conociste en línea.",
+        "correcta": false
+      },
+      {
+        "texto": "Decirle que primero tengo que preguntarles a mis papás",
+        "retroalimentacion": "Preguntarles a tus papás es mucho mejor que ir por tu cuenta. Recuerda que un encuentro así siempre debe ser conocido y supervisado por adultos responsables.",
+        "correcta": false
+      },
+      {
+        "texto": "No ir por mi cuenta y contarle a un adulto",
+        "retroalimentacion": "¡Bien hecho! No debes encontrarte a solas con alguien que conociste por internet. Un adulto puede ayudarte a decidir qué hacer.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "texto": "Tu compañero de juego te dice: “Si me das tu contraseña, puedo entrar a tu cuenta y ayudarte a conseguir más puntos”. ¿Qué responderías?",
+    "opciones": [
+      {
+        "texto": "Está bien, pero no se la digas a nadie",
+        "retroalimentacion": "Aunque sea alguien con quien juegas mucho, las contraseñas deben mantenerse privadas.",
+        "correcta": false
+      },
+      {
+        "texto": "Darle una contraseña que ya no uso",
+        "retroalimentacion": "Aunque ya no uses esa contraseña, sigue siendo mejor no compartirla. Las contraseñas deben mantenerse privadas.",
+        "correcta": false
+      },
+      {
+        "texto": "No comparto mi contraseña",
+        "retroalimentacion": "¡Correcto! Las contraseñas son como una llave: debemos mantenerlas protegidas.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "texto": "Alguien te dice: “Si de verdad eres mi amigo, tienes que hacer lo que te estoy pidiendo”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Hacerlo para demostrar que soy su amigo",
+        "retroalimentacion": "Ser amigo de alguien no significa hacer todo lo que esa persona diga. Puedes decir que no.",
+        "correcta": false
+      },
+      {
+        "texto": "Preguntarle a un adulto si lo que pide está bien",
+        "retroalimentacion": "¡Es buena idea pedir ayuda a un adulto! Cuando no estás seguro sobre algo, puedes preguntarle.",
+        "correcta": false
+      },
+      {
+        "texto": "Decirle que ser amigos no significa hacer cosas que no quiero",
+        "retroalimentacion": "¡Muy bien! Nadie debe usar la amistad para obligarte a hacer algo que no quieres.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "texto": "Mientras juegas, alguien pregunta: “¿Tu casa está cerca de la escuela? ¿En qué calle vives?”. ¿Qué información darías?",
+    "opciones": [
+      {
+        "texto": "Ninguna de las dos",
+        "retroalimentacion": "¡Lo has entendido! Tu casa, tu calle y los lugares cercanos a donde vives son información que debemos cuidar.",
+        "correcta": true
+      },
+      {
+        "texto": "La calle donde vivo",
+        "retroalimentacion": "Tu calle es información privada. No es necesario compartirla con alguien que conociste en internet.",
+        "correcta": false
+      },
+      {
+        "texto": "Solamente el nombre de mi colonia",
+        "retroalimentacion": "La colonia también puede ayudar a una persona a saber dónde vives. Es mejor no compartir información sobre tu casa.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "texto": "Una persona te dice: “Tengo una sorpresa para ti, pero tienes que hacer algo primero. No puedes preguntarle a tu mamá o papá”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Hacerlo porque quiero saber cuál es la sorpresa",
+        "retroalimentacion": "La curiosidad puede ser muy grande, pero nadie debe pedirte que hagas algo a escondidas de los adultos que te cuidan.",
+        "correcta": false
+      },
+      {
+        "texto": "Preguntarle a un adulto antes de hacer cualquier cosa",
+        "retroalimentacion": "¡Estás en lo correcto! Si alguien te pide hacer algo secreto, puedes detenerte y pedir ayuda.",
+        "correcta": true
+      },
+      {
+        "texto": "Aceptar solamente si la sorpresa parece divertida",
+        "retroalimentacion": "Aunque parezca divertido, no tienes que hacer algo solo para recibir una sorpresa.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "texto": "Le dices a alguien que no quieres compartir tu nombre completo y la persona responde: “Ay, no pasa nada. Puedes confiar en mí”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Cambiar de opinión porque parece amable",
+        "retroalimentacion": "Que alguien sea amable no significa que tengas que darle información personal.",
+        "correcta": false
+      },
+      {
+        "texto": "Darle mi nombre completo, pero pedir que no lo use",
+        "retroalimentacion": "Aunque le pidas que no lo use, no puedes controlar qué hará después con la información. Es mejor no compartirla.",
+        "correcta": false
+      },
+      {
+        "texto": "Mantener mi decisión y no compartirlo",
+        "retroalimentacion": "¡Exacto! Si no quieres compartir algo, puedes decir que no. Tus datos personales son tuyos.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "texto": "Tu amiga te cuenta: “Un adulto que conocí jugando me pidió que no le contara a nadie que hablamos”. ¿Qué le dirías a tu amiga?",
+    "opciones": [
+      {
+        "texto": "Creo que deberías contárselo a algún familiar de confianza",
+        "retroalimentacion": "¡Efectivamente! Tu amiga no tiene que enfrentar esa situación sola.",
+        "correcta": true
+      },
+      {
+        "texto": "Yo tampoco se lo diré a nadie",
+        "retroalimentacion": "No todos los secretos tienen que mantenerse. Cuando un adulto pide esconder una conversación con un niño, es importante contárselo a otro adulto de confianza.",
+        "correcta": false
+      },
+      {
+        "texto": "Si prometiste guardar el secreto, tienes que cumplirlo",
+        "retroalimentacion": "Guardar silencio podría hacer que tu amiga siga sintiéndose sola. Lo mejor es buscar ayuda de un adulto responsable.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "texto": "Una persona que conociste en internet te escribe: “Sé a qué hora sales de la escuela. Te he visto varias veces”. ¿Qué haces?",
+    "opciones": [
+      {
+        "texto": "Preguntarle cómo sabe eso",
+        "retroalimentacion": "Puede darte curiosidad saber cómo lo sabe, pero no necesitas continuar hablando con esa persona. Es mejor buscar ayuda.",
+        "correcta": false
+      },
+      {
+        "texto": "Bloquearlo y contárselo inmediatamente a un adulto",
+        "retroalimentacion": "¡Muy bien! Ese mensaje puede ser una señal de peligro. Aléjate de la conversación y cuéntaselo inmediatamente a un adulto.",
+        "correcta": true
+      },
+      {
+        "texto": "No responder, pero seguir jugando normalmente",
+        "retroalimentacion": "No responder es mejor que continuar la conversación, pero también es importante contarle a un adulto lo que ocurrió.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "texto": "Una persona te dice: “Yo te mando una foto mía si tú me mandas una tuya”. ¿Qué harías?",
+    "opciones": [
+      {
+        "texto": "Aceptar porque él también enviará una foto",
+        "retroalimentacion": "Que alguien te mande una fotografía no significa que tú tengas que enviar otra. Puedes decir que no.",
+        "correcta": false
+      },
+      {
+        "texto": "Pedirle que primero mande la suya",
+        "retroalimentacion": "Aunque mande primero su fotografía, tú sigues teniendo derecho a decir que no.",
+        "correcta": false
+      },
+      {
+        "texto": "Decir que no quiero intercambiar fotografías",
+        "retroalimentacion": "¡Nadie puede obligarte a enviar fotografías personales!",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "texto": "Un amigo de internet te dice: “Estoy triste y necesito que vengas a verme. No le digas a nadie porque me da pena”. ¿Qué harías para ayudarlo?",
+    "opciones": [
+      {
+        "texto": "Decirle que busque a un adulto y comentarle la situación a mamá o papá",
+        "retroalimentacion": "¡Hiciste lo correcto! Puedes ayudar a tu amigo buscando a un adulto que pueda protegerlo.",
+        "correcta": true
+      },
+      {
+        "texto": "Ir a verlo para que no esté triste",
+        "retroalimentacion": "Es bonito querer ayudar a alguien, pero no debes encontrarte a solas con una persona que conociste por internet.",
+        "correcta": false
+      },
+      {
+        "texto": "Prometerle que guardaré el secreto",
+        "retroalimentacion": "Guardar un secreto que puede poner a alguien en peligro no es la mejor forma de ayudar. Es importante buscar a un adulto.",
+        "correcta": false
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "texto": "Una persona en línea te pregunta si tus papás están en casa o a qué hora se van a trabajar. ¿Qué respondes?",
+    "opciones": [
+      {
+        "texto": "Le doy los horarios, somos amigos",
+        "retroalimentacion": "¡Ups! Esa información de seguridad es importante. ¡Los extraños no necesitan saber cuándo estás solo en casa!",
+        "correcta": false
+      },
+      {
+        "texto": "Le digo que no lo sé",
+        "retroalimentacion": "Una buena respuesta, pero lo mejor es no compartir información sobre tu familia con desconocidos.",
+        "correcta": false
+      },
+      {
+        "texto": "No le contesto y se lo digo a mi mamá o papá",
+        "retroalimentacion": "¡Decisión correcta! Eso es sospechoso. Contarle a tu familia es la mejor decisión para mantener a todos seguros.",
+        "correcta": true
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "texto": "Estás jugando en internet. Una persona que conociste hace unos días te dice que tiene tu misma edad, te pregunta en dónde estudias, te ofrece un regalo y te pide una fotografía. Al final te escribe: “No le cuentes a tus papás. Ellos no entenderían”. ¿Cuál sería la decisión más segura?",
+    "opciones": [
+      {
+        "texto": "Continuar hablando, pero no darle mi dirección",
+        "retroalimentacion": "No darle tu dirección es una buena decisión, pero hay más señales que debemos reconocer. Está pidiendo información personal, una foto, ofreciendo un regalo y guardar secretos.",
+        "correcta": false
+      },
+      {
+        "texto": "Preguntarle por qué quiere saber todas esas cosas",
+        "retroalimentacion": "Puedes tener curiosidad por saber por qué pregunta, pero no necesitas continuar la conversación para descubrirlo. Lo más seguro es alejarte y pedir ayuda.",
+        "correcta": false
+      },
+      {
+        "texto": "Dejar de hablar con él y contarle a un adulto de confianza",
+        "retroalimentacion": "¡Reconociste las señales de alerta! Cuando una persona que conociste en internet pide información personal, fotografías, ofrece regalos y quiere mantener secretos, es importante alejarte y buscar ayuda con un adulto.",
+        "correcta": true
+      }
+    ]
+  }
+]
