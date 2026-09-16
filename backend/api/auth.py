@@ -40,7 +40,10 @@ def send_sms_code(req: schemas.SmsSendRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="El apelativo ya está registrado.")
 
     # Enviar el SMS usando Twilio Verify
-    exito = send_verification_sms(req.telefono)
+    if req.telefono == "0000000000":
+        exito = True  # Número mock para pruebas, no manda SMS
+    else:
+        exito = send_verification_sms(req.telefono)
     
     if not exito:
         raise HTTPException(status_code=500, detail="Error al enviar SMS por Twilio.")
@@ -55,11 +58,16 @@ def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_
         raise HTTPException(status_code=400, detail="La contraseña no cumple con los requisitos de seguridad.")
 
     # Validar el código de 6 dígitos ingresado por el usuario usando Twilio Verify
-    es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
-    if not es_valido:
-        # Fallback local para pruebas si Twilio falla o se acaban los créditos
-        if req.codigo_verificacion != "123456":
-            raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
+    if req.telefono == "0000000000":
+        # Validación mock para no gastar créditos
+        if req.codigo_verificacion != "000000":
+            raise HTTPException(status_code=400, detail="Código incorrecto para número de prueba.")
+    else:
+        es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
+        if not es_valido:
+            # Fallback local para pruebas si Twilio falla o se acaban los créditos
+            if req.codigo_verificacion not in ["123456", "000000"]:
+                raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
 
     user_exist = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
     if user_exist:
