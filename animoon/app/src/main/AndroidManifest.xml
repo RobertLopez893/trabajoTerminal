@@ -49,11 +49,17 @@
         <activity
             android:name=".ui.auth.LoginActivity"
             android:screenOrientation="landscape"
+            android:exported="true" />
+
+        <!-- RESULTADOS MINIJUEGO 1 -->
+        <activity
+            android:name=".ui.minigame.Game1ResultActivity"
+            android:screenOrientation="landscape"
             android:exported="false" />
 
-        <!-- MINIJUEGO 1 - PRUEBA TEMPORAL -->
+        <!-- INTRODUCCIÓN MINIJUEGO 1 - PRUEBA TEMPORAL -->
         <activity
-            android:name=".ui.minigame.Game1Activity"
+            android:name=".ui.minigame.Game1IntroActivity"
             android:screenOrientation="landscape"
             android:exported="true">
 
@@ -68,6 +74,13 @@
             </intent-filter>
 
         </activity>
+
+
+        <!-- MINIJUEGO 1 -->
+        <activity
+            android:name=".ui.minigame.Game1Activity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
 
     </application>
 

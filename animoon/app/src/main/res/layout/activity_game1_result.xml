@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!-- ===================================================== -->
+    <!-- FONDO                                                 -->
+    <!-- ===================================================== -->
+
+    <ImageView
+        android:id="@+id/imgResultBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="Fondo de resultados"
+        android:scaleType="centerCrop"
+        android:src="@drawable/game1_bg_base_principal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!--
+        Capa oscura ligera para separar
+        visualmente los resultados del fondo.
+    -->
+
+    <View
+        android:id="@+id/resultOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#28000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!-- ===================================================== -->
+    <!-- MOONIE                                                -->
+    <!-- ===================================================== -->
+
+    <ImageView
+        android:id="@+id/imgResultMoonie"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:contentDescription="Estado final de Moonie"
+        android:scaleType="fitCenter"
+        android:src="@drawable/moonie_repaired"
+        app:layout_constraintWidth_percent="0.36"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+    <!-- ===================================================== -->
+    <!-- TARJETA DE RESULTADOS                                 -->
+    <!-- ===================================================== -->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardResults"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="48dp"
+        app:cardBackgroundColor="#F7FFFFFF"
+        app:cardCornerRadius="32dp"
+        app:cardElevation="10dp"
+        app:strokeColor="#D8DDF5"
+        app:strokeWidth="2dp"
+        app:layout_constraintStart_toEndOf="@id/imgResultMoonie"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingStart="36dp"
+            android:paddingTop="28dp"
+            android:paddingEnd="36dp"
+            android:paddingBottom="28dp">
+
+
+            <!-- ================================================= -->
+            <!-- TÍTULO                                            -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="¡Misión completada!"
+                android:textColor="#29345C"
+                android:textSize="34sp"
+                android:textStyle="bold" />
+
+
+            <!-- ================================================= -->
+            <!-- SUBTÍTULO                                         -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="Resultados de tu entrenamiento"
+                android:textColor="#67729B"
+                android:textSize="18sp" />
+
+
+            <!-- ================================================= -->
+            <!-- PUNTAJE                                           -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_score"
+                android:gravity="center"
+                android:paddingStart="30dp"
+                android:paddingTop="14dp"
+                android:paddingEnd="30dp"
+                android:paddingBottom="14dp"
+                android:text="★ 700 puntos"
+                android:textColor="#29345C"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+
+            <!-- ================================================= -->
+            <!-- ACIERTOS                                          -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultCorrect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:gravity="center"
+                android:text="7 de 10 aciertos"
+                android:textColor="#4A567F"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+
+            <!-- ================================================= -->
+            <!-- RÉCORD PERSONAL                                   -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultRecord"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="🏆 Récord personal: 700 puntos"
+                android:textColor="#6674D9"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+
+            <!-- ================================================= -->
+            <!-- MENSAJE EDUCATIVO                                 -->
+            <!-- ================================================= -->
+
+            <TextView
+                android:id="@+id/txtResultMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="center"
+                android:maxLines="3"
+                android:text="¡Gran trabajo! Moonie está casi como nuevo."
+                android:textColor="#39456E"
+                android:textSize="18sp" />
+
+
+            <!-- ================================================= -->
+            <!-- BOTONES                                           -->
+            <!-- ================================================= -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+
+                <!-- REINTENTAR -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRetry"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:text="Reintentar"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#6674D9"
+                    app:cornerRadius="22dp" />
+
+
+                <!-- REGRESAR -->
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReturn"
+                    android:layout_width="0dp"
+                    android:layout_height="64dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textColor="#29345C"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#E8EBFA"
+                    app:cornerRadius="22dp"
+                    app:strokeColor="#BCC5EC"
+                    app:strokeWidth="2dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
