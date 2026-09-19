@@ -59,7 +59,7 @@
 
         <!-- INTRODUCCIÓN MINIJUEGO 1 - PRUEBA TEMPORAL -->
         <activity
-            android:name=".ui.minigame.Game1IntroActivity"
+            android:name=".ui.minigame.Game1CinematicActivity"
             android:screenOrientation="landscape"
             android:exported="true">
 
