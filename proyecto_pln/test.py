@@ -1,9 +1,11 @@
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
+from peft import PeftModel
 
 RUTA_MODELO = "./output/training_results/mejor_modelo"
-MAX_LEN     = 128
-device      = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+MAX_LEN      = 128
+VENTANA      = 5
+device       = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 niveles = {
     0: "Bajo riesgo",
@@ -12,14 +14,19 @@ niveles = {
 }
 
 print("Cargando modelo...")
-tokenizer = BertTokenizer.from_pretrained(RUTA_MODELO)
-modelo    = BertForSequenceClassification.from_pretrained(RUTA_MODELO)
+tokenizer   = BertTokenizer.from_pretrained(RUTA_MODELO)
+modelo_base = BertForSequenceClassification.from_pretrained(
+    "bert-base-multilingual-cased",
+    num_labels=3
+)
+modelo = PeftModel.from_pretrained(modelo_base, RUTA_MODELO)
 modelo.to(device)
 modelo.eval()
 print("Listo.\n")
 
 
-def clasificar(texto):
+def clasificar_ventana(textos_ventana):
+    texto = " | ".join(textos_ventana)
     tokens = tokenizer(
         texto,
         max_length=MAX_LEN,
@@ -40,11 +47,19 @@ def clasificar(texto):
 
 def analizar_conversacion(mensajes):
     print(f"\n{'─'*50}")
+    print(f"  Analizando conversacion ({len(mensajes)} mensajes)")
+    print(f"  Ventana de contexto: {VENTANA} mensajes")
+    print(f"{'─'*50}")
+
     riesgo_max = 0
     alertas    = []
+    historial  = []
 
     for i, msg in enumerate(mensajes):
-        pred, probs = clasificar(msg["texto"])
+        historial.append(f"{msg['emisor']}: {msg['texto']}")
+        ventana_actual = historial[max(0, len(historial) - VENTANA):]
+
+        pred, probs = clasificar_ventana(ventana_actual)
 
         print(f"  [{i+1}] {msg['emisor']}: {msg['texto'][:55]}...")
         print(f"       {niveles[pred]} | "
@@ -56,7 +71,7 @@ def analizar_conversacion(mensajes):
         if pred >= 1:
             alertas.append(i + 1)
 
-    print(f"\n  Resultado: {niveles[riesgo_max]}")
+    print(f"\n  Resultado final: {niveles[riesgo_max]}")
     if alertas:
         print(f"  Mensajes en alerta: {alertas}")
     print(f"{'─'*50}\n")
@@ -64,18 +79,21 @@ def analizar_conversacion(mensajes):
 
 def modo_interactivo():
     print("=" * 50)
-    print("  ANIMOON — prueba de modelo")
+    print("  ANIMOON — prueba de modelo (LoRA + Ventana)")
     print("  'salir' para terminar")
     print("  'conv'  para probar conversacion de ejemplo")
     print("=" * 50)
 
-    while True:
-        texto = input("\nMensaje: ").strip()
+    historial_interactivo = []
 
-        if texto.lower() == "salir":
+    while True:
+        entrada = input("\nEmisor (A/B) y mensaje, separados por ':'\n> ").strip()
+
+        if entrada.lower() == "salir":
             break
 
-        elif texto.lower() == "conv":
+        elif entrada.lower() == "conv":
+            historial_interactivo = []
             ejemplo = [
                 {"emisor": "Usuario A", "texto": "hey do you want to play roblox?"},
                 {"emisor": "Usuario B", "texto": "sure, what's your username?"},
@@ -86,10 +104,26 @@ def modo_interactivo():
             ]
             analizar_conversacion(ejemplo)
 
-        elif texto:
-            pred, probs = clasificar(texto)
+        elif entrada.lower() == "reset":
+            historial_interactivo = []
+            print("  Historial limpiado — nueva conversacion")
+
+        elif ":" in entrada:
+            partes = entrada.split(":", 1)
+            emisor = partes[0].strip()
+            texto  = partes[1].strip()
+
+            historial_interactivo.append(f"{emisor}: {texto}")
+            ventana_actual = historial_interactivo[max(0, len(historial_interactivo) - VENTANA):]
+
+            pred, probs = clasificar_ventana(ventana_actual)
             print(f"  {niveles[pred]}")
             print(f"  Bajo: {probs[0]*100:.1f}% | Medio: {probs[1]*100:.1f}% | Alto: {probs[2]*100:.1f}%")
+            print(f"  Contexto usado: {len(ventana_actual)} mensaje(s)")
+
+        else:
+            print("  Formato: EmisorA: mensaje  o  EmisorB: mensaje")
+            print("  Comandos: 'conv', 'reset', 'salir'")
 
 
 if __name__ == "__main__":

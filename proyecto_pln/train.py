@@ -15,6 +15,11 @@ from transformers import (
     BertForSequenceClassification,
     get_linear_schedule_with_warmup
 )
+from peft import (
+    get_peft_model,
+    LoraConfig,
+    TaskType
+)
 from sklearn.model_selection import train_test_split
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import (
@@ -23,12 +28,13 @@ from sklearn.metrics import (
     f1_score
 )
 
-CORPUS_PATH      = "./output/corpus_final.csv"
-RESULTADOS_PATH  = "./output/training_results"
+CORPUS_PATH       = "./output/corpus_final.csv"
+RESULTADOS_PATH   = "./output/training_results"
 os.makedirs(RESULTADOS_PATH, exist_ok=True)
 
 PREENTRENO_MODELO = "bert-base-multilingual-cased"
 MAX_TOKEN_LEN     = 128
+VENTANA_MENSAJES  = 5
 BATCH_SIZE        = 32
 NUM_EPOCAS        = 4
 APRENDIZAJE_RATE  = 2e-5
@@ -37,39 +43,59 @@ SEM_RANDOM        = 42
 CAP_CLASE_BAJA    = 5_000
 GOAL_CLASES       = 4_000
 
+LORA_R            = 8
+LORA_ALPHA        = 16
+LORA_DROPOUT      = 0.1
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Dispositivo: {device}")
 if torch.cuda.is_available():
     print(f"GPU: {torch.cuda.get_device_name(0)}")
 
 
-def cargar_balancear(ruta_corpus):
-    print("\n[1/5] Cargando y balanceando corpus...")
-    datos = pd.read_csv(ruta_corpus, encoding="utf-8-sig")
-    datos = datos.dropna(subset=["texto_mensaje", "nivel_riesgo"]).copy()
-    datos["nivel_riesgo"] = datos["nivel_riesgo"].astype(int)
+def construir_ventanas(datos, ventana=VENTANA_MENSAJES):
+    print(f"\n  Construyendo ventanas de {ventana} mensajes...")
+    filas = []
 
-    print(f"  Total original: {len(datos):>10,} mensajes")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n = (datos.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: {n:>10,}  ({n/len(datos)*100:.1f}%)")
+    for id_bloque, grupo in datos.groupby("id_bloque"):
+        grupo = grupo.sort_values("orden_mensaje").reset_index(drop=True)
+        mensajes   = grupo["texto_mensaje"].tolist()
+        etiquetas  = grupo["nivel_riesgo"].tolist()
+        emisores   = grupo["emisor"].tolist()
 
-    clase_baja  = datos[datos.nivel_riesgo == 0]
-    clase_media = datos[datos.nivel_riesgo == 1]
-    clase_alta  = datos[datos.nivel_riesgo == 2]
+        for i in range(len(mensajes)):
+            inicio  = max(0, i - ventana + 1)
+            ventana_textos = []
+            for j in range(inicio, i + 1):
+                ventana_textos.append(f"{emisores[j]}: {mensajes[j]}")
+            texto_ventana = " | ".join(ventana_textos)
+            filas.append({
+                "texto_ventana": texto_ventana,
+                "nivel_riesgo":  etiquetas[i]
+            })
+
+    df_ventanas = pd.DataFrame(filas)
+    print(f"  Ventanas construidas: {len(df_ventanas):,}")
+    return df_ventanas
+
+
+def balancear_train(df_train):
+    clase_baja  = df_train[df_train.nivel_riesgo == 0]
+    clase_media = df_train[df_train.nivel_riesgo == 1]
+    clase_alta  = df_train[df_train.nivel_riesgo == 2]
 
     muestra_baja = clase_baja.sample(
         n=min(CAP_CLASE_BAJA, len(clase_baja)),
         random_state=SEM_RANDOM
     )
     muestra_media = clase_media.sample(
-        n=GOAL_CLASES,
-        replace=True,
+        n=min(GOAL_CLASES, len(clase_media)),
+        replace=len(clase_media) < GOAL_CLASES,
         random_state=SEM_RANDOM
     )
     muestra_alta = clase_alta.sample(
-        n=GOAL_CLASES,
-        replace=True,
+        n=min(GOAL_CLASES, len(clase_alta)),
+        replace=len(clase_alta) < GOAL_CLASES,
         random_state=SEM_RANDOM
     )
 
@@ -77,27 +103,59 @@ def cargar_balancear(ruta_corpus):
         [muestra_baja, muestra_media, muestra_alta]
     ).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
 
-    print(f"\n  Corpus balanceado: {len(balanceado):,} mensajes")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n = (balanceado.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: {n:>8,}")
-
     return balanceado
 
 
-class ConversacionDataset(Dataset):
-    def __init__(self, mensajes, etiquetas, tokenizer, max_len):
-        self.mensajes  = mensajes
+def cargar_datos(ruta_corpus):
+    print("\n[1/5] Cargando corpus...")
+    datos = pd.read_csv(ruta_corpus, encoding="utf-8-sig")
+    datos = datos.dropna(subset=["texto_mensaje", "nivel_riesgo"]).copy()
+    datos["nivel_riesgo"] = datos["nivel_riesgo"].astype(int)
+
+    print(f"  Total: {len(datos):,} mensajes")
+    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
+        n = (datos.nivel_riesgo == nivel).sum()
+        print(f"  Clase {nivel} {nombre}: {n:,}  ({n/len(datos)*100:.1f}%)")
+
+    df_ventanas = construir_ventanas(datos)
+
+    df_train, df_val = train_test_split(
+        df_ventanas,
+        test_size=0.2,
+        stratify=df_ventanas["nivel_riesgo"],
+        random_state=SEM_RANDOM
+    )
+
+    print(f"\n  Split sobre datos reales:")
+    print(f"  Train: {len(df_train):,} | Validacion: {len(df_val):,}")
+    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
+        n_t = (df_train.nivel_riesgo == nivel).sum()
+        n_v = (df_val.nivel_riesgo == nivel).sum()
+        print(f"  Clase {nivel} {nombre}: train={n_t:>6,}  val={n_v:>5,}")
+
+    df_train_bal = balancear_train(df_train)
+
+    print(f"\n  Train balanceado: {len(df_train_bal):,} mensajes")
+    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
+        n = (df_train_bal.nivel_riesgo == nivel).sum()
+        print(f"  Clase {nivel} {nombre}: {n:,}")
+
+    return df_train_bal, df_val
+
+
+class VentanaDataset(Dataset):
+    def __init__(self, textos, etiquetas, tokenizer, max_len):
+        self.textos    = textos
         self.etiquetas = etiquetas
         self.tokenizer = tokenizer
         self.max_len   = max_len
 
     def __len__(self):
-        return len(self.mensajes)
+        return len(self.textos)
 
     def __getitem__(self, idx):
         tokens = self.tokenizer(
-            str(self.mensajes[idx]),
+            str(self.textos[idx]),
             max_length=self.max_len,
             padding="max_length",
             truncation=True,
@@ -134,10 +192,8 @@ def mostrar_metricas(reales, predicciones, epoca):
     nombres_clases = ["Bajo (0)", "Medio (1)", "Alto (2)"]
     print(f"\n  Epoch {epoca}")
     print(classification_report(reales, predicciones, target_names=nombres_clases, digits=4))
-
     f1_macro = f1_score(reales, predicciones, average="macro")
     print(f"  F1 Macro: {f1_macro:.4f}")
-
     return f1_macro
 
 
@@ -167,7 +223,7 @@ def guardar_grafica_f1(historial):
              color="green", linewidth=2, label="F1 Macro")
     plt.plot(epochs, historial["loss"], marker="s", linestyle="--",
              color="steelblue", linewidth=2, label="Loss")
-    plt.title("ANIMOON - F1 Macro y Loss")
+    plt.title("ANIMOON - F1 Macro y Loss (LoRA + Ventana)")
     plt.xlabel("Epoch")
     plt.ylabel("Score / Loss")
     plt.legend()
@@ -180,28 +236,39 @@ def guardar_grafica_f1(historial):
 
 
 def entrenar():
-    datos = cargar_balancear(CORPUS_PATH)
+    df_train_bal, df_val = cargar_datos(CORPUS_PATH)
 
-    mensajes_train, mensajes_val, etiquetas_train, etiquetas_val = train_test_split(
-        datos["texto_mensaje"].tolist(),
-        datos["nivel_riesgo"].tolist(),
-        test_size=0.2,
-        stratify=datos["nivel_riesgo"],
-        random_state=SEM_RANDOM
-    )
-    print(f"\n  Train: {len(mensajes_train):,} | Validacion: {len(mensajes_val):,}")
+    textos_train   = df_train_bal["texto_ventana"].tolist()
+    etiquetas_train = df_train_bal["nivel_riesgo"].tolist()
+    textos_val     = df_val["texto_ventana"].tolist()
+    etiquetas_val  = df_val["nivel_riesgo"].tolist()
 
-    print(f"\n[2/5] Descargando {PREENTRENO_MODELO}...")
+    print(f"\n[2/5] Descargando {PREENTRENO_MODELO} y configurando LoRA...")
     tokenizer = BertTokenizer.from_pretrained(PREENTRENO_MODELO)
-    modelo    = BertForSequenceClassification.from_pretrained(
+    modelo_base = BertForSequenceClassification.from_pretrained(
         PREENTRENO_MODELO,
         num_labels=NUM_CLASES
     )
+
+    lora_config = LoraConfig(
+        task_type=TaskType.SEQ_CLS,
+        r=LORA_R,
+        lora_alpha=LORA_ALPHA,
+        lora_dropout=LORA_DROPOUT,
+        target_modules=["query", "value"],
+        bias="none"
+    )
+    modelo = get_peft_model(modelo_base, lora_config)
     modelo.to(device)
 
+    params_totales     = sum(p.numel() for p in modelo.parameters())
+    params_entrenables = sum(p.numel() for p in modelo.parameters() if p.requires_grad)
+    print(f"\n  Parametros totales    : {params_totales:,}")
+    print(f"  Parametros LoRA       : {params_entrenables:,}  ({params_entrenables/params_totales*100:.2f}%)")
+
     print("\n[3/5] Preparando DataLoaders...")
-    dataset_train = ConversacionDataset(mensajes_train, etiquetas_train, tokenizer, MAX_TOKEN_LEN)
-    dataset_val   = ConversacionDataset(mensajes_val,   etiquetas_val,   tokenizer, MAX_TOKEN_LEN)
+    dataset_train = VentanaDataset(textos_train, etiquetas_train, tokenizer, MAX_TOKEN_LEN)
+    dataset_val   = VentanaDataset(textos_val,   etiquetas_val,   tokenizer, MAX_TOKEN_LEN)
 
     loader_train = DataLoader(dataset_train, batch_size=BATCH_SIZE, shuffle=True,
                               num_workers=2, pin_memory=True)
@@ -226,7 +293,8 @@ def entrenar():
         num_training_steps=pasos_totales
     )
 
-    print(f"\n[4/5] Entrenando {NUM_EPOCAS} epochs...")
+    print(f"\n[4/5] Entrenando {NUM_EPOCAS} epochs con LoRA...")
+    print(f"  Ventana de analisis: {VENTANA_MENSAJES} mensajes")
     mejor_f1  = 0.0
     historial = {"loss": [], "f1_macro": []}
 

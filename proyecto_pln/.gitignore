@@ -1,0 +1,7 @@
+raw_data/
+output/
+__pycache__/
+*.pyc
+*.pkl
+*.zip
+.DS_Store
