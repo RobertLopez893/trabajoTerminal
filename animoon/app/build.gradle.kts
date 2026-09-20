@@ -33,7 +33,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         
         // Inyecta la variable en la clase BuildConfig
-        buildConfigField("String", "API_BASE_URL", "\"http://192.168.0.104:8000/\"")
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 
     buildTypes {

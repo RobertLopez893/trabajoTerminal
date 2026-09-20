@@ -43,19 +43,28 @@ open class BaseActivity : AppCompatActivity() {
         builder.setView(view)
         builder.setCancelable(false)
         
-        sessionDialog = builder.create()
-        // Hacer el fondo transparente para que se vea nuestro diseño curvo y no el recuadro blanco por defecto
-        sessionDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        try {
+            sessionDialog = builder.create()
+            sessionDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        view.findViewById<MaterialButton>(R.id.btnReconnect).setOnClickListener {
-            sessionDialog?.dismiss()
+            view.findViewById<MaterialButton>(R.id.btnReconnect).setOnClickListener {
+                sessionDialog?.dismiss()
+                TokenManager.clearToken()
+                val loginIntent = Intent(this, LoginActivity::class.java)
+                loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(loginIntent)
+                finish()
+            }
+
+            sessionDialog?.show()
+        } catch (e: Exception) {
+            // Si la Activity se está cerrando y el diálogo truena (BadTokenException),
+            // simplemente cerramos la sesión y lo mandamos al Login de forma segura.
             TokenManager.clearToken()
             val loginIntent = Intent(this, LoginActivity::class.java)
             loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(loginIntent)
             finish()
         }
-
-        sessionDialog?.show()
     }
 }
