@@ -9,14 +9,15 @@ from backend.api.jwt_manager import verify_access_token, get_token_hash
 
 security = HTTPBearer()
 
-def get_current_user(
+from datetime import timedelta
+
+def get_current_session(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
-) -> models.Usuario:
+) -> models.Sesion:
+    """Devuelve la sesión actual, verificando expiración de inactividad (Sliding Session)"""
     token = credentials.credentials
-    
     try:
-        # Verificar firma EdDSA y expiración
         payload = verify_access_token(token)
         user_id: str = payload.get("sub")
         if user_id is None:
@@ -26,43 +27,36 @@ def get_current_user(
     except Exception:
         raise HTTPException(status_code=401, detail="Token inválido o expirado.")
 
-    # Verificar que el token esté registrado y activo en la tabla SESION
     token_hash = get_token_hash(token)
-    sesion = db.query(models.Sesion).filter(
-        models.Sesion.session_token_hash == token_hash,
-        models.Sesion.is_active == True,
-        models.Sesion.expires_at > datetime.utcnow()
-    ).first()
-    
-    if not sesion:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Sesión inválida, revocada o expirada."
-        )
-
-    # Buscar al usuario
-    user = db.query(models.Usuario).filter(models.Usuario.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
-    if not user.is_active or user.is_banned:
-        raise HTTPException(status_code=403, detail="Usuario inactivo o bloqueado.")
-
-    return user
-
-def get_current_session(
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-    db: Session = Depends(get_db)
-) -> models.Sesion:
-    """Devuelve la sesión actual en caso de que necesitemos la llave ECDHE"""
-    token = credentials.credentials
-    token_hash = get_token_hash(token)
-    
     sesion = db.query(models.Sesion).filter(
         models.Sesion.session_token_hash == token_hash,
         models.Sesion.is_active == True
     ).first()
     
     if not sesion:
-        raise HTTPException(status_code=401, detail="Sesión inválida")
+        raise HTTPException(status_code=401, detail="Sesión inválida o revocada.")
+        
+    # Validar sliding expiration por inactividad
+    if sesion.expires_at < datetime.utcnow():
+        sesion.is_active = False
+        db.commit()
+        raise HTTPException(status_code=401, detail="Sesión expirada por inactividad.")
+
+    # Renovar expiración 15 minutos hacia el futuro
+    sesion.expires_at = datetime.utcnow() + timedelta(minutes=15)
+    db.commit()
         
     return sesion
+
+def get_current_user(
+    sesion: models.Sesion = Depends(get_current_session),
+    db: Session = Depends(get_db)
+) -> models.Usuario:
+    """Devuelve el usuario actual basándose en la sesión activa"""
+    user = db.query(models.Usuario).filter(models.Usuario.id == sesion.usuario_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
+    if not user.is_active or user.is_banned:
+        raise HTTPException(status_code=403, detail="Usuario inactivo o bloqueado.")
+
+    return user

@@ -33,5 +33,6 @@ data class TokenResponse(
     val access_token: String,
     val token_type: String,
     val message: String,
-    val status: String
+    val status: String,
+    val server_ecdhe_public_key: String? = null
 )

@@ -64,6 +64,9 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
 
+    // Criptografía (ECDHE X25519)
+    implementation("org.bouncycastle:bcprov-jdk15to18:1.77")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

@@ -38,6 +38,7 @@ CREATE TABLE SESION (
     id VARCHAR(36) PRIMARY KEY,
     usuario_id VARCHAR(36) NOT NULL,
     ecdhe_public_key_ephemeral TEXT NOT NULL,
+    shared_secret_b64 VARCHAR(255) NULL,
     session_token_hash VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     expires_at TIMESTAMP NOT NULL,

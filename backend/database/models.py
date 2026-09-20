@@ -47,6 +47,7 @@ class Sesion(Base):
     id = Column(String(36), primary_key=True, index=True)
     usuario_id = Column(String(36), ForeignKey("usuario.id", ondelete="CASCADE"), nullable=False)
     ecdhe_public_key_ephemeral = Column(Text, nullable=False)
+    shared_secret_b64 = Column(String(255), nullable=True) # Secreto derivado tras el HKDF
     session_token_hash = Column(String(255), nullable=False)
     created_at = Column(TIMESTAMP, server_default=func.now())
     expires_at = Column(TIMESTAMP, nullable=False)

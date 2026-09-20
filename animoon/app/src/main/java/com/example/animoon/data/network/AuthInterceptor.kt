@@ -15,6 +15,13 @@ class AuthInterceptor : Interceptor {
             requestBuilder.addHeader("Authorization", "Bearer $token")
         }
         
-        return chain.proceed(requestBuilder.build())
+        val response = chain.proceed(requestBuilder.build())
+        
+        // Si el servidor responde 401 (Sesión expirada o revocada)
+        if (response.code == 401) {
+            TokenManager.sessionExpiredFlow.tryEmit(Unit)
+        }
+        
+        return response
     }
 }

@@ -1,39 +1,61 @@
 package com.example.animoon.ui.base
 
+import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.LayoutInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
+import com.example.animoon.R
+import com.example.animoon.data.network.TokenManager
+import com.example.animoon.ui.auth.LoginActivity
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.launch
 
-abstract class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ocultarBarrasSistema()
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-
-        if (hasFocus) {
-            ocultarBarrasSistema()
+        
+        lifecycleScope.launch {
+            TokenManager.sessionExpiredFlow.collect {
+                showSessionExpiredDialog()
+            }
         }
     }
 
-    private fun ocultarBarrasSistema() {
+    override fun onDestroy() {
+        super.onDestroy()
+        // No need to unregister flow manually, lifecycleScope handles it
+    }
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+    private var sessionDialog: AlertDialog? = null
 
-        val controller =
-            WindowCompat.getInsetsController(window, window.decorView)
+    private fun showSessionExpiredDialog() {
+        if (isFinishing || isDestroyed || (sessionDialog?.isShowing == true)) {
+            return
+        }
 
-        controller.hide(
-            WindowInsetsCompat.Type.systemBars()
-        )
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_session_expired, null)
+        val builder = AlertDialog.Builder(this)
+        builder.setView(view)
+        builder.setCancelable(false)
+        
+        sessionDialog = builder.create()
+        // Hacer el fondo transparente para que se vea nuestro diseño curvo y no el recuadro blanco por defecto
+        sessionDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        view.findViewById<MaterialButton>(R.id.btnReconnect).setOnClickListener {
+            sessionDialog?.dismiss()
+            TokenManager.clearToken()
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            loginIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(loginIntent)
+            finish()
+        }
+
+        sessionDialog?.show()
     }
 }

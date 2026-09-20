@@ -48,10 +48,13 @@ class LoginActivity : AppCompatActivity() {
 
             btnLogin.isEnabled = false
 
-            // Estructura lista para cuando el backend tenga endpoint de login
+            // Generar par de llaves X25519 para el canal seguro
+            val clientKeyPair = com.example.animoon.security.CryptoManager.generateEphemeralKeyPair()
+            val clientPubKeyB64 = com.example.animoon.security.CryptoManager.getPublicKeyBase64(clientKeyPair)
+
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val request = com.example.animoon.data.model.LoginRequest(apelativo, password, "MOCK_KEY_ANDROID")
+                    val request = com.example.animoon.data.model.LoginRequest(apelativo, password, clientPubKeyB64)
                     val response = com.example.animoon.data.network.ApiClient.authService.login(request)
                     
                     withContext(Dispatchers.Main) {
@@ -61,6 +64,17 @@ class LoginActivity : AppCompatActivity() {
                             if (!token.isNullOrEmpty()) {
                                 com.example.animoon.data.network.TokenManager.saveToken(token)
                             }
+
+                            // 1. Recibir llave del servidor y computar el Shared Secret (AES-256)
+                            val serverPubKeyB64 = response.body()?.server_ecdhe_public_key
+                            if (!serverPubKeyB64.isNullOrEmpty()) {
+                                val sharedSecretB64 = com.example.animoon.security.CryptoManager.computeSharedSecret(
+                                    clientKeyPair, serverPubKeyB64
+                                )
+                                com.example.animoon.data.network.TokenManager.saveSessionSecret(sharedSecretB64)
+                                Log.d("ECDHE", "Secreto AES-256 derivado y guardado correctamente.")
+                            }
+
                             Toast.makeText(
                                 this@LoginActivity,
                                 response.body()?.message ?: "Login exitoso",
