@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+
+    android:background="@drawable/bg_minigames_menu"
+
+    android:paddingStart="28dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="28dp"
+    android:paddingBottom="24dp">
+
+
+    <!-- ===================================================== -->
+    <!-- CABECERA                                              -->
+    <!-- ===================================================== -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+
+
+        <!-- REGRESAR -->
+
+        <TextView
+            android:id="@+id/btnBackMinigames"
+
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+
+            android:background="@drawable/bg_cinematic_skip"
+
+            android:clickable="true"
+            android:focusable="true"
+
+            android:gravity="center"
+
+            android:text="←  Volver"
+            android:textColor="@android:color/white"
+
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <!-- TÍTULO -->
+
+        <TextView
+            android:id="@+id/txtMinigamesTitle"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Minijuegos"
+
+            android:textColor="#29345C"
+            android:textSize="32sp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!-- SUBTÍTULO -->
+
+        <TextView
+            android:id="@+id/txtMinigamesSubtitle"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="4dp"
+
+            android:text="Elige una misión y comienza tu entrenamiento"
+
+            android:textColor="#67729B"
+            android:textSize="16sp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/txtMinigamesTitle" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- TARJETAS DE MINIJUEGOS                                -->
+    <!-- ===================================================== -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_weight="1"
+
+        android:orientation="horizontal"
+        android:gravity="center">
+
+
+        <!-- ================================================= -->
+        <!-- MINIJUEGO 1                                      -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="8dp"
+
+            app:cardBackgroundColor="#FFFFFF"
+
+            app:cardCornerRadius="30dp"
+            app:cardElevation="8dp"
+
+            app:strokeColor="#AEBBF0"
+            app:strokeWidth="2dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+
+                android:padding="20dp">
+
+
+                <!-- ESTADO -->
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:background="@drawable/bg_moonie_message"
+
+                    android:paddingStart="16dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="6dp"
+
+                    android:text="DISPONIBLE"
+
+                    android:textColor="#3E756A"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <!-- IMAGEN -->
+
+                <ImageView
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+
+                    android:layout_marginTop="8dp"
+
+                    android:contentDescription="Moonie averiado"
+
+                    android:scaleType="fitCenter"
+
+                    android:src="@drawable/moonie_damaged" />
+
+
+                <!-- TÍTULO -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="4dp"
+
+                    android:gravity="center"
+
+                    android:text="Repara a Moonie"
+
+                    android:textColor="#29345C"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+
+                <!-- DESCRIPCIÓN -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="8dp"
+
+                    android:gravity="center_horizontal"
+
+                    android:text="Pon a prueba lo que sabes sobre seguridad digital y ayuda a Moonie a recuperarse."
+
+                    android:textColor="#67729B"
+                    android:textSize="14sp"
+
+                    android:lineSpacingExtra="2dp" />
+
+
+                <!-- JUGAR -->
+
+                <Button
+                    android:id="@+id/btnGame1"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+
+                    android:layout_marginTop="12dp"
+
+                    android:background="@drawable/bg_cinematic_button"
+
+                    android:text="Jugar"
+
+                    android:textAllCaps="false"
+
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- ================================================= -->
+        <!-- MINIJUEGO 2                                      -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            android:alpha="0.82"
+
+            app:cardBackgroundColor="#F5F6FC"
+
+            app:cardCornerRadius="30dp"
+            app:cardElevation="4dp"
+
+            app:strokeColor="#D8DDF5"
+            app:strokeWidth="2dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical"
+                android:gravity="center"
+
+                android:padding="20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="2"
+
+                    android:textColor="#ADB4CE"
+                    android:textSize="74sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+
+                    android:text="Minijuego 2"
+
+                    android:textColor="#626D96"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="12dp"
+
+                    android:gravity="center"
+
+                    android:text="Próximamente"
+
+                    android:textColor="#9098B5"
+                    android:textSize="16sp" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+
+                    android:enabled="false"
+
+                    android:text="Próximamente"
+
+                    android:textAllCaps="false"
+
+                    android:textColor="#67729B"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+
+                    app:backgroundTint="#E1E4F2"
+                    app:cornerRadius="24dp" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- ================================================= -->
+        <!-- MINIJUEGO 3                                      -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+
+            android:alpha="0.82"
+
+            app:cardBackgroundColor="#F5F6FC"
+
+            app:cardCornerRadius="30dp"
+            app:cardElevation="4dp"
+
+            app:strokeColor="#D8DDF5"
+            app:strokeWidth="2dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical"
+                android:gravity="center"
+
+                android:padding="20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="3"
+
+                    android:textColor="#ADB4CE"
+                    android:textSize="74sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+
+                    android:text="Minijuego 3"
+
+                    android:textColor="#626D96"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="12dp"
+
+                    android:gravity="center"
+
+                    android:text="Próximamente"
+
+                    android:textColor="#9098B5"
+                    android:textSize="16sp" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+
+                    android:enabled="false"
+
+                    android:text="Próximamente"
+
+                    android:textAllCaps="false"
+
+                    android:textColor="#67729B"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+
+                    app:backgroundTint="#E1E4F2"
+                    app:cornerRadius="24dp" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <!-- ================================================= -->
+        <!-- MINIJUEGO 4                                      -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="6dp"
+
+            android:alpha="0.82"
+
+            app:cardBackgroundColor="#F5F6FC"
+
+            app:cardCornerRadius="30dp"
+            app:cardElevation="4dp"
+
+            app:strokeColor="#D8DDF5"
+            app:strokeWidth="2dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:orientation="vertical"
+                android:gravity="center"
+
+                android:padding="20dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="4"
+
+                    android:textColor="#ADB4CE"
+                    android:textSize="74sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:gravity="center"
+
+                    android:text="Minijuego 4"
+
+                    android:textColor="#626D96"
+                    android:textSize="21sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+
+                    android:layout_weight="1"
+
+                    android:layout_marginTop="12dp"
+
+                    android:gravity="center"
+
+                    android:text="Próximamente"
+
+                    android:textColor="#9098B5"
+                    android:textSize="16sp" />
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+
+                    android:enabled="false"
+
+                    android:text="Próximamente"
+
+                    android:textAllCaps="false"
+
+                    android:textColor="#67729B"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+
+                    app:backgroundTint="#E1E4F2"
+                    app:cornerRadius="24dp" />
+
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
+    </LinearLayout>
+
+</LinearLayout>

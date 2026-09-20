@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="520dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+
+    app:cardBackgroundColor="#FAFFFFFF"
+    app:cardCornerRadius="32dp"
+    app:cardElevation="12dp"
+
+    app:strokeColor="#D8DDF5"
+    app:strokeWidth="2dp">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:paddingStart="32dp"
+        android:paddingTop="26dp"
+        android:paddingEnd="32dp"
+        android:paddingBottom="28dp">
+
+
+        <!-- ================================================= -->
+        <!-- MOONIE                                            -->
+        <!-- ================================================= -->
+
+        <ImageView
+            android:id="@+id/imgDialogMoonie"
+
+            android:layout_width="105dp"
+            android:layout_height="105dp"
+
+            android:contentDescription="Moonie"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/moonie_neutral"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!-- ================================================= -->
+        <!-- TÍTULO                                            -->
+        <!-- ================================================= -->
+
+        <TextView
+            android:id="@+id/tvDialogTitle"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="6dp"
+
+            android:text="Centro de Entrenamiento"
+
+            android:textColor="#29345C"
+            android:textSize="26sp"
+            android:textStyle="bold"
+
+            android:gravity="center"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/imgDialogMoonie" />
+
+
+        <!-- ================================================= -->
+        <!-- MENSAJE PRINCIPAL                                 -->
+        <!-- ================================================= -->
+
+        <TextView
+            android:id="@+id/tvDialogMessage"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+
+            android:text="¿Quieres entrar y ayudar a Moonie?"
+
+            android:textColor="#67729B"
+            android:textSize="18sp"
+
+            android:gravity="center"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/tvDialogTitle" />
+
+
+        <!-- ================================================= -->
+        <!-- MENSAJE SECUNDARIO                                -->
+        <!-- ================================================= -->
+
+        <TextView
+            android:id="@+id/tvDialogSubtitle"
+
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="6dp"
+
+            android:text="¡Tu entrenamiento de seguridad digital te espera!"
+
+            android:textColor="#8A93B0"
+            android:textSize="14sp"
+
+            android:gravity="center"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/tvDialogMessage" />
+
+
+        <!-- ================================================= -->
+        <!-- QUEDARME AQUÍ                                     -->
+        <!-- ================================================= -->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnStay"
+
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+
+            android:layout_marginTop="26dp"
+            android:layout_marginEnd="10dp"
+
+            android:text="Quedarme aquí"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="17sp"
+            android:textStyle="bold"
+
+            android:maxLines="1"
+            android:singleLine="true"
+
+            app:backgroundTint="#E8EBFA"
+            app:cornerRadius="22dp"
+
+            app:strokeColor="#BCC5EC"
+            app:strokeWidth="2dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnEnter"
+
+            app:layout_constraintTop_toBottomOf="@id/tvDialogSubtitle"
+
+            app:layout_constraintHorizontal_weight="1" />
+
+
+        <!-- ================================================= -->
+        <!-- ENTRAR                                            -->
+        <!-- ================================================= -->
+
+        <Button
+            android:id="@+id/btnEnter"
+
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+
+            android:layout_marginStart="10dp"
+
+            android:background="@drawable/bg_cinematic_button"
+
+            android:text="Entrar"
+            android:textAllCaps="false"
+
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+
+            android:maxLines="1"
+            android:singleLine="true"
+
+            app:layout_constraintStart_toEndOf="@id/btnStay"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="@id/btnStay"
+            app:layout_constraintBottom_toBottomOf="@id/btnStay"
+
+            app:layout_constraintHorizontal_weight="1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

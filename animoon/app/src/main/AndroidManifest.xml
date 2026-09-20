@@ -21,8 +21,14 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:screenOrientation="landscape"
-            android:exported="true">
+            android:exported="false">
+        </activity>
 
+        <!-- MENU -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="landscape"
+            android:exported="true">
             <intent-filter>
 
                 <action
@@ -33,12 +39,6 @@
 
             </intent-filter>
         </activity>
-
-        <!-- MENU -->
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="landscape"
-            android:exported="false" />
 
         <!-- REGISTRO -->
         <activity
@@ -61,6 +61,12 @@
             android:name=".ui.auth.LoginActivity"
             android:screenOrientation="landscape"
             android:exported="true" />
+
+        <!-- MENÚ DE MINIJUEGOS -->
+        <activity
+            android:name=".ui.minigame.MinigamesActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
 
         <!-- RESULTADOS MINIJUEGO 1 -->
         <activity
