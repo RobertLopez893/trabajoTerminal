@@ -57,6 +57,10 @@ class LoginActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         btnLogin.isEnabled = true
                         if (response.isSuccessful) {
+                            val token = response.body()?.access_token
+                            if (!token.isNullOrEmpty()) {
+                                com.example.animoon.data.network.TokenManager.saveToken(token)
+                            }
                             Toast.makeText(
                                 this@LoginActivity,
                                 response.body()?.message ?: "Login exitoso",

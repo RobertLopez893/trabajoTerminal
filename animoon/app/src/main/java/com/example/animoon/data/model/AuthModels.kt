@@ -27,3 +27,10 @@ data class DefaultResponse(
     val message: String,
     val status: String
 )
+
+data class TokenResponse(
+    val access_token: String,
+    val token_type: String,
+    val message: String,
+    val status: String
+)

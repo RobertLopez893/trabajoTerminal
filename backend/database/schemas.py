@@ -35,3 +35,8 @@ class TokenResponse(BaseModel):
     token_type: str = "Bearer"
     message: str
     status: str = "success"
+
+class MinijuegoScoreRequest(BaseModel):
+    minijuego_id: str = Field(..., description="ID del minijuego (ej. minijuego_1)")
+    puntaje: int = Field(..., description="Puntos obtenidos en la partida")
+    nivel_max_alcanzado: int = Field(default=1, description="Nivel máximo superado")

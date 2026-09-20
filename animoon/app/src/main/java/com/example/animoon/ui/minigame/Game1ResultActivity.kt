@@ -8,6 +8,14 @@ import com.example.animoon.MainActivity
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import android.util.Log
+import android.widget.Toast
+import com.example.animoon.data.model.MinijuegoScoreRequest
+import com.example.animoon.data.network.ApiClient
 
 class Game1ResultActivity : BaseActivity() {
 
@@ -164,6 +172,26 @@ class Game1ResultActivity : BaseActivity() {
                     puntaje
                 )
                 .apply()
+        }
+
+        // --- ENVIAR AL BACKEND ---
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val req = MinijuegoScoreRequest(
+                    minijuego_id = "minijuego_1",
+                    puntaje = puntaje,
+                    nivel_max_alcanzado = 1
+                )
+                val response = ApiClient.minigameService.guardarPuntaje(req)
+                
+                if (response.isSuccessful) {
+                    Log.d("Game1Result", "Puntaje guardado en el backend: ${response.body()?.message}")
+                } else {
+                    Log.e("Game1Result", "Error al guardar puntaje: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("Game1Result", "Excepción de red al guardar puntaje", e)
+            }
         }
 
 

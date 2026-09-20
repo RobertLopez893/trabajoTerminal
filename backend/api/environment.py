@@ -200,3 +200,20 @@ async def websocket_environment(websocket: WebSocket, token: str, db: Session = 
             "type": "player_left",
             "usuario_id": user.id
         })
+
+@router.get("/active-users")
+def get_active_users():
+    """
+    Devuelve un resumen de los usuarios conectados en cada zona.
+    """
+    resultado = {}
+    for zona, usuarios in manager.zonas.items():
+        resultado[zona] = []
+        for uid, data in usuarios.items():
+            resultado[zona].append({
+                "usuario_id": uid,
+                "nickname": data.get("nickname"),
+                "x": data.get("x"),
+                "y": data.get("y")
+            })
+    return {"status": "success", "zonas": resultado}
