@@ -75,40 +75,31 @@ Nuestra innovación central es un **guardián inteligente**: un modelo de **Proc
 
 ## 🚀 Guía de Ejecución (Frontend y Backend)
 
-Para probar la comunicación entre la aplicación móvil (Frontend) y nuestro servidor de autenticación/IA (Backend), sigue estos pasos:
+Para probar la comunicación entre la aplicación móvil (Frontend) y nuestro servidor de autenticación/IA (Backend) de forma local, hemos creado scripts que automatizan el proceso de detección de tu IP y el levantamiento de contenedores.
 
-### 1. Levantar el Backend (Servidor)
-El backend está "dockerizado" para evitar problemas de instalación. 
-1. Asegúrate de tener Docker instalado y abierto.
-2. Abre una terminal en la raíz del proyecto y ejecuta:
-   ```bash
-   docker-compose up -d --build
+### 1. Iniciar el Backend y configurar la App
+
+Solo necesitas ejecutar uno de los siguientes scripts en la raíz del proyecto. El script detectará tu IP local, actualizará la configuración de la App de Android automáticamente y levantará Docker de fondo:
+
+**Si usas Windows (PowerShell):**
+1. Abre tu terminal de PowerShell en la raíz del proyecto.
+2. Ejecuta:
+   ```powershell
+   .\start_docker.ps1
    ```
-3. Esto levantará la API de FastAPI (puerto `8000`) y la base de datos PostgreSQL de forma automática.
 
-### 2. Configurar la App de Android (Frontend)
-¡Buenas noticias! **Por defecto, la app ya está apuntando al servidor de pruebas en AWS** (`http://3.142.143.72:8000/`).
-Solo dale "Play" en Android Studio y estarás probando en la nube con el resto del equipo.
+**Si usas Mac, Linux o Git Bash (Windows):**
+1. Abre tu terminal en la raíz del proyecto.
+2. Ejecuta:
+   ```bash
+   ./start_docker.sh
+   ```
 
-Si algún día AWS se apaga y quieres **probar en tu computadora local**, la IP se configura de forma local para evitar conflictos en Git:
+> **Aviso para Pruebas Físicas:** Si pruebas la app desde un emulador, funcionará de inmediato. Sin embargo, **si pruebas desde una Tablet o Celular Físico**, asegúrate de estar en la misma red Wi-Fi y verifica que el **Firewall de Windows** no esté bloqueando el tráfico entrante en el puerto `8000`.
 
-1. Abre el archivo `animoon/local.properties`.
-2. Agrega la variable `API_BASE_URL` dependiendo de dónde vayas a probar:
-
-**Opción A: Probar en el Emulador de Android Studio (Local)**
-```properties
-API_BASE_URL=http://10.0.2.2:8000/
-```
-
-**Opción B: Probar en Celular Físico conectado a tu PC (Local)**
-```properties
-API_BASE_URL=http://T.U.I.P:8000/
-```
-*(Y presiona el botón del elefante 🐘 en Gradle para aplicar).*
-
-### 3. Sincronizar y Correr
+### 2. Sincronizar y Correr la App
 1. En Android Studio, da clic en **Sync Project with Gradle Files** (el ícono del elefante 🐘).
-2. Selecciona tu emulador o tu celular físico y dale clic a Play (▶️) para instalar la app.
+2. Selecciona tu emulador o dispositivo físico y dale clic a Play (▶️) para instalar la app.
 
 ---
 

@@ -6,8 +6,8 @@ val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
-// Por defecto apuntamos al servidor de AWS (para que todo el equipo pruebe fácil)
-val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://3.142.143.72:8000/"
+// Por defecto apuntamos al emulador local
+val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://10.0.2.2:8000/"
 
 plugins {
     alias(libs.plugins.android.application)
