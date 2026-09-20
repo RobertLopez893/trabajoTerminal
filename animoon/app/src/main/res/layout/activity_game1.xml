@@ -6,13 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- FONDO DEL MINIJUEGO                                       -->
+
+    <!-- ===================================================== -->
+    <!-- FONDO DEL MINIJUEGO -->
+    <!-- ===================================================== -->
 
     <ImageView
         android:id="@+id/imgBackground"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="Fondo de la Base Principal"
+        android:contentDescription="Centro de entrenamiento de Moonie"
         android:scaleType="centerCrop"
         android:src="@drawable/game1_bg_base_principal"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,228 +23,597 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <!-- Overlay muy ligero -->
+
     <View
         android:id="@+id/backgroundOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#16000000"
+        android:background="#10000000"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 
-    <!-- BARRA SUPERIOR                                            -->
-
-    <ImageButton
-        android:id="@+id/btnPause"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/bg_game_circle_button"
-        android:contentDescription="Pausar juego"
-        android:padding="16dp"
-        android:src="@android:drawable/ic_media_pause"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFFFFF" />
-
-    <TextView
-        android:id="@+id/txtProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Pregunta 1 de 10"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:shadowColor="#66000000"
-        android:shadowDx="0"
-        android:shadowDy="2"
-        android:shadowRadius="4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/btnPause"
-        app:layout_constraintBottom_toBottomOf="@id/btnPause" />
+    <!-- ===================================================== -->
+    <!-- HUD SUPERIOR -->
+    <!-- ===================================================== -->
 
 
-    <!-- ÁREA DE MOONIE                                            -->
+    <!-- PUNTUACIÓN -->
 
     <TextView
         android:id="@+id/txtScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="28dp"
+
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="20dp"
+
         android:background="@drawable/bg_score"
-        android:paddingStart="24dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="12dp"
+        android:elevation="6dp"
+
+        android:gravity="center"
+
+        android:paddingStart="22dp"
+        android:paddingTop="11dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="11dp"
+
         android:text="★ 0 puntos"
         android:textColor="#29345C"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/moonieContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintWidth_percent="0.34"
-        app:layout_constraintTop_toBottomOf="@id/btnPause"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <ImageView
-            android:id="@+id/imgMoonie"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="8dp"
-            android:contentDescription="Moonie"
-            android:scaleType="fitCenter"
-            android:src="@drawable/moonie_neutral"
-            app:layout_constraintWidth_percent="0.82"
-            app:layout_constraintHeight_percent="0.68"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+    <!-- ===================================================== -->
+    <!-- PROGRESO DEL ENTRENAMIENTO -->
+    <!-- ===================================================== -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerTrainingProgress"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="16dp"
+
+        android:background="@drawable/bg_game1_training_progress"
+        android:elevation="5dp"
+
+        android:paddingStart="24dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="12dp"
+
+        app:layout_constraintWidth_percent="0.42"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <!-- TÍTULO -->
 
         <TextView
-            android:id="@+id/txtMoonieMessage"
+            android:id="@+id/txtTrainingTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/bg_moonie_message"
+
             android:gravity="center"
-            android:padding="18dp"
-            android:text="¡Ayúdame a recuperar mi entrenamiento!"
-            android:textColor="#29345C"
-            android:textSize="18sp"
+
+            android:text="Entrenamiento de Moonie"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/imgMoonie"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <!-- PREGUNTA X DE 10 -->
+
+        <TextView
+            android:id="@+id/txtQuestionProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="3dp"
+
+            android:text="Pregunta 1 de 10"
+            android:textColor="#E9EEFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTrainingTitle" />
+
+
+        <!-- BARRA DE PROGRESO -->
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progressTraining"
+            android:layout_width="0dp"
+            android:layout_height="10dp"
+
+            android:layout_marginTop="8dp"
+
+            android:max="10"
+            android:progress="1"
+
+            app:indicatorColor="#FFE36E"
+            app:trackColor="#55FFFFFF"
+
+            app:trackCornerRadius="5dp"
+            app:trackThickness="10dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtQuestionProgress" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <!-- ÁREA DE PREGUNTA                                          -->
+    <!-- ===================================================== -->
+    <!-- BOTÓN PAUSA -->
+    <!-- ===================================================== -->
+
+    <ImageButton
+        android:id="@+id/btnPause"
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="28dp"
+
+        android:background="@drawable/bg_game_circle_button"
+        android:elevation="7dp"
+
+        android:contentDescription="Pausar juego"
+
+        android:padding="16dp"
+
+        android:src="@android:drawable/ic_media_pause"
+
+        app:tint="#FFFFFF"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!-- ===================================================== -->
+    <!-- PROGRESO ORIGINAL -->
+    <!-- ===================================================== -->
+
+    <!--
+        Se conserva porque Game1Activity.kt puede seguir
+        teniendo una referencia a txtProgress.
+
+        El indicador que realmente se muestra es
+        txtQuestionProgress.
+    -->
+
+    <TextView
+        android:id="@+id/txtProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Pregunta 1 de 10"
+        android:visibility="gone"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!-- ===================================================== -->
+    <!-- ÁREA IZQUIERDA -->
+    <!-- PREGUNTA + RESPUESTAS -->
+    <!-- ===================================================== -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/questionContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toEndOf="@id/moonieContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnPause"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="24dp"
+
+        app:layout_constraintHorizontal_weight="2"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/moonieContainer"
+
+        app:layout_constraintTop_toBottomOf="@id/containerTrainingProgress"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- TARJETA DE PREGUNTA -->
+
+        <!-- ================================================= -->
+        <!-- SITUACIÓN -->
+        <!-- ================================================= -->
 
         <TextView
             android:id="@+id/txtQuestion"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="36dp"
+            android:layout_height="wrap_content"
+
+            android:minHeight="130dp"
+
             android:background="@drawable/bg_question_card"
-            android:gravity="center"
-            android:padding="28dp"
+            android:elevation="7dp"
+
+            android:gravity="center_vertical"
+
+            android:paddingStart="30dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="30dp"
+            android:paddingBottom="20dp"
+
             android:text="Si alguien que conocí por Internet me pide la dirección de mi escuela debo..."
-            android:textColor="#29345C"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.32"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
+            android:textColor="#26345F"
+            android:textSize="23sp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/answer1Container"
+
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.52" />
+
+
+        <!-- ================================================= -->
         <!-- RESPUESTA A -->
+        <!-- ================================================= -->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAnswer1"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/answer1Container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
-            android:maxLines="2"
-            android:minHeight="68dp"
-            android:paddingStart="20dp"
-            android:paddingTop="14dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="14dp"
-            android:text="No compartirla"
-            android:textAllCaps="false"
-            android:textColor="#29345C"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:backgroundTint="#F2FFFFFF"
-            app:cornerRadius="24dp"
+
+            android:layout_marginTop="80dp"
+
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
+
             app:layout_constraintTop_toBottomOf="@id/txtQuestion"
-            app:strokeColor="#CFD8F5"
-            app:strokeWidth="2dp" />
+            app:layout_constraintBottom_toTopOf="@id/answer2Container">
 
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnswer1"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+
+                android:elevation="5dp"
+
+                android:gravity="center_vertical|start"
+
+                android:maxLines="2"
+
+                android:paddingStart="82dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp"
+
+                android:text="No compartirla"
+                android:textAllCaps="false"
+
+                android:textColor="#29345C"
+                android:textSize="19sp"
+                android:textStyle="bold"
+
+                app:backgroundTint="#F0FFFFFF"
+
+                app:cornerRadius="26dp"
+
+                app:strokeColor="#91A9E8"
+                app:strokeWidth="2dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <!-- LETRA A -->
+
+            <TextView
+                android:id="@+id/txtAnswerLabelA"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+
+                android:layout_marginStart="18dp"
+
+                android:background="@drawable/bg_answer_letter"
+
+                android:clickable="false"
+                android:focusable="false"
+                android:importantForAccessibility="no"
+
+                android:gravity="center"
+
+                android:text="A"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+
+                android:elevation="7dp"
+
+                app:layout_constraintStart_toStartOf="@id/btnAnswer1"
+                app:layout_constraintTop_toTopOf="@id/btnAnswer1"
+                app:layout_constraintBottom_toBottomOf="@id/btnAnswer1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- ================================================= -->
         <!-- RESPUESTA B -->
+        <!-- ================================================= -->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAnswer2"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/answer2Container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="68dp"
-            android:layout_marginTop="14dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:maxLines="2"
-            android:text="Compartirla"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#29345C"
-            app:backgroundTint="#F2FFFFFF"
-            app:cornerRadius="24dp"
-            app:strokeColor="#CFD8F5"
-            app:strokeWidth="2dp"
-            app:layout_constraintTop_toBottomOf="@id/btnAnswer1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
 
+            android:layout_marginTop="14dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/answer1Container"
+            app:layout_constraintBottom_toTopOf="@id/answer3Container">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnswer2"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+
+                android:elevation="5dp"
+
+                android:gravity="center_vertical|start"
+
+                android:maxLines="2"
+
+                android:paddingStart="82dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp"
+
+                android:text="Compartirla"
+                android:textAllCaps="false"
+
+                android:textColor="#29345C"
+                android:textSize="19sp"
+                android:textStyle="bold"
+
+                app:backgroundTint="#F0FFFFFF"
+
+                app:cornerRadius="26dp"
+
+                app:strokeColor="#91A9E8"
+                app:strokeWidth="2dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <!-- LETRA B -->
+
+            <TextView
+                android:id="@+id/txtAnswerLabelB"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+
+                android:layout_marginStart="18dp"
+
+                android:background="@drawable/bg_answer_letter"
+
+                android:clickable="false"
+                android:focusable="false"
+                android:importantForAccessibility="no"
+
+                android:gravity="center"
+
+                android:text="B"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+
+                android:elevation="7dp"
+
+                app:layout_constraintStart_toStartOf="@id/btnAnswer2"
+                app:layout_constraintTop_toTopOf="@id/btnAnswer2"
+                app:layout_constraintBottom_toBottomOf="@id/btnAnswer2" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!-- ================================================= -->
         <!-- RESPUESTA C -->
+        <!-- ================================================= -->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAnswer3"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/answer3Container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="68dp"
+
             android:layout_marginTop="14dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:maxLines="2"
-            android:text="Inventar otra dirección"
-            android:textAllCaps="false"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#29345C"
-            app:backgroundTint="#F2FFFFFF"
-            app:cornerRadius="24dp"
-            app:strokeColor="#CFD8F5"
-            app:strokeWidth="2dp"
-            app:layout_constraintTop_toBottomOf="@id/btnAnswer2"
+
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/answer2Container"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnswer3"
+                android:layout_width="0dp"
+                android:layout_height="72dp"
+
+                android:elevation="5dp"
+
+                android:gravity="center_vertical|start"
+
+                android:maxLines="2"
+
+                android:paddingStart="82dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="12dp"
+
+                android:text="Inventar otra dirección"
+                android:textAllCaps="false"
+
+                android:textColor="#29345C"
+                android:textSize="19sp"
+                android:textStyle="bold"
+
+                app:backgroundTint="#F0FFFFFF"
+
+                app:cornerRadius="26dp"
+
+                app:strokeColor="#91A9E8"
+                app:strokeWidth="2dp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+
+            <!-- LETRA C -->
+
+            <TextView
+                android:id="@+id/txtAnswerLabelC"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+
+                android:layout_marginStart="18dp"
+
+                android:background="@drawable/bg_answer_letter"
+
+                android:clickable="false"
+                android:focusable="false"
+                android:importantForAccessibility="no"
+
+                android:gravity="center"
+
+                android:text="C"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+
+                android:elevation="7dp"
+
+                app:layout_constraintStart_toStartOf="@id/btnAnswer3"
+                app:layout_constraintTop_toTopOf="@id/btnAnswer3"
+                app:layout_constraintBottom_toBottomOf="@id/btnAnswer3" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- ÁREA DERECHA -->
+    <!-- MOONIE + MENSAJE -->
+    <!-- ===================================================== -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/moonieContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="24dp"
+
+        app:layout_constraintHorizontal_weight="1"
+
+        app:layout_constraintStart_toEndOf="@id/questionContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@id/containerTrainingProgress"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <!-- ================================================= -->
+        <!-- MOONIE -->
+        <!-- ================================================= -->
+
+        <ImageView
+            android:id="@+id/imgMoonie"
+            android:layout_width="0dp"
+            android:layout_height="450dp"
+
+            android:layout_marginBottom="18dp"
+
+            android:contentDescription="Moonie"
+
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/moonie_neutral"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/txtMoonieMessage"
+
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_bias="0.52" />
+
+
+        <!-- ================================================= -->
+        <!-- MENSAJE DE MOONIE -->
+        <!-- ================================================= -->
+
+        <TextView
+            android:id="@+id/txtMoonieMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:minHeight="82dp"
+
+            android:background="@drawable/bg_moonie_message"
+            android:elevation="6dp"
+
+            android:gravity="center"
+
+            android:paddingStart="20dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="16dp"
+
+            android:text="¡Ayúdame a recuperar mi entrenamiento!"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            app:layout_constraintTop_toBottomOf="@id/imgMoonie"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

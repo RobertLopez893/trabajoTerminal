@@ -14,6 +14,8 @@ import com.example.animoon.ui.minigame.game1.data.PreguntasRepository
 import com.example.animoon.ui.minigame.game1.model.Pregunta
 import com.google.android.material.button.MaterialButton
 import android.content.Intent
+import android.media.MediaPlayer
+import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class Game1Activity : BaseActivity() {
 
@@ -42,6 +44,8 @@ class Game1Activity : BaseActivity() {
     // Referencia al diálogo para evitar abrir varios al mismo tiempo
     private var dialogPausa: Dialog? = null
 
+    private var musicPlayer: MediaPlayer? = null
+
 
     // ---------------------------------------------------------
     // ELEMENTOS DEL XML
@@ -50,6 +54,8 @@ class Game1Activity : BaseActivity() {
     private lateinit var txtProgress: TextView
     private lateinit var txtScore: TextView
     private lateinit var txtQuestion: TextView
+    private lateinit var txtQuestionProgress: TextView
+    private lateinit var progressTraining: LinearProgressIndicator
     private lateinit var txtMoonieMessage: TextView
 
     private lateinit var imgMoonie: ImageView
@@ -84,6 +90,12 @@ class Game1Activity : BaseActivity() {
         prepararPartida()
 
         mostrarPreguntaActual()
+
+        musicPlayer = MediaPlayer.create(this, R.raw.game1_music).apply {
+            isLooping = true
+            setVolume(0.20f, 0.20f)
+            start()
+        }
     }
 
 
@@ -101,6 +113,12 @@ class Game1Activity : BaseActivity() {
         txtScore = findViewById(R.id.txtScore)
         txtQuestion = findViewById(R.id.txtQuestion)
         txtMoonieMessage = findViewById(R.id.txtMoonieMessage)
+
+        txtQuestionProgress =
+            findViewById(R.id.txtQuestionProgress)
+
+        progressTraining =
+            findViewById(R.id.progressTraining)
 
         imgMoonie = findViewById(R.id.imgMoonie)
 
@@ -204,8 +222,7 @@ class Game1Activity : BaseActivity() {
         preguntaRespondida = false
 
 
-        txtProgress.text =
-            "Pregunta ${indicePreguntaActual + 1} de ${preguntasPartida.size}"
+        actualizarProgresoEntrenamiento()
 
 
         txtQuestion.text =
@@ -348,6 +365,34 @@ class Game1Activity : BaseActivity() {
 
         txtScore.text =
             "★ $puntaje puntos"
+    }
+
+    // ---------------------------------------------------------
+    // PROGRESO DEL ENTRENAMIENTO
+    // ---------------------------------------------------------
+
+    /**
+     * Actualiza el número de pregunta y
+     * la barra de progreso de la partida.
+     */
+    private fun actualizarProgresoEntrenamiento() {
+
+        val numeroPregunta =
+            indicePreguntaActual + 1
+
+        val totalPreguntas =
+            preguntasPartida.size
+
+        txtQuestionProgress.text =
+            "Pregunta $numeroPregunta de $totalPreguntas"
+
+        progressTraining.max =
+            totalPreguntas
+
+        progressTraining.setProgressCompat(
+            numeroPregunta,
+            true
+        )
     }
 
 
@@ -849,9 +894,18 @@ class Game1Activity : BaseActivity() {
          * el mismo nivel de reparación que
          * tiene Moonie en la partida.
          */
-        imgFeedbackMoonie.setImageResource(
-            obtenerImagenMoonie()
-        )
+        if (esCorrecta) {
+
+            imgFeedbackMoonie.setImageResource(
+                R.drawable.moonie_happy
+            )
+
+        } else {
+
+            imgFeedbackMoonie.setImageResource(
+                R.drawable.moonie_confused
+            )
+        }
 
 
         // -----------------------------------------------------
