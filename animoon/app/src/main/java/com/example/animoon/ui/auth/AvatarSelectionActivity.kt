@@ -35,10 +35,10 @@ class AvatarSelectionActivity : AppCompatActivity() {
     // OPCIONES DE COLOR
     // =========================================================
 
-    private lateinit var btnWhite: Button
-    private lateinit var btnBlue: Button
-    private lateinit var btnOrange: Button
-    private lateinit var btnGreen: Button
+    private lateinit var btnWhite: View
+    private lateinit var btnBlue: View
+    private lateinit var btnOrange: View
+    private lateinit var btnGreen: View
 
 
     // =========================================================
@@ -473,17 +473,14 @@ class AvatarSelectionActivity : AppCompatActivity() {
                     val intent =
                         android.content.Intent(
                             this@AvatarSelectionActivity,
-                            com.example.animoon.MainActivity::class.java
+                            com.example.animoon.ui.auth.LoginActivity::class.java
                         )
-
 
                     intent.flags =
                         android.content.Intent.FLAG_ACTIVITY_NEW_TASK or
                                 android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 
-
                     startActivity(intent)
-
                     finish()
                 }
 

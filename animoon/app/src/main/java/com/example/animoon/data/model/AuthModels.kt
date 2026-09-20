@@ -6,7 +6,8 @@ data class NicknameCheckRequest(
 
 data class LoginRequest(
     val nickname: String,
-    val password: String
+    val password: String,
+    val client_ecdhe_public_key: String
 )
 
 data class SmsSendRequest(

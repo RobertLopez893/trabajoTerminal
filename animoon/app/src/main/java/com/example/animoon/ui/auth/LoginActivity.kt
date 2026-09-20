@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
             // Estructura lista para cuando el backend tenga endpoint de login
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
-                    val request = com.example.animoon.data.model.LoginRequest(apelativo, password)
+                    val request = com.example.animoon.data.model.LoginRequest(apelativo, password, "MOCK_KEY_ANDROID")
                     val response = com.example.animoon.data.network.ApiClient.authService.login(request)
                     
                     withContext(Dispatchers.Main) {

@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnPlayGame1 = findViewById<MaterialButton>(R.id.btnPlayGame1)
         val btnCheckUsers = findViewById<MaterialButton>(R.id.btnCheckUsers)
+        val btnLogout = findViewById<MaterialButton>(R.id.btnLogout)
 
         btnPlayGame1.setOnClickListener {
             startActivity(Intent(this, Game1CinematicActivity::class.java))
@@ -27,6 +28,33 @@ class MainActivity : AppCompatActivity() {
 
         btnCheckUsers.setOnClickListener {
             checkActiveUsers()
+        }
+
+        btnLogout.setOnClickListener {
+            logout()
+        }
+    }
+
+    private fun logout() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // Notificar al backend
+                ApiClient.authService.logout()
+            } catch (e: Exception) {
+                // Ignorar si hay error de red, igual borramos token
+            }
+            
+            withContext(Dispatchers.Main) {
+                // Borrar token local
+                com.example.animoon.data.network.TokenManager.clearToken()
+                Toast.makeText(this@MainActivity, "Sesión cerrada", Toast.LENGTH_SHORT).show()
+                
+                // Redirigir a Splash
+                val intent = Intent(this@MainActivity, com.example.animoon.ui.splash.SplashActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
         }
     }
 

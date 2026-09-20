@@ -29,4 +29,7 @@ interface AuthApiService {
     suspend fun finalRegister(
         @Body request: FinalRegisterRequest
     ): Response<DefaultResponse>
+
+    @POST("/api/auth/logout")
+    suspend fun logout(): Response<DefaultResponse>
 }

@@ -139,6 +139,12 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
     )
     
     # 2. Registrar la sesión para estado inmutable y ECDHE
+    # Inactivar sesiones previas del mismo usuario para evitar sesiones duplicadas activas
+    db.query(models.Sesion).filter(
+        models.Sesion.usuario_id == user.id,
+        models.Sesion.is_active == True
+    ).update({"is_active": False})
+
     token_hash = get_token_hash(access_token)
     nueva_sesion = models.Sesion(
         id=str(uuid.uuid4()),

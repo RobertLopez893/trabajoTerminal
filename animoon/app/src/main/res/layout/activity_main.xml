@@ -27,7 +27,16 @@
         android:id="@+id/btnCheckUsers"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_marginBottom="16dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:text="🌐 Ver Usuarios Activos (SD)" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:textColor="@color/design_default_color_error"
+        android:text="Cerrar Sesión" />
 
 </LinearLayout>
