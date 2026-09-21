@@ -4,7 +4,7 @@ import psycopg2
 
 # Credenciales para el servidor AWS (Base de datos remota)
 # IMPORTANTE: Debes abrir el puerto 5433 en el Security Group de AWS para que funcione.
-DB_HOST = "18.217.21.239"
+DB_HOST = "192.168.0.104"
 DB_PORT = "5433"
 DB_USER = "postgres"
 DB_PASSWORD = "password"

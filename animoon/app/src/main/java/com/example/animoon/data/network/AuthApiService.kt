@@ -18,7 +18,7 @@ interface AuthApiService {
     @POST("/api/auth/login")
     suspend fun login(
         @Body request: com.example.animoon.data.model.LoginRequest
-    ): Response<DefaultResponse>
+    ): Response<com.example.animoon.data.model.TokenResponse>
 
     @POST("/api/auth/enviar-codigo-sms")
     suspend fun sendSmsCode(
@@ -29,4 +29,7 @@ interface AuthApiService {
     suspend fun finalRegister(
         @Body request: FinalRegisterRequest
     ): Response<DefaultResponse>
+
+    @POST("/api/auth/logout")
+    suspend fun logout(): Response<DefaultResponse>
 }

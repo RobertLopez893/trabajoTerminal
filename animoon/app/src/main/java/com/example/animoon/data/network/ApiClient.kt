@@ -16,6 +16,7 @@ object ApiClient {
     }
 
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(AuthInterceptor())
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
@@ -31,5 +32,13 @@ object ApiClient {
 
     val authService: AuthApiService by lazy {
         retrofit.create(AuthApiService::class.java)
+    }
+
+    val minigameService: MinigameApiService by lazy {
+        retrofit.create(MinigameApiService::class.java)
+    }
+
+    val envService: EnvApiService by lazy {
+        retrofit.create(EnvApiService::class.java)
     }
 }

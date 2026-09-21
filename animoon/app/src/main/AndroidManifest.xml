@@ -21,13 +21,19 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:screenOrientation="landscape"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <!-- MENU -->
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
 
         <!-- REGISTRO -->
         <activity
@@ -51,6 +57,12 @@
             android:screenOrientation="landscape"
             android:exported="true" />
 
+        <!-- MENÚ DE MINIJUEGOS -->
+        <activity
+            android:name=".ui.minigame.MinigamesActivity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+
         <!-- RESULTADOS MINIJUEGO 1 -->
         <activity
             android:name=".ui.minigame.Game1ResultActivity"
@@ -61,19 +73,7 @@
         <activity
             android:name=".ui.minigame.Game1CinematicActivity"
             android:screenOrientation="landscape"
-            android:exported="true">
-
-            <intent-filter>
-
-                <action
-                    android:name="android.intent.action.MAIN" />
-
-                <category
-                    android:name="android.intent.category.LAUNCHER" />
-
-            </intent-filter>
-
-        </activity>
+            android:exported="true"/>
 
 
         <!-- MINIJUEGO 1 -->

@@ -131,19 +131,43 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
         raise HTTPException(status_code=403, detail="El usuario está inactivo o bloqueado.")
 
     # 1. Crear el token JWT (Ed25519)
-    # Según documento de requerimientos: Cierre de sesión automático tras 15 minutos de inactividad
-    expires_delta = timedelta(minutes=15)
+    # El JWT interno durará 24h, pero la sesión en BD controlará la expiración por inactividad de 15 minutos
     access_token = create_access_token(
-        data={"sub": user.id, "nickname": user.nickname},
-        expires_delta=expires_delta
+        data={"sub": user.id, "nickname": user.nickname}
     )
     
+    # Tiempo límite de inactividad: 15 minutos
+    expires_delta = timedelta(minutes=15)
+    
     # 2. Registrar la sesión para estado inmutable y ECDHE
+    # Inactivar sesiones previas del mismo usuario para evitar sesiones duplicadas activas
+    db.query(models.Sesion).filter(
+        models.Sesion.usuario_id == user.id,
+        models.Sesion.is_active == True
+    ).update({"is_active": False})
+
     token_hash = get_token_hash(access_token)
+    
+    # 2.5 Generar Llaves ECDHE del Servidor y Calcular Shared Secret
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+    from security.ecdhe.ecdhe_manager import ECDHEManager
+    
+    server_priv, server_pub_b64 = ECDHEManager.generate_keypair()
+    
+    shared_secret_b64 = None
+    if req.client_ecdhe_public_key != "MOCK_KEY_ANDROID":
+        try:
+            shared_secret_b64 = ECDHEManager.compute_shared_secret(server_priv, req.client_ecdhe_public_key)
+        except Exception as e:
+            raise HTTPException(status_code=400, detail=f"Error en intercambio ECDHE: {str(e)}")
+    
     nueva_sesion = models.Sesion(
         id=str(uuid.uuid4()),
         usuario_id=user.id,
         ecdhe_public_key_ephemeral=req.client_ecdhe_public_key,
+        shared_secret_b64=shared_secret_b64,
         session_token_hash=token_hash,
         expires_at=datetime.utcnow() + expires_delta,
         is_active=True
@@ -155,7 +179,8 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
         "access_token": access_token,
         "token_type": "Bearer",
         "message": f"Bienvenido de vuelta, {user.nickname}",
-        "status": "success"
+        "status": "success",
+        "server_ecdhe_public_key": server_pub_b64
     }
 
 

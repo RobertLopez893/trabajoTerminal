@@ -15,9 +15,19 @@ class SplashActivity : AppCompatActivity() {
 
         val btnStart = findViewById<android.widget.Button>(R.id.btnStart)
 
+        com.example.animoon.data.network.TokenManager.init(applicationContext)
+
         btnStart.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
+            val token = com.example.animoon.data.network.TokenManager.getToken()
+            if (token.isNullOrEmpty()) {
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                val intent = Intent(this, com.example.animoon.MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 }

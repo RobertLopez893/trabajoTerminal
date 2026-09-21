@@ -6,7 +6,8 @@ data class NicknameCheckRequest(
 
 data class LoginRequest(
     val nickname: String,
-    val password: String
+    val password: String,
+    val client_ecdhe_public_key: String
 )
 
 data class SmsSendRequest(
@@ -26,4 +27,12 @@ data class FinalRegisterRequest(
 data class DefaultResponse(
     val message: String,
     val status: String
+)
+
+data class TokenResponse(
+    val access_token: String,
+    val token_type: String,
+    val message: String,
+    val status: String,
+    val server_ecdhe_public_key: String? = null
 )
