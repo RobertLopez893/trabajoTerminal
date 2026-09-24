@@ -1,4 +1,4 @@
-package com.example.animoon.ui.minigame
+package com.example.animoon.ui.minigame.game1
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,9 +11,7 @@ import com.google.android.material.button.MaterialButton
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import android.util.Log
-import android.widget.Toast
 import com.example.animoon.data.model.MinijuegoScoreRequest
 import com.example.animoon.data.network.ApiClient
 

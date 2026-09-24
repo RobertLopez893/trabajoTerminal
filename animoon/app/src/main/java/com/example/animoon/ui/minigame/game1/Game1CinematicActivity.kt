@@ -1,4 +1,4 @@
-package com.example.animoon.ui.minigame
+package com.example.animoon.ui.minigame.game1
 
 import android.content.Intent
 import android.graphics.Color

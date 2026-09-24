@@ -6,7 +6,9 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
-
+import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
+import com.example.animoon.ui.minigame.game2.Game2Activity
+import com.google.android.material.button.MaterialButton
 class MinigamesActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +26,9 @@ class MinigamesActivity : BaseActivity() {
 
         val btnGame1 =
             findViewById<Button>(R.id.btnGame1)
+
+        val btnGame2 =
+            findViewById<MaterialButton>(R.id.btnGame2)
 
 
         // =====================================================
@@ -46,6 +51,22 @@ class MinigamesActivity : BaseActivity() {
                 Intent(
                     this,
                     Game1CinematicActivity::class.java
+                )
+
+            startActivity(intent)
+        }
+
+
+        // =====================================================
+        // MINIJUEGO 2
+        // =====================================================
+
+        btnGame2.setOnClickListener {
+
+            val intent =
+                Intent(
+                    this,
+                    Game2Activity::class.java
                 )
 
             startActivity(intent)

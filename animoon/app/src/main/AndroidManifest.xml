@@ -21,18 +21,18 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:screenOrientation="landscape"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:exported="false">
         </activity>
 
         <!-- MENU -->
         <activity
             android:name=".MainActivity"
             android:screenOrientation="landscape"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <!-- REGISTRO -->
@@ -65,20 +65,26 @@
 
         <!-- RESULTADOS MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1ResultActivity"
+            android:name=".ui.minigame.game1.Game1ResultActivity"
             android:screenOrientation="landscape"
             android:exported="false" />
 
-        <!-- INTRODUCCIÓN MINIJUEGO 1 - PRUEBA TEMPORAL -->
+        <!-- INTRODUCCIÓN MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1CinematicActivity"
+            android:name=".ui.minigame.game1.Game1CinematicActivity"
             android:screenOrientation="landscape"
             android:exported="true"/>
 
 
         <!-- MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1Activity"
+            android:name=".ui.minigame.game1.Game1Activity"
+            android:screenOrientation="landscape"
+            android:exported="false" />
+
+        <!-- MINIJUEGO 2 -->
+        <activity
+            android:name=".ui.minigame.game2.Game2Activity"
             android:screenOrientation="landscape"
             android:exported="false" />
 

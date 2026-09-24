@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import android.widget.Button
@@ -15,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.animoon.data.network.ApiClient
 import com.example.animoon.data.network.TokenManager
 import com.example.animoon.ui.base.BaseActivity
-import com.example.animoon.ui.minigame.Game1CinematicActivity
+import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
 import com.example.animoon.ui.splash.SplashActivity
 import com.example.animoon.ui.minigame.MinigamesActivity
 import com.google.android.material.button.MaterialButton

@@ -315,20 +315,22 @@
 
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGame2"
+
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
 
-                    android:enabled="false"
+                    android:enabled="true"
 
-                    android:text="Próximamente"
+                    android:text="Jugar"
 
                     android:textAllCaps="false"
 
-                    android:textColor="#67729B"
-                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
                     android:textStyle="bold"
 
-                    app:backgroundTint="#E1E4F2"
+                    app:backgroundTint="#6674D9"
                     app:cornerRadius="24dp" />
 
 

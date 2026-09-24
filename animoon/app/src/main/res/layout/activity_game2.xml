@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#EEF2FF">
+
+
+    <!-- ===================================================== -->
+    <!-- HUD                                                   -->
+    <!-- ===================================================== -->
+
+    <TextView
+        android:id="@+id/txtGame2Round"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+
+        android:text="Ronda 1 de 5"
+
+        android:textColor="#29345C"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/txtGame2Score"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+
+        android:text="★ 0"
+
+        android:textColor="#29345C"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <!-- ===================================================== -->
+    <!-- PUERTOS DE SALIDA                                     -->
+    <!-- ===================================================== -->
+
+    <LinearLayout
+        android:id="@+id/outputRow"
+
+        android:layout_width="0dp"
+        android:layout_height="110dp"
+
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="28dp"
+
+        android:orientation="horizontal"
+        android:gravity="center"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtGame2Round">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOutput1"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+
+            android:text="Mensaje 1"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#AEBBF0"
+            app:strokeWidth="2dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOutput2"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+
+            android:text="Mensaje 2"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#AEBBF0"
+            app:strokeWidth="2dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOutput3"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+
+            android:text="Mensaje 3"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#AEBBF0"
+            app:strokeWidth="2dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnOutput4"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+
+            android:text="Mensaje 4"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#AEBBF0"
+            app:strokeWidth="2dp" />
+
+    </LinearLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- ÁREA DE CABLES                                        -->
+    <!-- ===================================================== -->
+
+    <com.example.animoon.ui.minigame.game2.view.CableBoardView
+        android:id="@+id/cableBoard"
+
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@id/outputRow"
+        app:layout_constraintBottom_toTopOf="@id/inputRow" />
+
+
+    <!-- ===================================================== -->
+    <!-- PUERTOS DE ENTRADA                                    -->
+    <!-- ===================================================== -->
+
+    <LinearLayout
+        android:id="@+id/inputRow"
+
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="16dp"
+
+        android:orientation="horizontal"
+        android:gravity="center"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnGame2Check">
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnParents"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+
+            android:text="Padres / Tutores"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#91A9E8"
+            app:strokeWidth="2dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnTeachers"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+
+            android:text="Profesores"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#91A9E8"
+            app:strokeWidth="2dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAnimoon"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:layout_margin="10dp"
+
+            android:text="ANIMOON"
+            android:textAllCaps="false"
+
+            android:textColor="#29345C"
+            android:textSize="16sp"
+            android:textStyle="bold"
+
+            app:backgroundTint="#FFFFFF"
+            app:cornerRadius="22dp"
+            app:strokeColor="#91A9E8"
+            app:strokeWidth="2dp" />
+
+    </LinearLayout>
+
+
+    <!-- ===================================================== -->
+    <!-- COMPROBAR                                             -->
+    <!-- ===================================================== -->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGame2Check"
+
+        android:layout_width="220dp"
+        android:layout_height="62dp"
+
+        android:layout_marginBottom="20dp"
+
+        android:enabled="false"
+
+        android:text="Comprobar"
+        android:textAllCaps="false"
+
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+
+        app:backgroundTint="#6674D9"
+        app:cornerRadius="22dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
