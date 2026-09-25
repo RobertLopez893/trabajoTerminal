@@ -1,6 +1,7 @@
 package com.example.animoon.ui.base
 
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -29,6 +30,24 @@ open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+
+
+        // -----------------------------------------------------
+        // ORIENTACIÓN HORIZONTAL
+        // -----------------------------------------------------
+
+        /*
+         * ANIMOON está diseñado exclusivamente
+         * para funcionar en orientación horizontal.
+         *
+         * SENSOR_LANDSCAPE permite utilizar ambas
+         * orientaciones horizontales dependiendo
+         * de cómo el usuario sostenga el dispositivo,
+         * pero impide utilizar la aplicación en vertical.
+         */
+        requestedOrientation =
+            ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+
 
         // -----------------------------------------------------
         // MODO INMERSIVO
@@ -108,13 +127,6 @@ open class BaseActivity : AppCompatActivity() {
     // RECUPERAR MODO INMERSIVO
     // =========================================================
 
-    /**
-     * Algunas acciones del sistema pueden volver
-     * a mostrar las barras.
-     *
-     * Cuando la Activity vuelve al frente,
-     * volvemos a ocultarlas.
-     */
     override fun onResume() {
 
         super.onResume()
@@ -123,10 +135,6 @@ open class BaseActivity : AppCompatActivity() {
     }
 
 
-    /**
-     * También recuperamos el modo inmersivo
-     * cuando la ventana vuelve a obtener el foco.
-     */
     override fun onWindowFocusChanged(
         hasFocus: Boolean
     ) {
@@ -221,12 +229,6 @@ open class BaseActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
 
-            /*
-             * Si la Activity se está cerrando
-             * y el diálogo genera BadTokenException,
-             * cerramos la sesión de forma segura.
-             */
-
             TokenManager.clearToken()
 
 
@@ -256,10 +258,5 @@ open class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
 
         super.onDestroy()
-
-        /*
-         * lifecycleScope cancela automáticamente
-         * sus corrutinas al destruir la Activity.
-         */
     }
 }

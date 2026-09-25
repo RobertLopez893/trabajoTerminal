@@ -15,77 +15,78 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Animoon">
+        android:theme="@style/Theme.Animoon"
+        android:appCategory="game">
 
-        <!-- SPLASH / PANTALLA DE INICIO -->
+        <!-- SPLASH -->
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:screenOrientation="landscape"
-            android:exported="false">
-        </activity>
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
 
-        <!-- MENU -->
+        <!-- MENU PRINCIPAL -->
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <!-- REGISTRO -->
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <activity
             android:name=".ui.auth.AvatarSelectionActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <activity
             android:name=".ui.auth.VerificationActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- LOGIN -->
         <activity
             android:name=".ui.auth.LoginActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="true" />
 
         <!-- MENÚ DE MINIJUEGOS -->
         <activity
             android:name=".ui.minigame.MinigamesActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- RESULTADOS MINIJUEGO 1 -->
         <activity
             android:name=".ui.minigame.game1.Game1ResultActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
-        <!-- INTRODUCCIÓN MINIJUEGO 1 -->
+        <!-- CINEMÁTICA MINIJUEGO 1 -->
         <activity
             android:name=".ui.minigame.game1.Game1CinematicActivity"
-            android:screenOrientation="landscape"
-            android:exported="true"/>
-
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
 
         <!-- MINIJUEGO 1 -->
         <activity
             android:name=".ui.minigame.game1.Game1Activity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- MINIJUEGO 2 -->
         <activity
             android:name=".ui.minigame.game2.Game2Activity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
     </application>

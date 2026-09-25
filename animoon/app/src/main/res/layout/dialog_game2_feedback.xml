@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="24dp"
+    app:cardBackgroundColor="#FFFDFB"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="10dp"
+    app:strokeColor="#D8DDF8"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingStart="28dp"
+        android:paddingTop="22dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="22dp">
+
+        <ImageView
+            android:id="@+id/imgGame2FeedbackMoonie"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:contentDescription="Moonie"
+            android:scaleType="fitCenter"
+            android:src="@drawable/moonie_damaged" />
+
+        <TextView
+            android:id="@+id/txtGame2FeedbackTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="¡Muy bien!"
+            android:textColor="#44396D"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtGame2FeedbackScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:text="Aciertos de esta ronda: 4 de 4"
+            android:textColor="#6674D9"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fillViewport="true"
+            android:maxHeight="320dp"
+            android:overScrollMode="ifContentScrolls">
+
+            <TextView
+                android:id="@+id/txtGame2FeedbackMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="3dp"
+                android:padding="4dp"
+                android:text="Retroalimentación de la ronda"
+                android:textColor="#374151"
+                android:textSize="16sp" />
+
+        </ScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGame2FeedbackContinue"
+            android:layout_width="220dp"
+            android:layout_height="58dp"
+            android:layout_marginTop="18dp"
+            android:text="Continuar"
+            android:textAllCaps="false"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            app:backgroundTint="#6674D9"
+            app:cornerRadius="22dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

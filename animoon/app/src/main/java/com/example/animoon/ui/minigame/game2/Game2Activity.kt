@@ -1,5 +1,8 @@
 package com.example.animoon.ui.minigame.game2
 
+import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
+import android.widget.ImageView
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -7,7 +10,6 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.ui.minigame.game2.model.CategoriaMensaje
@@ -17,8 +19,6 @@ import com.example.animoon.ui.minigame.game2.model.MensajeJuego
 import com.example.animoon.ui.minigame.game2.model.RondaJuego
 import com.example.animoon.ui.minigame.game2.view.CableBoardView
 import com.google.android.material.button.MaterialButton
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 class Game2Activity : BaseActivity() {
@@ -405,7 +405,7 @@ class Game2Activity : BaseActivity() {
 
         btnCheck.setOnClickListener {
 
-            comprobarRondaTemporal()
+            comprobarRonda()
         }
     }
 
@@ -975,24 +975,548 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
+    // REGLAS DEL MINIJUEGO
+    // =========================================================
+
+    /**
+     * Devuelve exactamente los destinos seguros
+     * para una categoría de mensaje.
+     *
+     * IMPORTANTE:
+     * El texto del mensaje no determina la respuesta.
+     * La lógica depende únicamente de su categoría.
+     */
+    private fun obtenerDestinosCorrectos(
+        categoria: CategoriaMensaje
+    ): Set<DestinoConexion> {
+
+        return when (categoria) {
+
+            CategoriaMensaje.PERSONAL,
+            CategoriaMensaje.ESCOLAR -> {
+
+                setOf(
+                    DestinoConexion.PADRES,
+                    DestinoConexion.PROFESORES
+                )
+            }
+
+            CategoriaMensaje.JUEGO,
+            CategoriaMensaje.ENTRETENIMIENTO -> {
+
+                setOf(
+                    DestinoConexion.PADRES,
+                    DestinoConexion.PROFESORES,
+                    DestinoConexion.ANIMOON
+                )
+            }
+        }
+    }
+
+    /**
+     * Obtiene todos los destinos que el jugador
+     * seleccionó para un mensaje específico.
+     */
+    private fun obtenerDestinosSeleccionados(
+        mensajeId: Int
+    ): Set<DestinoConexion> {
+
+        return conexiones
+            .filter {
+                it.mensajeId == mensajeId
+            }
+            .map {
+                it.destino
+            }
+            .toSet()
+    }
+
+
+    /**
+     * Comprueba si las conexiones realizadas por el jugador
+     * para un mensaje coinciden EXACTAMENTE con los destinos
+     * correctos definidos para su categoría.
+     */
+    private fun esMensajeCorrecto(
+        mensaje: MensajeJuego
+    ): Boolean {
+
+        val destinosCorrectos =
+            obtenerDestinosCorrectos(
+                mensaje.categoria
+            )
+
+
+        val destinosSeleccionados =
+            obtenerDestinosSeleccionados(
+                mensaje.id
+            )
+
+
+        return destinosSeleccionados ==
+                destinosCorrectos
+    }
+
+
+    /**
+     * Cada mensaje correctamente conectado
+     * suma exactamente 1 punto.
+     *
+     * Como cada ronda contiene 4 mensajes,
+     * el resultado posible es de 0 a 4 puntos.
+     */
+    private fun calcularAciertosRonda(): Int {
+
+        return datosRondaActual
+            .mensajes
+            .count { mensaje ->
+
+                esMensajeCorrecto(
+                    mensaje
+                )
+            }
+    }
+
+
+    // =========================================================
+    // RETROALIMENTACIÓN DE LA RONDA
+    // =========================================================
+
+    /**
+     * Convierte el enum del destino a un texto
+     * comprensible para el jugador.
+     */
+    private fun nombreDestino(
+        destino: DestinoConexion
+    ): String {
+
+        return when (destino) {
+
+            DestinoConexion.PADRES ->
+                "Padres"
+
+            DestinoConexion.PROFESORES ->
+                "Profesores"
+
+            DestinoConexion.ANIMOON ->
+                "ANIMOON"
+        }
+    }
+
+
+    /**
+     * Explicación educativa general por categoría.
+     *
+     * Estos textos son provisionales en el sentido
+     * de que todavía no dependen de los ejemplos
+     * definitivos que entregará Silvia.
+     */
+    private fun explicacionCategoria(
+        categoria: CategoriaMensaje
+    ): String {
+
+        return when (categoria) {
+
+            CategoriaMensaje.PERSONAL ->
+
+                "La información personal debe compartirse solamente con adultos de confianza, como tus padres o profesores."
+
+
+            CategoriaMensaje.ESCOLAR ->
+
+                "Los datos relacionados con tu escuela pueden revelar información sobre dónde estudias o dónde te encuentras. Compártelos solo con adultos de confianza."
+
+
+            CategoriaMensaje.JUEGO ->
+
+                "La información del juego puede compartirse con tus padres, profesores y dentro de ANIMOON porque, en esta actividad, no revela datos personales."
+
+
+            CategoriaMensaje.ENTRETENIMIENTO ->
+
+                "Los gustos de entretenimiento pueden compartirse con tus padres, profesores y dentro de ANIMOON, siempre evitando agregar datos personales."
+        }
+    }
+
+
+    /**
+     * Construye el texto que verá el jugador
+     * después de pulsar COMPROBAR.
+     */
+    private fun construirResumenRetroalimentacion(): String {
+
+        return datosRondaActual
+            .mensajes
+            .joinToString(
+                separator = "\n\n"
+            ) { mensaje ->
+
+
+                val correcta =
+                    esMensajeCorrecto(
+                        mensaje
+                    )
+
+
+                val destinosCorrectos =
+                    obtenerDestinosCorrectos(
+                        mensaje.categoria
+                    )
+
+
+                val nombresDestinos =
+                    destinosCorrectos
+                        .sortedBy {
+                            it.ordinal
+                        }
+                        .joinToString(
+                            separator = ", "
+                        ) {
+                            nombreDestino(
+                                it
+                            )
+                        }
+
+
+                val indicador =
+
+                    if (correcta) {
+
+                        "✓"
+
+                    } else {
+
+                        "⚠"
+                    }
+
+
+                val estado =
+
+                    if (correcta) {
+
+                        "Conexión correcta."
+
+                    } else {
+
+                        "Debía conectarse con: $nombresDestinos."
+                    }
+
+
+                "$indicador ${mensaje.texto}\n" +
+                        "$estado\n" +
+                        explicacionCategoria(
+                            mensaje.categoria
+                        )
+            }
+    }
+
+
+    /**
+     * Marca visualmente las cuatro tarjetas
+     * superiores después de comprobar.
+     *
+     * Verde = todas las conexiones del mensaje
+     * son exactamente correctas.
+     *
+     * Rojo = falta o sobra al menos una conexión.
+     */
+    private fun marcarResultadosVisuales() {
+
+
+        mensajeSeleccionadoId =
+            null
+
+
+        botonesSalida.forEach { boton ->
+
+
+            val mensajeId =
+                boton.tag as? Int
+
+
+            val mensaje =
+                datosRondaActual
+                    .mensajes
+                    .firstOrNull {
+                        it.id == mensajeId
+                    }
+
+
+            if (mensaje == null) {
+
+                return@forEach
+            }
+
+
+            val correcta =
+                esMensajeCorrecto(
+                    mensaje
+                )
+
+
+            boton.strokeWidth =
+                dpToPx(4)
+
+
+            boton.strokeColor =
+                ColorStateList.valueOf(
+
+                    Color.parseColor(
+
+                        if (correcta) {
+
+                            "#43A047"
+
+                        } else {
+
+                            "#E05A5A"
+                        }
+                    )
+                )
+
+
+            boton.backgroundTintList =
+                ColorStateList.valueOf(
+
+                    Color.parseColor(
+
+                        if (correcta) {
+
+                            "#E8F5E9"
+
+                        } else {
+
+                            "#FDECEC"
+                        }
+                    )
+                )
+        }
+    }
+
+
+    /**
+     * Muestra la retroalimentación y espera
+     * a que el jugador decida continuar.
+     *
+     * Ya NO avanzamos automáticamente
+     * después de COMPROBAR.
+     */
+    private fun mostrarRetroalimentacionRonda(
+        aciertosRonda: Int
+    ) {
+
+
+        val dialog =
+            Dialog(this)
+
+
+        dialog.setContentView(
+            R.layout.dialog_game2_feedback
+        )
+
+
+        dialog.setCancelable(
+            false
+        )
+
+
+        dialog.setCanceledOnTouchOutside(
+            false
+        )
+
+
+        dialog.window
+            ?.setBackgroundDrawable(
+                ColorDrawable(
+                    Color.TRANSPARENT
+                )
+            )
+
+
+        val txtFeedbackTitle =
+            dialog.findViewById<TextView>(
+                R.id.txtGame2FeedbackTitle
+            )
+
+
+        val txtFeedbackScore =
+            dialog.findViewById<TextView>(
+                R.id.txtGame2FeedbackScore
+            )
+
+
+        val txtFeedbackMessage =
+            dialog.findViewById<TextView>(
+                R.id.txtGame2FeedbackMessage
+            )
+
+
+        val imgFeedbackMoonie =
+            dialog.findViewById<ImageView>(
+                R.id.imgGame2FeedbackMoonie
+            )
+
+
+        val btnFeedbackContinue =
+            dialog.findViewById<MaterialButton>(
+                R.id.btnGame2FeedbackContinue
+            )
+
+
+        // -----------------------------------------------------
+        // TÍTULO
+        // -----------------------------------------------------
+
+        txtFeedbackTitle.text =
+
+            when (aciertosRonda) {
+
+                4 ->
+                    "¡Excelente trabajo!"
+
+                3 ->
+                    "¡Muy bien!"
+
+                2 ->
+                    "¡Vamos mejorando!"
+
+                else ->
+                    "Revisemos las conexiones"
+            }
+
+
+        // -----------------------------------------------------
+        // PUNTAJE DE LA RONDA
+        // -----------------------------------------------------
+
+        txtFeedbackScore.text =
+            "Aciertos de esta ronda: $aciertosRonda de 4"
+
+
+        // -----------------------------------------------------
+        // MENSAJE EDUCATIVO
+        // -----------------------------------------------------
+
+        txtFeedbackMessage.text =
+            construirResumenRetroalimentacion()
+
+
+        // -----------------------------------------------------
+        // MOONIE
+        // -----------------------------------------------------
+
+        imgFeedbackMoonie.setImageResource(
+
+            if (aciertosRonda == 4) {
+
+                R.drawable.moonie_repaired
+
+            } else {
+
+                R.drawable.moonie_damaged
+            }
+        )
+
+
+        // -----------------------------------------------------
+        // BOTÓN
+        // -----------------------------------------------------
+
+        btnFeedbackContinue.text =
+
+            if (
+                rondaActual <
+                TOTAL_RONDAS
+            ) {
+
+                "Continuar"
+
+            } else {
+
+                "Finalizar"
+            }
+
+
+        btnFeedbackContinue.setOnClickListener {
+
+
+            dialog.dismiss()
+
+
+            if (
+                rondaActual <
+                TOTAL_RONDAS
+            ) {
+
+                avanzarRonda()
+
+            } else {
+
+                finalizarPartidaTemporal()
+            }
+        }
+
+
+        dialog.show()
+
+
+        /*
+         * Ancho cómodo para la Galaxy Tab,
+         * manteniendo margen a los lados.
+         */
+        dialog.window
+            ?.setLayout(
+
+                (
+                        resources
+                            .displayMetrics
+                            .widthPixels *
+                                0.82f
+                        ).toInt(),
+
+                android.view.ViewGroup
+                    .LayoutParams
+                    .WRAP_CONTENT
+            )
+    }
+
+    // =========================================================
     // COMPROBAR RONDA
     // =========================================================
 
     /**
-     * TEMPORAL.
+     * Evalúa los cuatro mensajes de la ronda,
+     * suma el puntaje y abre la retroalimentación.
      *
-     * Todavía no evalúa si las conexiones
-     * realizadas son correctas.
-     *
-     * Esa validación será el siguiente punto.
+     * El jugador no pasa a la siguiente ronda
+     * hasta pulsar CONTINUAR.
      */
-    private fun comprobarRondaTemporal() {
+    private fun comprobarRonda() {
 
 
         if (rondaBloqueada) {
 
             return
         }
+
+
+        // -----------------------------------------------------
+        // VALIDAR CONEXIONES
+        // -----------------------------------------------------
+
+        val aciertosRonda =
+            calcularAciertosRonda()
+
+
+        // -----------------------------------------------------
+        // ACTUALIZAR PUNTAJE
+        // -----------------------------------------------------
+
+        puntaje +=
+            aciertosRonda
+
+
+        actualizarHud()
 
 
         // -----------------------------------------------------
@@ -1017,47 +1541,19 @@ class Game2Activity : BaseActivity() {
 
 
         // -----------------------------------------------------
-        // MENSAJE TEMPORAL
+        // MOSTRAR RESULTADO EN LA PANTALLA
         // -----------------------------------------------------
 
-        Toast.makeText(
-
-            this,
-
-            "Ronda $rondaActual completada",
-
-            Toast.LENGTH_SHORT
-
-        ).show()
+        marcarResultadosVisuales()
 
 
         // -----------------------------------------------------
-        // ESPERA TEMPORAL
+        // MOSTRAR RETROALIMENTACIÓN
         // -----------------------------------------------------
 
-        /*
-         * Posteriormente estos 900 ms
-         * serán sustituidos por el modal
-         * de retroalimentación.
-         */
-        lifecycleScope.launch {
-
-
-            delay(900)
-
-
-            if (
-                rondaActual <
-                TOTAL_RONDAS
-            ) {
-
-                avanzarRonda()
-
-            } else {
-
-                finalizarPartidaTemporal()
-            }
-        }
+        mostrarRetroalimentacionRonda(
+            aciertosRonda
+        )
     }
 
 
