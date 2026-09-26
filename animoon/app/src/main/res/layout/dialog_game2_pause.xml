@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="360dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="#FFFFFF"
+    app:cardCornerRadius="28dp"
+    app:cardElevation="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="28dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Juego pausado"
+            android:textColor="#34315D"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Tus cables seguirán exactamente como los dejaste."
+            android:textColor="#62638B"
+            android:textSize="16sp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGame2PauseContinue"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:text="Continuar"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="#6674D9"
+            app:cornerRadius="22dp" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGame2PauseExit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
+            android:text="Salir del minijuego"
+            android:textAllCaps="false"
+            android:textColor="#5E62B8"
+            android:textSize="16sp"
+            app:backgroundTint="#EDF0FF"
+            app:cornerRadius="22dp" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

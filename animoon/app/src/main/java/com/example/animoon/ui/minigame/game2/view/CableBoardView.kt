@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
@@ -11,18 +12,6 @@ import com.example.animoon.ui.minigame.game2.model.Conexion
 import com.example.animoon.ui.minigame.game2.model.DestinoConexion
 
 
-/**
- * Vista encargada exclusivamente
- * de dibujar los cables.
- *
- * No decide:
- *
- * - si una conexión es correcta
- * - cuántos puntos obtiene el jugador
- * - cuándo cambia la ronda
- *
- * Únicamente representa las conexiones.
- */
 class CableBoardView @JvmOverloads constructor(
 
     context: Context,
@@ -38,82 +27,50 @@ class CableBoardView @JvmOverloads constructor(
 ) {
 
 
-    // =========================================================
-    // PUERTOS
-    // =========================================================
-
-    /**
-     * ID lógico del mensaje
-     * →
-     * View donde se encuentra actualmente.
-     */
     private var salidas:
             Map<Int, View> =
         emptyMap()
 
 
-    /**
-     * Destino lógico
-     * →
-     * View correspondiente.
-     */
     private var destinos:
             Map<DestinoConexion, View> =
         emptyMap()
 
-
-    // =========================================================
-    // CONEXIONES
-    // =========================================================
 
     private var conexiones:
             Set<Conexion> =
         emptySet()
 
 
-    // =========================================================
-    // COLORES
-    // =========================================================
-
-    /**
-     * ID del mensaje
-     * →
-     * color asignado durante esta ronda.
-     *
-     * Este color depende de la posición visual
-     * y no del ID permanente del mensaje.
-     */
-    private var coloresPorMensaje:
+    private var colores:
             Map<Int, Int> =
         emptyMap()
 
 
-    // =========================================================
-    // PINCEL
-    // =========================================================
-
-    private val cablePaint =
-        Paint(
-            Paint.ANTI_ALIAS_FLAG
-        ).apply {
-
+    private val paintCable =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
 
             style =
                 Paint.Style.STROKE
 
-
             strokeWidth =
                 dpToPx(7f)
 
-
             strokeCap =
                 Paint.Cap.ROUND
+
+            strokeJoin =
+                Paint.Join.ROUND
         }
 
 
-    // =========================================================
-    // CONFIGURAR PUERTOS
-    // =========================================================
+    private val paintConnector =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+
+            style =
+                Paint.Style.FILL
+        }
+
 
     fun configurarPuertos(
 
@@ -121,7 +78,6 @@ class CableBoardView @JvmOverloads constructor(
 
         destinos: Map<DestinoConexion, View>
     ) {
-
 
         this.salidas =
             salidas
@@ -135,53 +91,33 @@ class CableBoardView @JvmOverloads constructor(
     }
 
 
-    // =========================================================
-    // CONFIGURAR COLORES
-    // =========================================================
-
     fun configurarColores(
-        nuevosColores: Map<Int, Int>
+        colores: Map<Int, Int>
     ) {
 
-
-        coloresPorMensaje =
-            nuevosColores.toMap()
+        this.colores =
+            colores
 
 
         invalidate()
     }
 
-
-    // =========================================================
-    // ACTUALIZAR CONEXIONES
-    // =========================================================
 
     fun actualizarConexiones(
-        nuevasConexiones: Set<Conexion>
+        conexiones: Set<Conexion>
     ) {
 
-
-        /*
-         * Creamos una copia para que
-         * CableBoardView no dependa del
-         * MutableSet original.
-         */
-        conexiones =
-            nuevasConexiones.toSet()
+        this.conexiones =
+            conexiones.toSet()
 
 
         invalidate()
     }
 
-
-    // =========================================================
-    // DIBUJAR
-    // =========================================================
 
     override fun onDraw(
         canvas: Canvas
     ) {
-
 
         super.onDraw(
             canvas
@@ -190,10 +126,6 @@ class CableBoardView @JvmOverloads constructor(
 
         conexiones.forEach { conexion ->
 
-
-            // -------------------------------------------------
-            // LOCALIZAR PUERTOS
-            // -------------------------------------------------
 
             val salida =
                 salidas[
@@ -207,11 +139,6 @@ class CableBoardView @JvmOverloads constructor(
                 ]
 
 
-            /*
-             * Si alguna referencia todavía
-             * no está disponible, ignoramos
-             * únicamente esa conexión.
-             */
             if (
                 salida == null ||
                 destino == null
@@ -220,10 +147,6 @@ class CableBoardView @JvmOverloads constructor(
                 return@forEach
             }
 
-
-            // -------------------------------------------------
-            // COORDENADAS
-            // -------------------------------------------------
 
             val inicio =
                 obtenerCentroInferior(
@@ -237,182 +160,180 @@ class CableBoardView @JvmOverloads constructor(
                 )
 
 
-            // -------------------------------------------------
-            // COLOR
-            // -------------------------------------------------
-
-            cablePaint.color =
-
-                coloresPorMensaje[
+            val color =
+                colores[
                     conexion.mensajeId
-                ]
-                    ?: Color.parseColor(
-                        "#6674D9"
-                    )
+                ] ?: Color.WHITE
 
 
-            // -------------------------------------------------
-            // DIBUJAR
-            // -------------------------------------------------
+            paintCable.color =
+                color
 
-            /*
-             * Por ahora utilizamos líneas rectas.
-             *
-             * Posteriormente podremos convertirlas
-             * en cables curvos, luminosos o animados.
-             */
-            canvas.drawLine(
 
-                inicio.x,
-                inicio.y,
+            paintConnector.color =
+                color
 
-                fin.x,
-                fin.y,
 
-                cablePaint
+            dibujarCable(
+
+                canvas,
+
+                inicio,
+
+                fin
             )
         }
     }
 
 
-    // =========================================================
-    // CENTRO INFERIOR DE SALIDA
-    // =========================================================
+    private fun dibujarCable(
 
-    /**
-     * Calcula el centro inferior
-     * del botón superior.
-     */
+        canvas: Canvas,
+
+        inicio: PointF,
+
+        fin: PointF
+    ) {
+
+
+        val distancia =
+            fin.y -
+                    inicio.y
+
+
+        val control1 =
+            inicio.y +
+                    distancia * 0.38f
+
+
+        val control2 =
+            fin.y -
+                    distancia * 0.38f
+
+
+        val path =
+            Path().apply {
+
+                moveTo(
+                    inicio.x,
+                    inicio.y
+                )
+
+
+                cubicTo(
+
+                    inicio.x,
+                    control1,
+
+                    fin.x,
+                    control2,
+
+                    fin.x,
+                    fin.y
+                )
+            }
+
+
+        canvas.drawPath(
+            path,
+            paintCable
+        )
+
+
+        canvas.drawCircle(
+
+            inicio.x,
+
+            inicio.y,
+
+            dpToPx(6f),
+
+            paintConnector
+        )
+
+
+        canvas.drawCircle(
+
+            fin.x,
+
+            fin.y,
+
+            dpToPx(6f),
+
+            paintConnector
+        )
+    }
+
+
     private fun obtenerCentroInferior(
         view: View
     ): PointF {
 
 
-        val viewLocation =
+        val ubicacionView =
             IntArray(2)
 
 
-        val boardLocation =
+        val ubicacionBoard =
             IntArray(2)
 
 
-        /*
-         * Coordenadas absolutas
-         * de la View.
-         */
-        view.getLocationOnScreen(
-            viewLocation
+        view.getLocationInWindow(
+            ubicacionView
         )
 
 
-        /*
-         * Coordenadas absolutas
-         * del CableBoardView.
-         */
-        getLocationOnScreen(
-            boardLocation
+        getLocationInWindow(
+            ubicacionBoard
         )
-
-
-        /*
-         * Convertimos las coordenadas
-         * absolutas en coordenadas relativas
-         * al CableBoardView.
-         */
-        val x =
-
-            (
-                    viewLocation[0] -
-                            boardLocation[0]
-                    ).toFloat() +
-
-                    view.width / 2f
-
-
-        val y =
-
-            (
-                    viewLocation[1] -
-                            boardLocation[1] +
-                            view.height
-                    ).toFloat()
 
 
         return PointF(
 
-            x,
+            ubicacionView[0] -
+                    ubicacionBoard[0] +
+                    view.width / 2f,
 
-            y
+            ubicacionView[1] -
+                    ubicacionBoard[1] +
+                    view.height.toFloat()
         )
     }
 
 
-    // =========================================================
-    // CENTRO SUPERIOR DE DESTINO
-    // =========================================================
-
-    /**
-     * Calcula el centro superior
-     * del botón inferior.
-     */
     private fun obtenerCentroSuperior(
         view: View
     ): PointF {
 
 
-        val viewLocation =
+        val ubicacionView =
             IntArray(2)
 
 
-        val boardLocation =
+        val ubicacionBoard =
             IntArray(2)
 
 
-        view.getLocationOnScreen(
-            viewLocation
+        view.getLocationInWindow(
+            ubicacionView
         )
 
 
-        getLocationOnScreen(
-            boardLocation
+        getLocationInWindow(
+            ubicacionBoard
         )
-
-
-        val x =
-
-            (
-                    viewLocation[0] -
-                            boardLocation[0]
-                    ).toFloat() +
-
-                    view.width / 2f
-
-
-        val y =
-
-            (
-                    viewLocation[1] -
-                            boardLocation[1]
-                    ).toFloat()
 
 
         return PointF(
-
-            x,
-
-            y
+            ubicacionView[0] - ubicacionBoard[0] + view.width / 2f,
+            (ubicacionView[1] - ubicacionBoard[1]).toFloat()
         )
     }
 
 
-    // =========================================================
-    // UTILIDADES
-    // =========================================================
-
     private fun dpToPx(
         dp: Float
     ): Float {
-
 
         return dp *
                 resources

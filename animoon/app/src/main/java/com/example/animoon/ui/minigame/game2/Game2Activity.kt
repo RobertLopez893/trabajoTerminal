@@ -1,15 +1,17 @@
 package com.example.animoon.ui.minigame.game2
 
 import android.app.Dialog
-import android.graphics.drawable.ColorDrawable
-import android.widget.ImageView
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.ui.minigame.game2.model.CategoriaMensaje
@@ -24,22 +26,20 @@ import com.google.android.material.button.MaterialButton
 class Game2Activity : BaseActivity() {
 
 
-    // =========================================================
-    // CONFIGURACIÓN GENERAL
-    // =========================================================
-
     companion object {
-
         const val TOTAL_RONDAS = 5
+        const val MENSAJES_POR_RONDA = 4
+        const val PUNTOS_POR_CASO = 5
+
+        const val PUNTAJE_MAXIMO =
+            TOTAL_RONDAS * MENSAJES_POR_RONDA * PUNTOS_POR_CASO
     }
 
 
-    /**
-     * Los colores pertenecen a las posiciones visuales
-     * de los cuatro puertos superiores.
-     *
-     * NO dependen del ID del mensaje.
-     */
+    // =========================================================
+    // COLORES
+    // =========================================================
+
     private val coloresCables =
         listOf(
 
@@ -54,8 +54,16 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // DATOS DE LA PARTIDA
+    // PARTIDA
     // =========================================================
+
+    private lateinit var rondasPartida:
+            List<RondaJuego>
+
+
+    private lateinit var datosRondaActual:
+            RondaJuego
+
 
     private var rondaActual =
         1
@@ -65,150 +73,81 @@ class Game2Activity : BaseActivity() {
         0
 
 
-    /**
-     * Ronda que actualmente se encuentra
-     * jugando el usuario.
-     */
-    private lateinit var datosRondaActual:
-            RondaJuego
-
-
-    /**
-     * Evita modificar una ronda después
-     * de pulsar COMPROBAR.
-     */
     private var rondaBloqueada =
         false
 
 
-    // =========================================================
-    // MENSAJES TEMPORALES
-    // =========================================================
-
-    /**
-     * IMPORTANTE:
-     *
-     * Estos cuatro mensajes existen únicamente
-     * para probar el funcionamiento del juego.
-     *
-     * Serán sustituidos cuando Silvia entregue
-     * el documento con las situaciones reales.
-     */
-    private val mensajesTemporales =
-        listOf(
-
-            MensajeJuego(
-                id = 101,
-                texto = "Mensaje de prueba A",
-                categoria = CategoriaMensaje.PERSONAL
-            ),
-
-            MensajeJuego(
-                id = 102,
-                texto = "Mensaje de prueba B",
-                categoria = CategoriaMensaje.JUEGO
-            ),
-
-            MensajeJuego(
-                id = 103,
-                texto = "Mensaje de prueba C",
-                categoria = CategoriaMensaje.ESCOLAR
-            ),
-
-            MensajeJuego(
-                id = 104,
-                texto = "Mensaje de prueba D",
-                categoria = CategoriaMensaje.ENTRETENIMIENTO
-            )
-        )
+    private var juegoPausado =
+        false
 
 
     // =========================================================
-    // ESTADO DE INTERACCIÓN
+    // INTERACCIÓN
     // =========================================================
 
-    /**
-     * ID lógico del mensaje seleccionado.
-     *
-     * No representa su posición visual.
-     */
     private var mensajeSeleccionadoId:
             Int? =
         null
 
 
-    /**
-     * Conexiones creadas durante
-     * la ronda actual.
-     */
     private val conexiones =
         mutableSetOf<Conexion>()
 
 
     // =========================================================
-    // HUD
+    // VISTAS
     // =========================================================
 
     private lateinit var txtRound:
             TextView
 
+
     private lateinit var txtScore:
             TextView
 
 
-    // =========================================================
-    // PUERTOS DE SALIDA
-    // =========================================================
-
     private lateinit var btnOutput1:
             MaterialButton
+
 
     private lateinit var btnOutput2:
             MaterialButton
 
+
     private lateinit var btnOutput3:
             MaterialButton
+
 
     private lateinit var btnOutput4:
             MaterialButton
 
 
-    /**
-     * Representa las cuatro POSICIONES
-     * disponibles en la parte superior.
-     */
     private lateinit var botonesSalida:
             List<MaterialButton>
 
 
-    // =========================================================
-    // PUERTOS DE ENTRADA
-    // =========================================================
-
     private lateinit var btnParents:
             MaterialButton
 
+
     private lateinit var btnTeachers:
             MaterialButton
+
 
     private lateinit var btnAnimoon:
             MaterialButton
 
 
-    // =========================================================
-    // TABLERO
-    // =========================================================
+    private lateinit var btnCheck:
+            MaterialButton
+
+
+    private lateinit var btnPause:
+            ImageButton
+
 
     private lateinit var cableBoard:
             CableBoardView
-
-
-    // =========================================================
-    // COMPROBAR
-    // =========================================================
-
-    private lateinit var btnCheck:
-            MaterialButton
 
 
     // =========================================================
@@ -233,20 +172,18 @@ class Game2Activity : BaseActivity() {
 
         configurarBotones()
 
+        configurarBotonAtras()
+
         prepararPartida()
     }
 
 
     // =========================================================
-    // INICIALIZACIÓN DE VISTAS
+    // VISTAS
     // =========================================================
 
     private fun inicializarVistas() {
 
-
-        // -----------------------------------------------------
-        // HUD
-        // -----------------------------------------------------
 
         txtRound =
             findViewById(
@@ -259,10 +196,6 @@ class Game2Activity : BaseActivity() {
                 R.id.txtGame2Score
             )
 
-
-        // -----------------------------------------------------
-        // SALIDAS
-        // -----------------------------------------------------
 
         btnOutput1 =
             findViewById(
@@ -292,15 +225,14 @@ class Game2Activity : BaseActivity() {
             listOf(
 
                 btnOutput1,
+
                 btnOutput2,
+
                 btnOutput3,
+
                 btnOutput4
             )
 
-
-        // -----------------------------------------------------
-        // DESTINOS
-        // -----------------------------------------------------
 
         btnParents =
             findViewById(
@@ -320,41 +252,45 @@ class Game2Activity : BaseActivity() {
             )
 
 
-        // -----------------------------------------------------
-        // TABLERO
-        // -----------------------------------------------------
+        btnCheck =
+            findViewById(
+                R.id.btnGame2Check
+            )
+
+
+        btnPause =
+            findViewById(
+                R.id.btnGame2Pause
+            )
+
 
         cableBoard =
             findViewById(
                 R.id.cableBoard
             )
-
-
-        // -----------------------------------------------------
-        // COMPROBAR
-        // -----------------------------------------------------
-
-        btnCheck =
-            findViewById(
-                R.id.btnGame2Check
-            )
     }
 
 
     // =========================================================
-    // CONFIGURAR BOTONES
+    // BOTONES
     // =========================================================
 
     private fun configurarBotones() {
 
 
-        // -----------------------------------------------------
-        // PUERTOS SUPERIORES
-        // -----------------------------------------------------
-
         botonesSalida.forEach { boton ->
 
+
             boton.setOnClickListener {
+
+
+                if (
+                    rondaBloqueada ||
+                    juegoPausado
+                ) {
+
+                    return@setOnClickListener
+                }
 
 
                 val mensajeId =
@@ -370,10 +306,6 @@ class Game2Activity : BaseActivity() {
             }
         }
 
-
-        // -----------------------------------------------------
-        // DESTINOS
-        // -----------------------------------------------------
 
         btnParents.setOnClickListener {
 
@@ -399,14 +331,36 @@ class Game2Activity : BaseActivity() {
         }
 
 
-        // -----------------------------------------------------
-        // COMPROBAR
-        // -----------------------------------------------------
-
         btnCheck.setOnClickListener {
 
             comprobarRonda()
         }
+
+
+        btnPause.setOnClickListener {
+
+            mostrarDialogPausa()
+        }
+    }
+
+
+    private fun configurarBotonAtras() {
+
+
+        onBackPressedDispatcher.addCallback(
+
+            this,
+
+            object :
+                OnBackPressedCallback(true) {
+
+
+                override fun handleOnBackPressed() {
+
+                    mostrarDialogPausa()
+                }
+            }
+        )
     }
 
 
@@ -416,12 +370,17 @@ class Game2Activity : BaseActivity() {
 
     private fun prepararPartida() {
 
+
         rondaActual =
             1
 
 
         puntaje =
             0
+
+
+        rondasPartida =
+            generarRondasPartida()
 
 
         prepararRonda(
@@ -434,33 +393,103 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // CREAR RONDA TEMPORAL
+    // GENERACIÓN REAL
     // =========================================================
 
-    /**
-     * Por ahora utilizamos siempre los cuatro
-     * mensajes temporales.
-     *
-     * shuffled() modifica únicamente
-     * su posición visual.
-     */
-    private fun crearRondaTemporal(
-        numero: Int
-    ): RondaJuego {
+    private fun generarRondasPartida():
+            List<RondaJuego> {
 
 
-        val mensajesAleatorios =
-
-            mensajesTemporales
-                .shuffled()
-
-
-        return RondaJuego(
-
-            numero = numero,
-
-            mensajes = mensajesAleatorios
+        require(
+            Game2MessageBank
+                .personales
+                .size >= TOTAL_RONDAS
         )
+
+
+        require(
+            Game2MessageBank
+                .juego
+                .size >= TOTAL_RONDAS
+        )
+
+
+        require(
+            Game2MessageBank
+                .escolares
+                .size >= TOTAL_RONDAS
+        )
+
+
+        require(
+            Game2MessageBank
+                .entretenimiento
+                .size >= TOTAL_RONDAS
+        )
+
+
+        /*
+         * Seleccionamos cinco mensajes DIFERENTES
+         * de cada categoría.
+         *
+         * Por ello ninguna situación puede repetirse
+         * dentro de la misma partida.
+         */
+        val personales =
+            Game2MessageBank
+                .personales
+                .shuffled()
+                .take(TOTAL_RONDAS)
+
+
+        val juego =
+            Game2MessageBank
+                .juego
+                .shuffled()
+                .take(TOTAL_RONDAS)
+
+
+        val escolares =
+            Game2MessageBank
+                .escolares
+                .shuffled()
+                .take(TOTAL_RONDAS)
+
+
+        val entretenimiento =
+            Game2MessageBank
+                .entretenimiento
+                .shuffled()
+                .take(TOTAL_RONDAS)
+
+
+        return (0 until TOTAL_RONDAS)
+            .map { indice ->
+
+
+                val mensajes =
+                    listOf(
+
+                        personales[indice],
+
+                        juego[indice],
+
+                        escolares[indice],
+
+                        entretenimiento[indice]
+                    )
+                        .shuffled()
+
+
+                RondaJuego(
+
+                    numero =
+                        indice + 1,
+
+                    mensajes =
+                        mensajes
+                )
+            }
     }
 
 
@@ -473,21 +502,17 @@ class Game2Activity : BaseActivity() {
     ) {
 
 
-        // -----------------------------------------------------
-        // CREAR RONDA
-        // -----------------------------------------------------
-
         datosRondaActual =
-            crearRondaTemporal(
-                numero
-            )
+            rondasPartida[
+                numero - 1
+            ]
 
-
-        // -----------------------------------------------------
-        // REINICIAR ESTADO
-        // -----------------------------------------------------
 
         rondaBloqueada =
+            false
+
+
+        juegoPausado =
             false
 
 
@@ -498,70 +523,34 @@ class Game2Activity : BaseActivity() {
         conexiones.clear()
 
 
-        // -----------------------------------------------------
-        // MOSTRAR MENSAJES
-        // -----------------------------------------------------
-
         mostrarMensajesRonda()
-
-
-        // -----------------------------------------------------
-        // CONFIGURAR TABLERO
-        // -----------------------------------------------------
 
         configurarPuertosCableBoard()
 
         configurarColoresCableBoard()
 
 
-        // -----------------------------------------------------
-        // LIMPIAR CABLES
-        // -----------------------------------------------------
-
         cableBoard.actualizarConexiones(
             conexiones
         )
 
-
-        // -----------------------------------------------------
-        // REACTIVAR BOTONES
-        // -----------------------------------------------------
 
         habilitarInteraccionRonda(
             true
         )
 
 
-        btnCheck.text =
-            "Comprobar"
+        btnPause.isEnabled =
+            true
 
 
         actualizarSeleccionVisual()
 
         actualizarEstadoBotonComprobar()
 
-
-        // -----------------------------------------------------
-        // LOG
-        // -----------------------------------------------------
-
-        Log.d(
-
-            "Game2Activity",
-
-            "Ronda $numero - orden: " +
-                    datosRondaActual
-                        .mensajes
-                        .map {
-                            "${it.id}-${it.categoria}"
-                        }
-        )
+        actualizarHud()
     }
 
-
-    // =========================================================
-    // MOSTRAR MENSAJES
-    // =========================================================
 
     private fun mostrarMensajesRonda() {
 
@@ -575,20 +564,15 @@ class Game2Activity : BaseActivity() {
 
 
                 val boton =
-                    botonesSalida[indice]
+                    botonesSalida[
+                        indice
+                    ]
 
 
-                /*
-                 * Texto visible.
-                 */
                 boton.text =
                     mensaje.texto
 
 
-                /*
-                 * ID lógico correspondiente
-                 * al mensaje actual.
-                 */
                 boton.tag =
                     mensaje.id
             }
@@ -596,7 +580,7 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // CONFIGURAR PUERTOS DEL CABLE BOARD
+    // CABLE BOARD
     // =========================================================
 
     private fun configurarPuertosCableBoard() {
@@ -615,14 +599,15 @@ class Game2Activity : BaseActivity() {
 
             if (mensajeId != null) {
 
-                salidas[mensajeId] =
+                salidas[
+                    mensajeId
+                ] =
                     boton
             }
         }
 
 
-        val destinos:
-                Map<DestinoConexion, View> =
+        val destinos =
             mapOf(
 
                 DestinoConexion.PADRES
@@ -638,21 +623,15 @@ class Game2Activity : BaseActivity() {
 
         cableBoard.configurarPuertos(
 
-            salidas = salidas,
+            salidas =
+                salidas,
 
-            destinos = destinos
+            destinos =
+                destinos
         )
     }
 
 
-    // =========================================================
-    // CONFIGURAR COLORES DE CABLES
-    // =========================================================
-
-    /**
-     * El color depende de la posición
-     * visual del botón durante la ronda.
-     */
     private fun configurarColoresCableBoard() {
 
 
@@ -660,22 +639,27 @@ class Game2Activity : BaseActivity() {
             mutableMapOf<Int, Int>()
 
 
-        botonesSalida.forEachIndexed {
+        botonesSalida
+            .forEachIndexed {
 
-                indice,
-                boton ->
-
-
-            val mensajeId =
-                boton.tag as? Int
+                    indice,
+                    boton ->
 
 
-            if (mensajeId != null) {
+                val mensajeId =
+                    boton.tag as? Int
 
-                colores[mensajeId] =
-                    coloresCables[indice]
+
+                if (mensajeId != null) {
+
+                    colores[
+                        mensajeId
+                    ] =
+                        coloresCables[
+                            indice
+                        ]
+                }
             }
-        }
 
 
         cableBoard.configurarColores(
@@ -685,7 +669,7 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // SELECCIÓN DE MENSAJE
+    // SELECCIÓN
     // =========================================================
 
     private fun seleccionarMensaje(
@@ -693,19 +677,15 @@ class Game2Activity : BaseActivity() {
     ) {
 
 
-        /*
-         * Protección adicional.
-         */
-        if (rondaBloqueada) {
+        if (
+            rondaBloqueada ||
+            juegoPausado
+        ) {
 
             return
         }
 
 
-        /*
-         * Tocar nuevamente el mismo mensaje
-         * elimina la selección.
-         */
         mensajeSeleccionadoId =
 
             if (
@@ -725,19 +705,15 @@ class Game2Activity : BaseActivity() {
     }
 
 
-    // =========================================================
-    // CREAR / ELIMINAR CONEXIÓN
-    // =========================================================
-
     private fun alternarConexion(
         destino: DestinoConexion
     ) {
 
 
-        /*
-         * Protección adicional.
-         */
-        if (rondaBloqueada) {
+        if (
+            rondaBloqueada ||
+            juegoPausado
+        ) {
 
             return
         }
@@ -747,11 +723,8 @@ class Game2Activity : BaseActivity() {
             mensajeSeleccionadoId
 
 
-        /*
-         * No puede existir un cable sin
-         * seleccionar primero una salida.
-         */
         if (mensajeId == null) {
+
 
             Toast.makeText(
 
@@ -771,18 +744,14 @@ class Game2Activity : BaseActivity() {
         val conexion =
             Conexion(
 
-                mensajeId = mensajeId,
+                mensajeId =
+                    mensajeId,
 
-                destino = destino
+                destino =
+                    destino
             )
 
 
-        /*
-         * Toggle:
-         *
-         * existe    → eliminar
-         * no existe → agregar
-         */
         if (
             conexiones.contains(
                 conexion
@@ -801,25 +770,17 @@ class Game2Activity : BaseActivity() {
         }
 
 
-        /*
-         * Actualizamos visualmente
-         * los cables.
-         */
         cableBoard.actualizarConexiones(
             conexiones
         )
 
 
-        /*
-         * Revisamos si los cuatro mensajes
-         * tienen al menos una conexión.
-         */
         actualizarEstadoBotonComprobar()
     }
 
 
     // =========================================================
-    // SELECCIÓN VISUAL
+    // ESTILO
     // =========================================================
 
     private fun actualizarSeleccionVisual() {
@@ -832,18 +793,13 @@ class Game2Activity : BaseActivity() {
                 boton.tag as? Int
 
 
-            val seleccionado =
-
-                mensajeId != null &&
-                        mensajeId ==
-                        mensajeSeleccionadoId
-
-
             actualizarEstiloSalida(
 
                 boton,
 
-                seleccionado
+                mensajeId != null &&
+                        mensajeId ==
+                        mensajeSeleccionadoId
             )
         }
     }
@@ -861,7 +817,9 @@ class Game2Activity : BaseActivity() {
 
 
             boton.strokeWidth =
-                dpToPx(4)
+                dpToPx(
+                    4
+                )
 
 
             boton.strokeColor =
@@ -886,7 +844,9 @@ class Game2Activity : BaseActivity() {
 
 
             boton.strokeWidth =
-                dpToPx(2)
+                dpToPx(
+                    2
+                )
 
 
             boton.strokeColor =
@@ -907,17 +867,16 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // ESTADO DEL BOTÓN COMPROBAR
+    // COMPROBAR
     // =========================================================
 
     private fun actualizarEstadoBotonComprobar() {
 
 
-        /*
-         * Una ronda ya enviada
-         * nunca puede volver a comprobarse.
-         */
-        if (rondaBloqueada) {
+        if (
+            rondaBloqueada ||
+            juegoPausado
+        ) {
 
             btnCheck.isEnabled =
                 false
@@ -931,12 +890,7 @@ class Game2Activity : BaseActivity() {
         }
 
 
-        /*
-         * Mensajes que tienen al menos
-         * una conexión.
-         */
         val mensajesConConexion =
-
             conexiones
                 .map {
                     it.mensajeId
@@ -944,17 +898,10 @@ class Game2Activity : BaseActivity() {
                 .toSet()
 
 
-        /*
-         * COMPROBAR solo se habilita
-         * cuando los cuatro mensajes
-         * tienen al menos un cable.
-         */
         val puedeComprobar =
 
             mensajesConConexion.size ==
-                    datosRondaActual
-                        .mensajes
-                        .size
+                    MENSAJES_POR_RONDA
 
 
         btnCheck.isEnabled =
@@ -975,339 +922,163 @@ class Game2Activity : BaseActivity() {
 
 
     // =========================================================
-    // REGLAS DEL MINIJUEGO
+    // REGLAS
     // =========================================================
 
-    /**
-     * Devuelve exactamente los destinos seguros
-     * para una categoría de mensaje.
-     *
-     * IMPORTANTE:
-     * El texto del mensaje no determina la respuesta.
-     * La lógica depende únicamente de su categoría.
-     */
     private fun obtenerDestinosCorrectos(
         categoria: CategoriaMensaje
     ): Set<DestinoConexion> {
 
-        return when (categoria) {
+
+        return when (
+            categoria
+        ) {
+
 
             CategoriaMensaje.PERSONAL,
             CategoriaMensaje.ESCOLAR -> {
 
                 setOf(
+
                     DestinoConexion.PADRES,
+
                     DestinoConexion.PROFESORES
                 )
             }
+
 
             CategoriaMensaje.JUEGO,
             CategoriaMensaje.ENTRETENIMIENTO -> {
 
                 setOf(
+
                     DestinoConexion.PADRES,
+
                     DestinoConexion.PROFESORES,
+
                     DestinoConexion.ANIMOON
                 )
             }
         }
     }
 
-    /**
-     * Obtiene todos los destinos que el jugador
-     * seleccionó para un mensaje específico.
-     */
+
     private fun obtenerDestinosSeleccionados(
         mensajeId: Int
     ): Set<DestinoConexion> {
 
+
         return conexiones
             .filter {
-                it.mensajeId == mensajeId
+
+                it.mensajeId ==
+                        mensajeId
             }
             .map {
+
                 it.destino
             }
             .toSet()
     }
 
 
-    /**
-     * Comprueba si las conexiones realizadas por el jugador
-     * para un mensaje coinciden EXACTAMENTE con los destinos
-     * correctos definidos para su categoría.
-     */
-    private fun esMensajeCorrecto(
-        mensaje: MensajeJuego
-    ): Boolean {
-
-        val destinosCorrectos =
-            obtenerDestinosCorrectos(
-                mensaje.categoria
-            )
+    private fun comprobarRonda() {
 
 
-        val destinosSeleccionados =
-            obtenerDestinosSeleccionados(
-                mensaje.id
-            )
+        if (
+            rondaBloqueada ||
+            juegoPausado
+        ) {
 
-
-        return destinosSeleccionados ==
-                destinosCorrectos
-    }
-
-
-    /**
-     * Cada mensaje correctamente conectado
-     * suma exactamente 1 punto.
-     *
-     * Como cada ronda contiene 4 mensajes,
-     * el resultado posible es de 0 a 4 puntos.
-     */
-    private fun calcularAciertosRonda(): Int {
-
-        return datosRondaActual
-            .mensajes
-            .count { mensaje ->
-
-                esMensajeCorrecto(
-                    mensaje
-                )
-            }
-    }
-
-
-    // =========================================================
-    // RETROALIMENTACIÓN DE LA RONDA
-    // =========================================================
-
-    /**
-     * Convierte el enum del destino a un texto
-     * comprensible para el jugador.
-     */
-    private fun nombreDestino(
-        destino: DestinoConexion
-    ): String {
-
-        return when (destino) {
-
-            DestinoConexion.PADRES ->
-                "Padres"
-
-            DestinoConexion.PROFESORES ->
-                "Profesores"
-
-            DestinoConexion.ANIMOON ->
-                "ANIMOON"
+            return
         }
-    }
 
 
-    /**
-     * Explicación educativa general por categoría.
-     *
-     * Estos textos son provisionales en el sentido
-     * de que todavía no dependen de los ejemplos
-     * definitivos que entregará Silvia.
-     */
-    private fun explicacionCategoria(
-        categoria: CategoriaMensaje
-    ): String {
-
-        return when (categoria) {
-
-            CategoriaMensaje.PERSONAL ->
-
-                "La información personal debe compartirse solamente con adultos de confianza, como tus padres o profesores."
+        rondaBloqueada =
+            true
 
 
-            CategoriaMensaje.ESCOLAR ->
-
-                "Los datos relacionados con tu escuela pueden revelar información sobre dónde estudias o dónde te encuentras. Compártelos solo con adultos de confianza."
-
-
-            CategoriaMensaje.JUEGO ->
-
-                "La información del juego puede compartirse con tus padres, profesores y dentro de ANIMOON porque, en esta actividad, no revela datos personales."
+        habilitarInteraccionRonda(
+            false
+        )
 
 
-            CategoriaMensaje.ENTRETENIMIENTO ->
-
-                "Los gustos de entretenimiento pueden compartirse con tus padres, profesores y dentro de ANIMOON, siempre evitando agregar datos personales."
-        }
-    }
+        btnPause.isEnabled =
+            false
 
 
-    /**
-     * Construye el texto que verá el jugador
-     * después de pulsar COMPROBAR.
-     */
-    private fun construirResumenRetroalimentacion(): String {
-
-        return datosRondaActual
-            .mensajes
-            .joinToString(
-                separator = "\n\n"
-            ) { mensaje ->
+        var puntosRonda =
+            0
 
 
-                val correcta =
-                    esMensajeCorrecto(
-                        mensaje
-                    )
+        val resultados =
+            datosRondaActual
+                .mensajes
+                .map { mensaje ->
 
 
-                val destinosCorrectos =
-                    obtenerDestinosCorrectos(
-                        mensaje.categoria
-                    )
-
-
-                val nombresDestinos =
-                    destinosCorrectos
-                        .sortedBy {
-                            it.ordinal
-                        }
-                        .joinToString(
-                            separator = ", "
-                        ) {
-                            nombreDestino(
-                                it
-                            )
-                        }
-
-
-                val indicador =
-
-                    if (correcta) {
-
-                        "✓"
-
-                    } else {
-
-                        "⚠"
-                    }
-
-
-                val estado =
-
-                    if (correcta) {
-
-                        "Conexión correcta."
-
-                    } else {
-
-                        "Debía conectarse con: $nombresDestinos."
-                    }
-
-
-                "$indicador ${mensaje.texto}\n" +
-                        "$estado\n" +
-                        explicacionCategoria(
+                    val correctos =
+                        obtenerDestinosCorrectos(
                             mensaje.categoria
                         )
-            }
-    }
 
 
-    /**
-     * Marca visualmente las cuatro tarjetas
-     * superiores después de comprobar.
-     *
-     * Verde = todas las conexiones del mensaje
-     * son exactamente correctas.
-     *
-     * Rojo = falta o sobra al menos una conexión.
-     */
-    private fun marcarResultadosVisuales() {
+                    val seleccionados =
+                        obtenerDestinosSeleccionados(
+                            mensaje.id
+                        )
 
 
-        mensajeSeleccionadoId =
-            null
+                    val esCorrecto =
+                        seleccionados ==
+                                correctos
 
 
-        botonesSalida.forEach { boton ->
+                    if (esCorrecto) {
 
-
-            val mensajeId =
-                boton.tag as? Int
-
-
-            val mensaje =
-                datosRondaActual
-                    .mensajes
-                    .firstOrNull {
-                        it.id == mensajeId
+                        puntosRonda++
                     }
 
 
-            if (mensaje == null) {
-
-                return@forEach
-            }
-
-
-            val correcta =
-                esMensajeCorrecto(
-                    mensaje
-                )
+                    mensaje to
+                            esCorrecto
+                }
 
 
-            boton.strokeWidth =
-                dpToPx(4)
+        puntaje += puntosRonda * PUNTOS_POR_CASO
 
 
-            boton.strokeColor =
-                ColorStateList.valueOf(
-
-                    Color.parseColor(
-
-                        if (correcta) {
-
-                            "#43A047"
-
-                        } else {
-
-                            "#E05A5A"
-                        }
-                    )
-                )
+        actualizarHud()
 
 
-            boton.backgroundTintList =
-                ColorStateList.valueOf(
+        mostrarFeedbackRonda(
 
-                    Color.parseColor(
+            resultados =
+                resultados,
 
-                        if (correcta) {
-
-                            "#E8F5E9"
-
-                        } else {
-
-                            "#FDECEC"
-                        }
-                    )
-                )
-        }
+            puntosRonda =
+                puntosRonda
+        )
     }
 
 
-    /**
-     * Muestra la retroalimentación y espera
-     * a que el jugador decida continuar.
-     *
-     * Ya NO avanzamos automáticamente
-     * después de COMPROBAR.
-     */
-    private fun mostrarRetroalimentacionRonda(
-        aciertosRonda: Int
+    // =========================================================
+    // FEEDBACK
+    // =========================================================
+
+    private fun mostrarFeedbackRonda(
+
+        resultados:
+        List<Pair<MensajeJuego, Boolean>>,
+
+        puntosRonda: Int
     ) {
 
 
         val dialog =
-            Dialog(this)
+            Dialog(
+                this
+            )
 
 
         dialog.setContentView(
@@ -1333,43 +1104,35 @@ class Game2Activity : BaseActivity() {
             )
 
 
-        val txtFeedbackTitle =
+        val txtTitle =
             dialog.findViewById<TextView>(
                 R.id.txtGame2FeedbackTitle
             )
 
 
-        val txtFeedbackScore =
+        val txtScore =
             dialog.findViewById<TextView>(
                 R.id.txtGame2FeedbackScore
             )
 
 
-        val txtFeedbackMessage =
+        val txtMessage =
             dialog.findViewById<TextView>(
                 R.id.txtGame2FeedbackMessage
             )
 
 
-        val imgFeedbackMoonie =
-            dialog.findViewById<ImageView>(
-                R.id.imgGame2FeedbackMoonie
-            )
-
-
-        val btnFeedbackContinue =
+        val btnContinue =
             dialog.findViewById<MaterialButton>(
                 R.id.btnGame2FeedbackContinue
             )
 
 
-        // -----------------------------------------------------
-        // TÍTULO
-        // -----------------------------------------------------
+        txtTitle.text =
 
-        txtFeedbackTitle.text =
-
-            when (aciertosRonda) {
+            when (
+                puntosRonda
+            ) {
 
                 4 ->
                     "¡Excelente trabajo!"
@@ -1378,66 +1141,26 @@ class Game2Activity : BaseActivity() {
                     "¡Muy bien!"
 
                 2 ->
-                    "¡Vamos mejorando!"
+                    "¡Vas aprendiendo!"
 
                 else ->
-                    "Revisemos las conexiones"
+                    "Revisemos los cables"
             }
 
 
-        // -----------------------------------------------------
-        // PUNTAJE DE LA RONDA
-        // -----------------------------------------------------
+        val puntosGanados = puntosRonda * PUNTOS_POR_CASO
 
-        txtFeedbackScore.text =
-            "Aciertos de esta ronda: $aciertosRonda de 4"
+        txtScore.text =
+            "$puntosRonda de $MENSAJES_POR_RONDA casos correctos · +$puntosGanados puntos"
 
 
-        // -----------------------------------------------------
-        // MENSAJE EDUCATIVO
-        // -----------------------------------------------------
-
-        txtFeedbackMessage.text =
-            construirResumenRetroalimentacion()
+        txtMessage.text =
+            construirTextoFeedback(
+                resultados
+            )
 
 
-        // -----------------------------------------------------
-        // MOONIE
-        // -----------------------------------------------------
-
-        imgFeedbackMoonie.setImageResource(
-
-            if (aciertosRonda == 4) {
-
-                R.drawable.moonie_repaired
-
-            } else {
-
-                R.drawable.moonie_damaged
-            }
-        )
-
-
-        // -----------------------------------------------------
-        // BOTÓN
-        // -----------------------------------------------------
-
-        btnFeedbackContinue.text =
-
-            if (
-                rondaActual <
-                TOTAL_RONDAS
-            ) {
-
-                "Continuar"
-
-            } else {
-
-                "Finalizar"
-            }
-
-
-        btnFeedbackContinue.setOnClickListener {
+        btnContinue.setOnClickListener {
 
 
             dialog.dismiss()
@@ -1448,11 +1171,16 @@ class Game2Activity : BaseActivity() {
                 TOTAL_RONDAS
             ) {
 
-                avanzarRonda()
+                rondaActual++
+
+
+                prepararRonda(
+                    rondaActual
+                )
 
             } else {
 
-                finalizarPartidaTemporal()
+                finalizarPartida()
             }
         }
 
@@ -1460,10 +1188,6 @@ class Game2Activity : BaseActivity() {
         dialog.show()
 
 
-        /*
-         * Ancho cómodo para la Galaxy Tab,
-         * manteniendo margen a los lados.
-         */
         dialog.window
             ?.setLayout(
 
@@ -1471,59 +1195,118 @@ class Game2Activity : BaseActivity() {
                         resources
                             .displayMetrics
                             .widthPixels *
-                                0.82f
-                        ).toInt(),
+                                0.78f
+                        )
+                    .toInt(),
 
-                android.view.ViewGroup
+                ViewGroup
                     .LayoutParams
                     .WRAP_CONTENT
             )
     }
 
+
+    private fun construirTextoFeedback(
+        resultados:
+        List<Pair<MensajeJuego, Boolean>>
+    ): String {
+
+
+        return resultados
+            .joinToString(
+                separator =
+                    "\n\n"
+            ) {
+
+                    (
+                        mensaje,
+                        correcto
+                    ) ->
+
+
+                if (correcto) {
+
+
+                    "✅ \"${mensaje.texto}\"\n${mensaje.explicacion}"
+
+
+                } else {
+
+
+                    val seleccionados =
+                        obtenerDestinosSeleccionados(
+                            mensaje.id
+                        )
+
+
+                    val correctos =
+                        obtenerDestinosCorrectos(
+                            mensaje.categoria
+                        )
+
+
+                    "⚠️ \"${mensaje.texto}\"\n" +
+                            "${mensaje.explicacion}\n" +
+                            "Elegiste: ${formatearDestinos(seleccionados)}\n" +
+                            "Lo correcto era: ${formatearDestinos(correctos)}"
+                }
+            }
+    }
+
+
+    private fun formatearDestinos(
+        destinos:
+        Set<DestinoConexion>
+    ): String {
+
+
+        if (destinos.isEmpty()) {
+
+            return "Ninguno"
+        }
+
+
+        return destinos
+            .sortedBy {
+                it.ordinal
+            }
+            .joinToString(
+                separator =
+                    ", "
+            ) {
+
+                when (it) {
+
+                    DestinoConexion.PADRES ->
+                        "Padres/Tutores"
+
+                    DestinoConexion.PROFESORES ->
+                        "Profesores"
+
+                    DestinoConexion.ANIMOON ->
+                        "ANIMOON"
+                }
+            }
+    }
+
+
     // =========================================================
-    // COMPROBAR RONDA
+    // PAUSA
     // =========================================================
 
-    /**
-     * Evalúa los cuatro mensajes de la ronda,
-     * suma el puntaje y abre la retroalimentación.
-     *
-     * El jugador no pasa a la siguiente ronda
-     * hasta pulsar CONTINUAR.
-     */
-    private fun comprobarRonda() {
+    private fun mostrarDialogPausa() {
 
 
-        if (rondaBloqueada) {
+        if (
+            juegoPausado ||
+            rondaBloqueada
+        ) {
 
             return
         }
 
 
-        // -----------------------------------------------------
-        // VALIDAR CONEXIONES
-        // -----------------------------------------------------
-
-        val aciertosRonda =
-            calcularAciertosRonda()
-
-
-        // -----------------------------------------------------
-        // ACTUALIZAR PUNTAJE
-        // -----------------------------------------------------
-
-        puntaje +=
-            aciertosRonda
-
-
-        actualizarHud()
-
-
-        // -----------------------------------------------------
-        // BLOQUEAR RONDA
-        // -----------------------------------------------------
-
-        rondaBloqueada =
+        juegoPausado =
             true
 
 
@@ -1532,33 +1315,90 @@ class Game2Activity : BaseActivity() {
         )
 
 
-        btnCheck.isEnabled =
+        btnPause.isEnabled =
             false
 
 
-        btnCheck.alpha =
-            0.45f
+        val dialog =
+            Dialog(
+                this
+            )
 
 
-        // -----------------------------------------------------
-        // MOSTRAR RESULTADO EN LA PANTALLA
-        // -----------------------------------------------------
-
-        marcarResultadosVisuales()
-
-
-        // -----------------------------------------------------
-        // MOSTRAR RETROALIMENTACIÓN
-        // -----------------------------------------------------
-
-        mostrarRetroalimentacionRonda(
-            aciertosRonda
+        dialog.setContentView(
+            R.layout.dialog_game2_pause
         )
+
+
+        dialog.setCancelable(
+            false
+        )
+
+
+        dialog.setCanceledOnTouchOutside(
+            false
+        )
+
+
+        dialog.window
+            ?.setBackgroundDrawable(
+                ColorDrawable(
+                    Color.TRANSPARENT
+                )
+            )
+
+
+        val btnContinue =
+            dialog.findViewById<MaterialButton>(
+                R.id.btnGame2PauseContinue
+            )
+
+
+        val btnExit =
+            dialog.findViewById<MaterialButton>(
+                R.id.btnGame2PauseExit
+            )
+
+
+        btnContinue.setOnClickListener {
+
+
+            dialog.dismiss()
+
+
+            juegoPausado =
+                false
+
+
+            btnPause.isEnabled =
+                true
+
+
+            habilitarInteraccionRonda(
+                true
+            )
+
+
+            actualizarEstadoBotonComprobar()
+        }
+
+
+        btnExit.setOnClickListener {
+
+
+            dialog.dismiss()
+
+
+            finish()
+        }
+
+
+        dialog.show()
     }
 
 
     // =========================================================
-    // HABILITAR / DESHABILITAR INTERACCIÓN
+    // INTERACCIÓN
     // =========================================================
 
     private fun habilitarInteraccionRonda(
@@ -1583,69 +1423,76 @@ class Game2Activity : BaseActivity() {
 
         btnAnimoon.isEnabled =
             habilitada
+
+
+        if (!habilitada) {
+
+
+            btnCheck.isEnabled =
+                false
+
+
+            btnCheck.alpha =
+                0.45f
+
+
+        } else {
+
+
+            actualizarEstadoBotonComprobar()
+        }
     }
 
 
     // =========================================================
-    // AVANZAR RONDA
+    // FINAL
     // =========================================================
 
-    private fun avanzarRonda() {
-
-
-        rondaActual++
-
-
-        prepararRonda(
-            rondaActual
-        )
-
-
-        actualizarHud()
-    }
-
-
-    // =========================================================
-    // FINAL TEMPORAL
-    // =========================================================
-
-    private fun finalizarPartidaTemporal() {
+    private fun finalizarPartida() {
 
 
         rondaBloqueada =
             true
 
 
-        habilitarInteraccionRonda(
-            false
+        val intent =
+            Intent(
+
+                this,
+
+                Game2ResultActivity::class.java
+            )
+
+
+        intent.putExtra(
+
+            Game2ResultActivity.EXTRA_SCORE,
+
+            puntaje
         )
 
 
-        btnCheck.isEnabled =
-            false
+        intent.putExtra(
+
+            Game2ResultActivity.EXTRA_MAX_SCORE,
+
+            PUNTAJE_MAXIMO
+        )
+
+
+        startActivity(
+            intent
+        )
 
 
         /*
-         * Lo dejamos completamente visible
-         * para mostrar el estado final.
+         * Quitamos Game2Activity de la pila.
+         *
+         * Resultado -> finish()
+         * regresará a la pantalla que abrió
+         * originalmente el minijuego.
          */
-        btnCheck.alpha =
-            1f
-
-
-        btnCheck.text =
-            "Partida completada"
-
-
-        Toast.makeText(
-
-            this,
-
-            "¡Prueba completada! Se jugaron las 5 rondas.",
-
-            Toast.LENGTH_LONG
-
-        ).show()
+        finish()
     }
 
 
@@ -1661,7 +1508,7 @@ class Game2Activity : BaseActivity() {
 
 
         txtScore.text =
-            "★ $puntaje"
+            "★ $puntaje / $PUNTAJE_MAXIMO"
     }
 
 
@@ -1681,6 +1528,7 @@ class Game2Activity : BaseActivity() {
                             .displayMetrics
                             .density
 
-                ).toInt()
+                )
+            .toInt()
     }
 }

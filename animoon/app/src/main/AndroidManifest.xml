@@ -85,9 +85,19 @@
 
         <!-- MINIJUEGO 2 -->
         <activity
+            android:name=".ui.minigame.game2.Game2CinematicActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
             android:name=".ui.minigame.game2.Game2Activity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.minigame.game2.Game2ResultActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
 
     </application>
 

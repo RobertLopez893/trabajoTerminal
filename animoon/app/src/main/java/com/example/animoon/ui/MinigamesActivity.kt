@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
-import com.example.animoon.ui.minigame.game2.Game2Activity
+import com.example.animoon.ui.minigame.game2.Game2CinematicActivity
 import com.google.android.material.button.MaterialButton
 class MinigamesActivity : BaseActivity() {
 
@@ -66,7 +66,7 @@ class MinigamesActivity : BaseActivity() {
             val intent =
                 Intent(
                     this,
-                    Game2Activity::class.java
+                    Game2CinematicActivity::class.java
                 )
 
             startActivity(intent)
