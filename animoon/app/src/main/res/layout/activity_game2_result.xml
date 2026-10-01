@@ -116,33 +116,21 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGame2Retry"
+                    style="@style/Widget.Animoon.Button.Primary"
                     android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="Jugar otra vez"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="#6674D9"
-                    app:cornerRadius="22dp" />
+                    android:text="Jugar otra vez" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnGame2Return"
+                    style="@style/Widget.Animoon.Button.Secondary"
                     android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="Regresar"
-                    android:textAllCaps="false"
-                    android:textColor="#29345C"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="#E8EBFA"
-                    app:cornerRadius="22dp"
-                    app:strokeColor="#BCC5EC"
-                    app:strokeWidth="2dp" />
+                    android:text="Regresar" />
 
             </LinearLayout>
 

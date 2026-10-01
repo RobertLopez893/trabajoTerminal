@@ -121,11 +121,11 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
+                style="@style/Widget.Animoon.Button.Auth"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/login_button"
-                android:textSize="17sp" />
+                android:text="@string/login_button" />
 
             <TextView
                 android:layout_width="match_parent"

@@ -1,82 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView
-    style="@style/Widget.Animoon.Card"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Animoon.Card"
     android:layout_width="520dp"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center">
+    android:layout_height="wrap_content">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="28dp">
+        android:layout_height="wrap_content">
 
-        <!-- TÍTULO -->
-
-        <TextView
-            android:id="@+id/txtFeedbackTitle"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="¡Muy bien!"
-            android:textColor="#29345C"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/animoon_card_padding">
 
-        <!-- MOONIE -->
+            <TextView
+                android:id="@+id/txtFeedbackTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="¡Muy bien!"
+                android:textAppearance="@style/TextAppearance.Animoon.Title" />
 
-        <ImageView
-            android:id="@+id/imgFeedbackMoonie"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_marginTop="16dp"
-            android:contentDescription="Moonie"
-            android:scaleType="fitCenter"
-            android:src="@drawable/moonie_neutral"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtFeedbackTitle" />
+            <ImageView
+                android:id="@+id/imgFeedbackMoonie"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_neutral" />
 
-        <!-- MENSAJE -->
+            <TextView
+                android:id="@+id/txtFeedbackMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
-        <TextView
-            android:id="@+id/txtFeedbackMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:lineSpacingExtra="4dp"
-            android:text="Aquí aparecerá la explicación de Moonie."
-            android:textColor="#29345C"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgFeedbackMoonie" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnFeedbackContinue"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/animoon_continue" />
 
-        <!-- CONTINUAR -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnFeedbackContinue"
-            android:layout_width="220dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="24dp"
-            android:text="Continuar"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:backgroundTint="#556FD8"
-            app:cornerRadius="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/txtFeedbackMessage"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </com.google.android.material.card.MaterialCardView>

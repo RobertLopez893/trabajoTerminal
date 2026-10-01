@@ -1186,23 +1186,7 @@ class Game2Activity : BaseActivity() {
 
 
         dialog.show()
-
-
-        dialog.window
-            ?.setLayout(
-
-                (
-                        resources
-                            .displayMetrics
-                            .widthPixels *
-                                0.78f
-                        )
-                    .toInt(),
-
-                ViewGroup
-                    .LayoutParams
-                    .WRAP_CONTENT
-            )
+        ajustarTamanoDialogo(dialog)
     }
 
 

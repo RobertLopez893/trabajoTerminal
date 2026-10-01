@@ -191,6 +191,7 @@ class MainActivity : BaseActivity() {
         // ---------------------------------------------------------
 
         dialog.show()
+        ajustarTamanoDialogo(dialog)
 
         // ---------------------------------------------------------
         // OSCURECER SUAVEMENTE EL LOBBY

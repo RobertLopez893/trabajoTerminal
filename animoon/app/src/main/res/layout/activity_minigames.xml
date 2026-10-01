@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
+    android:padding="@dimen/animoon_screen_padding"
+    android:background="@drawable/bg_minigames_menu">
 
-    android:background="@drawable/bg_minigames_menu"
-
-    android:padding="@dimen/animoon_screen_padding">
-
-
-    <!-- ===================================================== -->
-    <!-- CABECERA                                              -->
-    <!-- ===================================================== -->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- CABECERA -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="90dp">
-
-
-        <!-- REGRESAR -->
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBackMinigames"
@@ -32,55 +23,34 @@
             android:layout_height="wrap_content"
             android:text="@string/animoon_back"
             app:icon="@drawable/ic_animoon_back"
-            app:iconTint="@color/animoon_text_primary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:iconTint="@color/animoon_text_primary" />
 
-
-        <!-- TÍTULO -->
-
-        <TextView
-            android:id="@+id/txtMinigamesTitle"
-            android:textAppearance="@style/TextAppearance.Animoon.Title"
-
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+            android:orientation="vertical">
 
-            android:text="Minijuegos"
+            <TextView
+                android:id="@+id/txtMinigamesTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Minijuegos"
+                android:textAppearance="@style/TextAppearance.Animoon.Title" />
 
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            <TextView
+                android:id="@+id/txtMinigamesSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Elige una misión y comienza tu entrenamiento"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
-            app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+    </LinearLayout>
 
-
-        <!-- SUBTÍTULO -->
-
-        <TextView
-            android:id="@+id/txtMinigamesSubtitle"
-            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="4dp"
-
-            android:text="Elige una misión y comienza tu entrenamiento"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintTop_toBottomOf="@id/txtMinigamesTitle" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!-- ===================================================== -->
-    <!-- TARJETAS DE MINIJUEGOS                                -->
-    <!-- ===================================================== -->
-
+    <!-- DESPLAZAMIENTO HORIZONTAL -->
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -88,395 +58,265 @@
         android:fillViewport="true"
         android:scrollbars="horizontal">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp">
-
-
-        <!-- ================================================= -->
-        <!-- MINIJUEGO 1                                      -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Animoon.Card"
-            android:layout_width="280dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
 
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="8dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- MINIJUEGO 1 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="8dp">
 
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-
-                android:padding="20dp">
-
-
-                <!-- ESTADO -->
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:background="@drawable/bg_moonie_message"
-
-                    android:paddingStart="16dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="6dp"
-
-                    android:text="DISPONIBLE"
-
-                    android:textColor="#3E756A"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-
-                <!-- IMAGEN -->
-
-                <ImageView
-                    android:layout_width="135dp"
-                    android:layout_height="135dp"
-
-                    android:layout_marginTop="8dp"
-
-                    android:contentDescription="Moonie averiado"
-
-                    android:scaleType="fitCenter"
-
-                    android:src="@drawable/moonie_damaged" />
-
-
-                <!-- TÍTULO -->
-
-                <TextView
-                    android:textAppearance="@style/TextAppearance.Animoon.Section"
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
-                    android:layout_marginTop="4dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp">
 
-                    android:gravity="center"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_moonie_message"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="6dp"
+                            android:text="@string/animoon_available"
+                            android:textColor="@color/animoon_success"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
-                    android:text="Repara a Moonie"/>
+                        <ImageView
+                            android:layout_width="@dimen/animoon_menu_image_size"
+                            android:layout_height="@dimen/animoon_menu_image_size"
+                            android:layout_marginTop="8dp"
+                            android:contentDescription="Moonie averiado"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/moonie_damaged" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="Repara a Moonie"
+                            android:textAppearance="@style/TextAppearance.Animoon.Section" />
 
-                <!-- DESCRIPCIÓN -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:lineSpacingExtra="2dp"
+                            android:text="Pon a prueba lo que sabes sobre seguridad digital y ayuda a Moonie a recuperarse."
+                            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGame1"
+                            style="@style/Widget.Animoon.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/animoon_play" />
 
-                    android:layout_weight="1"
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </com.google.android.material.card.MaterialCardView>
 
-                    android:layout_marginTop="8dp"
-
-                    android:gravity="center_horizontal"
-
-                    android:text="Pon a prueba lo que sabes sobre seguridad digital y ayuda a Moonie a recuperarse."
-
-                    android:textColor="#67729B"
-                    android:textSize="14sp"
-
-                    android:lineSpacingExtra="2dp" />
-
-
-                <!-- JUGAR -->
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGame1"
-                    style="@style/Widget.Animoon.Button.Primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="@string/animoon_play" />
-
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <!-- ================================================= -->
-        <!-- MINIJUEGO 2                                      -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.Animoon.Card"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- MINIJUEGO 2 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
 
-                android:orientation="vertical"
-                android:gravity="center"
-
-                android:padding="20dp">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_moonie_message"
-                    android:paddingStart="16dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="6dp"
-                    android:text="@string/animoon_available"
-                    android:textColor="@color/animoon_success"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="@dimen/animoon_menu_image_size"
-                    android:layout_height="@dimen/animoon_menu_image_size"
-                    android:layout_marginTop="8dp"
-                    android:contentDescription="@string/animoon_moonie"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/moonie_neutral" />
-
-
-                <TextView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:gravity="center"
-                    android:text="@string/animoon_game2_title"
-                    android:textAppearance="@style/TextAppearance.Animoon.Section" />
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/bg_moonie_message"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingTop="6dp"
+                            android:paddingBottom="6dp"
+                            android:text="@string/animoon_available"
+                            android:textColor="@color/animoon_success"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
-                    android:layout_weight="1"
+                        <ImageView
+                            android:layout_width="@dimen/animoon_menu_image_size"
+                            android:layout_height="@dimen/animoon_menu_image_size"
+                            android:layout_marginTop="8dp"
+                            android:contentDescription="@string/animoon_moonie"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/moonie_neutral" />
 
-                    android:layout_marginTop="12dp"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="@string/animoon_game2_title"
+                            android:textAppearance="@style/TextAppearance.Animoon.Section" />
 
-                    android:text="@string/animoon_game2_description"
-                    android:textColor="@color/animoon_text_secondary"
-                    android:textSize="14sp"
-                    android:gravity="center_horizontal"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:lineSpacingExtra="2dp"
+                            android:text="@string/animoon_game2_description"
+                            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnGame2"
+                            style="@style/Widget.Animoon.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/animoon_play" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGame2"
-                    style="@style/Widget.Animoon.Button.Primary"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:enabled="true"
-                    android:text="@string/animoon_play" />
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </com.google.android.material.card.MaterialCardView>
 
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <!-- ================================================= -->
-        <!-- MINIJUEGO 3                                      -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-
-            android:alpha="0.82"
-
-            app:cardBackgroundColor="#F5F6FC"
-
-            app:cardCornerRadius="30dp"
-            app:cardElevation="4dp"
-
-            app:strokeColor="#D8DDF5"
-            app:strokeWidth="2dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- MINIJUEGO 3 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardBackgroundColor="@color/animoon_surface_disabled">
 
-                android:orientation="vertical"
-                android:gravity="center"
-
-                android:padding="20dp">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="3"
-
-                    android:textColor="#ADB4CE"
-                    android:textSize="74sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
-                    android:gravity="center"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp">
 
-                    android:text="Minijuego 3"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:textColor="@color/animoon_border_strong"
+                            android:textSize="74sp"
+                            android:textStyle="bold" />
 
-                    android:textColor="#626D96"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Minijuego 3"
+                            android:textAppearance="@style/TextAppearance.Animoon.Section" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:text="Próximamente"
+                            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Animoon.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:enabled="false"
+                            android:text="Próximamente" />
 
-                    android:layout_weight="1"
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </com.google.android.material.card.MaterialCardView>
 
-                    android:layout_marginTop="12dp"
-
-                    android:gravity="center"
-
-                    android:text="Próximamente"
-
-                    android:textColor="#9098B5"
-                    android:textSize="16sp" />
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-
-                    android:enabled="false"
-
-                    android:text="Próximamente"
-
-                    android:textAllCaps="false"
-
-                    android:textColor="#67729B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-
-                    app:backgroundTint="#E1E4F2"
-                    app:cornerRadius="24dp" />
-
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-        <!-- ================================================= -->
-        <!-- MINIJUEGO 4                                      -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="6dp"
-
-            android:alpha="0.82"
-
-            app:cardBackgroundColor="#F5F6FC"
-
-            app:cardCornerRadius="30dp"
-            app:cardElevation="4dp"
-
-            app:strokeColor="#D8DDF5"
-            app:strokeWidth="2dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <!-- MINIJUEGO 4 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="280dp"
                 android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="6dp"
+                app:cardBackgroundColor="@color/animoon_surface_disabled">
 
-                android:orientation="vertical"
-                android:gravity="center"
-
-                android:padding="20dp">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-
-                    android:text="4"
-
-                    android:textColor="#ADB4CE"
-                    android:textSize="74sp"
-                    android:textStyle="bold" />
-
-
-                <TextView
+                <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
-                    android:gravity="center"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center_horizontal"
+                        android:padding="20dp">
 
-                    android:text="Minijuego 4"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4"
+                            android:textColor="@color/animoon_border_strong"
+                            android:textSize="74sp"
+                            android:textStyle="bold" />
 
-                    android:textColor="#626D96"
-                    android:textSize="21sp"
-                    android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="Minijuego 4"
+                            android:textAppearance="@style/TextAppearance.Animoon.Section" />
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center"
+                            android:text="Próximamente"
+                            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
+                        <com.google.android.material.button.MaterialButton
+                            style="@style/Widget.Animoon.Button.Primary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:enabled="false"
+                            android:text="Próximamente" />
 
-                    android:layout_weight="1"
+                    </LinearLayout>
+                </androidx.core.widget.NestedScrollView>
+            </com.google.android.material.card.MaterialCardView>
 
-                    android:layout_marginTop="12dp"
-
-                    android:gravity="center"
-
-                    android:text="Próximamente"
-
-                    android:textColor="#9098B5"
-                    android:textSize="16sp" />
-
-
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-
-                    android:enabled="false"
-
-                    android:text="Próximamente"
-
-                    android:textAllCaps="false"
-
-                    android:textColor="#67729B"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-
-                    app:backgroundTint="#E1E4F2"
-                    app:cornerRadius="24dp" />
-
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-
-    </LinearLayout>
+        </LinearLayout>
     </HorizontalScrollView>
 </LinearLayout>

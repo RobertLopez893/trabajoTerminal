@@ -1,86 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView
-    style="@style/Widget.Animoon.Card"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Animoon.Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="24dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:paddingStart="28dp"
-        android:paddingTop="22dp"
-        android:paddingEnd="28dp"
-        android:paddingBottom="22dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imgGame2FeedbackMoonie"
-            android:layout_width="92dp"
-            android:layout_height="92dp"
-            android:contentDescription="Moonie"
-            android:scaleType="fitCenter"
-            android:src="@drawable/moonie_damaged" />
-
-        <TextView
-            android:id="@+id/txtGame2FeedbackTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="¡Muy bien!"
-            android:textColor="#44396D"
-            android:textSize="25sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/animoon_card_padding">
 
-        <TextView
-            android:id="@+id/txtGame2FeedbackScore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="Aciertos de esta ronda: 4 de 4"
-            android:textColor="#6674D9"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/imgGame2FeedbackMoonie"
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_damaged" />
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:fillViewport="true"
-            android:maxHeight="320dp"
-            android:overScrollMode="ifContentScrolls">
+            <TextView
+                android:id="@+id/txtGame2FeedbackTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="¡Muy bien!"
+                android:textAppearance="@style/TextAppearance.Animoon.Title" />
+
+            <TextView
+                android:id="@+id/txtGame2FeedbackScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textColor="@color/animoon_primary"
+                android:textSize="@dimen/animoon_body_size"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtGame2FeedbackMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineSpacingExtra="3dp"
-                android:padding="4dp"
-                android:text="Retroalimentación de la ronda"
-                android:textColor="#374151"
-                android:textSize="16sp" />
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.Animoon.Body" />
 
-        </ScrollView>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGame2FeedbackContinue"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/animoon_continue" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnGame2FeedbackContinue"
-            android:layout_width="220dp"
-            android:layout_height="58dp"
-            android:layout_marginTop="18dp"
-            android:text="Continuar"
-            android:textAllCaps="false"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            app:backgroundTint="#6674D9"
-            app:cornerRadius="22dp" />
-
-    </LinearLayout>
-
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </com.google.android.material.card.MaterialCardView>

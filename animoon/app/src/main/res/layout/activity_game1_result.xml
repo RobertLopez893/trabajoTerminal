@@ -94,13 +94,11 @@
 
             <TextView
                 android:id="@+id/txtResultTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="¡Misión completada!"
-                android:textColor="#29345C"
-                android:textSize="34sp"
-                android:textStyle="bold" />
+                android:textAppearance="@style/TextAppearance.Animoon.Title" />
 
 
             <!-- ================================================= -->
@@ -109,13 +107,12 @@
 
             <TextView
                 android:id="@+id/txtResultSubtitle"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:gravity="center"
                 android:text="Resultados de tu entrenamiento"
-                android:textColor="#67729B"
-                android:textSize="18sp" />
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
 
             <!-- ================================================= -->
@@ -181,10 +178,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
                 android:gravity="center"
-                android:maxLines="3"
+                android:lineSpacingExtra="4dp"
                 android:text="¡Gran trabajo! Moonie está casi como nuevo."
-                android:textColor="#39456E"
-                android:textSize="18sp" />
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
 
             <!-- ================================================= -->
@@ -203,36 +199,24 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRetry"
+                    style="@style/Widget.Animoon.Button.Primary"
                     android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="10dp"
-                    android:text="Reintentar"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="#6674D9"
-                    app:cornerRadius="22dp" />
+                    android:text="Reintentar" />
 
 
                 <!-- REGRESAR -->
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnReturn"
+                    style="@style/Widget.Animoon.Button.Secondary"
                     android:layout_width="0dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="Regresar"
-                    android:textAllCaps="false"
-                    android:textColor="#29345C"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="#E8EBFA"
-                    app:cornerRadius="22dp"
-                    app:strokeColor="#BCC5EC"
-                    app:strokeWidth="2dp" />
+                    android:text="Regresar" />
 
 
             </LinearLayout>
