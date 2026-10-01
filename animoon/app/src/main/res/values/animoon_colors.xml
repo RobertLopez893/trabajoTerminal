@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Superficies claras -->
+    <color name="animoon_background">#F4F1FF</color>
+    <color name="animoon_surface">#FFFFFF</color>
+    <color name="animoon_surface_secondary">#E8EBFA</color>
+    <color name="animoon_surface_disabled">#F5F6FC</color>
+
+    <!-- Texto -->
+    <color name="animoon_text_primary">#29345C</color>
+    <color name="animoon_text_secondary">#67729B</color>
+    <color name="animoon_text_on_primary">#FFFFFF</color>
+    <color name="animoon_text_disabled">#626D96</color>
+
+    <!-- Acciones: más oscuro para mejorar contraste con blanco -->
+    <color name="animoon_primary">#5966C4</color>
+    <color name="animoon_primary_pressed">#4653AD</color>
+    <color name="animoon_primary_disabled">#E1E4F2</color>
+    <color name="animoon_border">#D8DDF5</color>
+    <color name="animoon_border_strong">#BCC5EC</color>
+
+    <!-- Estados -->
+    <color name="animoon_success">#3E756A</color>
+    <color name="animoon_error">#A83247</color>
+    <color name="animoon_accent">#FFE174</color>
+
+    <!-- Autenticación -->
+    <color name="animoon_auth_background">#17152F</color>
+    <color name="animoon_auth_surface">#302451</color>
+    <color name="animoon_auth_primary">#8E61D6</color>
+    <color name="animoon_auth_text">#FFFFFF</color>
+    <color name="animoon_auth_text_secondary">#D5D1E5</color>
+
+    <!-- Fondo pastel compartido -->
+    <color name="animoon_gradient_start">#EDF4FF</color>
+    <color name="animoon_gradient_center">#F4F1FF</color>
+    <color name="animoon_gradient_end">#F9EEFF</color>
+</resources>

@@ -45,15 +45,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnReconnect"
+        style="@style/Widget.Animoon.Button.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="#FF9800"
-        android:text="Reconectar"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:cornerRadius="16dp"
+        android:text="@string/animoon_login_again"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

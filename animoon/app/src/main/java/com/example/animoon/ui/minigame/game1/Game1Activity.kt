@@ -728,6 +728,7 @@ class Game1Activity : BaseActivity() {
 
 
         dialog.show()
+        ajustarTamanoDialogo(dialog)
     }
 
 

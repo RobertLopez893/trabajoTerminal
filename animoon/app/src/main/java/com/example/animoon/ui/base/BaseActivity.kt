@@ -250,6 +250,36 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
+    protected fun ajustarTamanoDialogo(dialog: android.app.Dialog) {
+        val metrics = resources.displayMetrics
+        val density = metrics.density
+
+        val margen = (24 * density).toInt()
+        val anchoMaximo = resources.getDimensionPixelSize(
+            com.example.animoon.R.dimen.animoon_dialog_max_width
+        )
+
+        val anchoDisponible = (metrics.widthPixels - margen * 2)
+            .coerceAtLeast(1)
+
+        val ancho = minOf(anchoMaximo, anchoDisponible)
+        val alturaMaxima = (metrics.heightPixels - margen * 2)
+            .coerceAtLeast(1)
+
+        dialog.window?.setLayout(
+            ancho,
+            android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        dialog.window?.decorView?.post {
+            val contenido = dialog.window?.decorView ?: return@post
+
+            if (contenido.height > alturaMaxima) {
+                dialog.window?.setLayout(ancho, alturaMaxima)
+            }
+        }
+    }
+
 
     // =========================================================
     // ON DESTROY
