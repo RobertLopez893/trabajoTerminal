@@ -74,6 +74,7 @@
     <!-- Mantiene la variante oscura de los formularios -->
     <style name="ThemeOverlay.Animoon.Auth"
         parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="materialButtonStyle">@style/Widget.Animoon.Button.Auth</item>
         <item name="colorPrimary">@color/animoon_auth_primary</item>
         <item name="colorOnPrimary">@color/animoon_auth_text</item>
         <item name="colorSurface">@color/animoon_auth_surface</item>
@@ -81,5 +82,11 @@
         <item name="android:textColorPrimary">@color/animoon_auth_text</item>
         <item name="android:textColorSecondary">@color/animoon_auth_text_secondary</item>
         <item name="android:colorBackground">@color/animoon_auth_background</item>
+    </style>
+
+    <style name="Widget.Animoon.Button.Auth"
+        parent="Widget.Animoon.Button.Primary">
+        <item name="backgroundTint">@color/animoon_auth_primary</item>
+        <item name="android:textColor">@color/animoon_auth_text</item>
     </style>
 </resources>

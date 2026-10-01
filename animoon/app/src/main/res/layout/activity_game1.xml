@@ -560,7 +560,8 @@
         <ImageView
             android:id="@+id/imgMoonie"
             android:layout_width="0dp"
-            android:layout_height="450dp"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_max="450dp"
 
             android:layout_marginBottom="18dp"
 
@@ -574,10 +575,7 @@
             app:layout_constraintEnd_toEndOf="parent"
 
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/txtMoonieMessage"
-
-            app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintVertical_bias="0.52" />
+            app:layout_constraintBottom_toTopOf="@id/txtMoonieMessage"/>
 
 
         <!-- ================================================= -->

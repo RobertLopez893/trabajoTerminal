@@ -65,16 +65,12 @@
     <!-- ===================================================== -->
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Animoon.Card"
         android:id="@+id/cardResults"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginEnd="48dp"
-        app:cardBackgroundColor="#F7FFFFFF"
-        app:cardCornerRadius="32dp"
-        app:cardElevation="10dp"
-        app:strokeColor="#D8DDF5"
-        app:strokeWidth="2dp"
         app:layout_constraintStart_toEndOf="@id/imgResultMoonie"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
