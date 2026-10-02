@@ -42,8 +42,8 @@
         <item name="android:textColor">@color/animoon_button_primary_text</item>
         <item name="backgroundTint">@color/animoon_button_primary</item>
         <item name="cornerRadius">@dimen/animoon_button_radius</item>
-        <item name="insetTop">0dp</item>
-        <item name="insetBottom">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
     </style>
 
     <style name="Widget.Animoon.Button.Secondary"

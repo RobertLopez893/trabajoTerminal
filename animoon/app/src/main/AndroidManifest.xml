@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -58,6 +59,24 @@
             android:name=".ui.auth.LoginActivity"
             android:screenOrientation="sensorLandscape"
             android:exported="true" />
+
+        <!-- AJUSTES -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- AYUDA -->
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- PERFILES -->
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
 
         <!-- MENÚ DE MINIJUEGOS -->
         <activity

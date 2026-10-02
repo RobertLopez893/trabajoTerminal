@@ -15,12 +15,15 @@ import com.example.animoon.data.network.ApiClient
 import com.example.animoon.data.network.TokenManager
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
-import com.example.animoon.ui.splash.SplashActivity
 import com.example.animoon.ui.minigame.MinigamesActivity
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.animoon.ui.settings.SettingsActivity
+import com.example.animoon.ui.profile.DemoProfileSource
+import com.example.animoon.ui.profile.ProfileActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : BaseActivity() {
 
@@ -28,9 +31,29 @@ class MainActivity : BaseActivity() {
     // ON CREATE
     // =========================================================
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        TokenManager.init(applicationContext)
 
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // MI PERFIL
+        findViewById<MaterialButton>(
+            R.id.btnMyProfile
+        ).setOnClickListener {
+            startActivity(
+                ProfileActivity.myProfileIntent(this)
+            )
+        }
+
+        // PERFILES DE DEMOSTRACIÓN
+        findViewById<MaterialButton>(
+            R.id.btnDemoProfiles
+        ).setOnClickListener {
+            showDemoProfiles()
+        }
+
+        // Aquí continúa tu código actual:
+        // REFERENCIAS DEL HUD, Ajustes, Minijuegos, etc.
 
 
         // =====================================================
@@ -40,8 +63,8 @@ class MainActivity : BaseActivity() {
         val btnCheckUsers =
             findViewById<MaterialButton>(R.id.btnCheckUsers)
 
-        val btnLogout =
-            findViewById<MaterialButton>(R.id.btnLogout)
+        val btnSettings =
+            findViewById<MaterialButton>(R.id.btnSettings)
 
         val btnMinigames =
             findViewById<MaterialButton>(R.id.btnMinigames)
@@ -66,24 +89,22 @@ class MainActivity : BaseActivity() {
 
 
         // =====================================================
-        // CERRAR SESIÓN
+        // AJUSTES
         // =====================================================
 
-        btnLogout.setOnClickListener {
-
-            logout()
+        btnSettings.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    SettingsActivity::class.java
+                )
+            )
         }
 
 
         // =====================================================
         // BOTÓN GENERAL DE MINIJUEGOS
         // =====================================================
-        //
-        // Este botón se conservará para posteriormente abrir
-        // una nueva Activity con todos los minijuegos.
-        //
-        // Por ahora NO tendrá ninguna acción.
-        //
 
         btnMinigames.setOnClickListener {
 
@@ -129,7 +150,6 @@ class MainActivity : BaseActivity() {
         dialog.setContentView(
             R.layout.dialog_enter_minigame
         )
-
 
         /*
          * Queremos que el niño tome una decisión explícita
@@ -237,75 +257,6 @@ class MainActivity : BaseActivity() {
 
         startActivity(intent)
     }
-
-
-    // =========================================================
-    // CERRAR SESIÓN
-    // =========================================================
-
-    private fun logout() {
-
-        lifecycleScope.launch(
-            Dispatchers.IO
-        ) {
-
-            try {
-
-                /*
-                 * Avisar al backend que el usuario
-                 * cerró su sesión.
-                 */
-                ApiClient.authService.logout()
-
-            } catch (e: Exception) {
-
-                /*
-                 * Si falla la red no impedimos
-                 * el cierre local de la sesión.
-                 */
-            }
-
-
-            withContext(
-                Dispatchers.Main
-            ) {
-
-                // Borrar token local
-                TokenManager.clearToken()
-
-
-                Toast.makeText(
-                    this@MainActivity,
-                    "Sesión cerrada",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-
-                /*
-                 * Regresar al Splash.
-                 */
-                val intent = Intent(
-                    this@MainActivity,
-                    SplashActivity::class.java
-                )
-
-
-                /*
-                 * Eliminamos las Activities anteriores
-                 * para evitar volver al Lobby usando atrás.
-                 */
-                intent.flags =
-                    Intent.FLAG_ACTIVITY_NEW_TASK or
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-
-                startActivity(intent)
-
-                finish()
-            }
-        }
-    }
-
 
     // =========================================================
     // CONSULTAR USUARIOS ACTIVOS
@@ -428,5 +379,28 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun showDemoProfiles() {
+        val players = DemoProfileSource.otherPlayers
+
+        val names = players
+            .map { it.nickname }
+            .toTypedArray()
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Perfiles de demostración")
+            .setItems(names) { _, position ->
+                val player = players[position]
+
+                startActivity(
+                    ProfileActivity.playerProfileIntent(
+                        context = this,
+                        userId = player.id
+                    )
+                )
+            }
+            .setNegativeButton("Cerrar", null)
+            .show()
     }
 }
