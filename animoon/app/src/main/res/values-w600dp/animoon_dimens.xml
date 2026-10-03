@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="animoon_screen_padding">28dp</dimen>
+    <dimen name="animoon_card_padding">28dp</dimen>
+
+    <dimen name="animoon_button_min_height">60dp</dimen>
+    <dimen name="animoon_title_size">32sp</dimen>
+    <dimen name="animoon_section_size">22sp</dimen>
+    <dimen name="animoon_body_size">18sp</dimen>
+    <dimen name="animoon_button_text_size">18sp</dimen>
+
+    <dimen name="animoon_menu_image_size">135dp</dimen>
+</resources>

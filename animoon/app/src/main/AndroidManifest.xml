@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -15,72 +16,107 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.Animoon">
+        android:theme="@style/Theme.Animoon"
+        android:appCategory="game">
 
-        <!-- SPLASH / PANTALLA DE INICIO -->
+        <!-- SPLASH -->
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- MENU PRINCIPAL -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="sensorLandscape"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
-        <!-- MENU -->
-        <activity
-            android:name=".MainActivity"
-            android:screenOrientation="landscape"
-            android:exported="false">
         </activity>
 
         <!-- REGISTRO -->
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <activity
             android:name=".ui.auth.AvatarSelectionActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <activity
             android:name=".ui.auth.VerificationActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- LOGIN -->
         <activity
             android:name=".ui.auth.LoginActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="true" />
+
+        <!-- AJUSTES -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- AYUDA -->
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- PERFILES -->
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
 
         <!-- MENÚ DE MINIJUEGOS -->
         <activity
             android:name=".ui.minigame.MinigamesActivity"
-            android:screenOrientation="landscape"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- RESULTADOS MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1ResultActivity"
-            android:screenOrientation="landscape"
+            android:name=".ui.minigame.game1.Game1ResultActivity"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
-        <!-- INTRODUCCIÓN MINIJUEGO 1 - PRUEBA TEMPORAL -->
+        <!-- CINEMÁTICA MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1CinematicActivity"
-            android:screenOrientation="landscape"
-            android:exported="true"/>
-
+            android:name=".ui.minigame.game1.Game1CinematicActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="true" />
 
         <!-- MINIJUEGO 1 -->
         <activity
-            android:name=".ui.minigame.Game1Activity"
-            android:screenOrientation="landscape"
+            android:name=".ui.minigame.game1.Game1Activity"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
+
+        <!-- MINIJUEGO 2 -->
+        <activity
+            android:name=".ui.minigame.game2.Game2CinematicActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.minigame.game2.Game2Activity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.minigame.game2.Game2ResultActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
 
     </application>
 

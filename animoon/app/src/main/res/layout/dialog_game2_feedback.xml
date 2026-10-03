@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Widget.Animoon.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/animoon_card_padding">
+
+            <ImageView
+                android:id="@+id/imgGame2FeedbackMoonie"
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_damaged" />
+
+            <TextView
+                android:id="@+id/txtGame2FeedbackTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="¡Muy bien!"
+                android:textAppearance="@style/TextAppearance.Animoon.Title" />
+
+            <TextView
+                android:id="@+id/txtGame2FeedbackScore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textColor="@color/animoon_primary"
+                android:textSize="@dimen/animoon_body_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtGame2FeedbackMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.Animoon.Body" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGame2FeedbackContinue"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/animoon_continue" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.google.android.material.card.MaterialCardView>

@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
-
-    <style
-        name="Theme.Animoon"
-        parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.Animoon"
+        parent="Theme.Material3.Light.NoActionBar">
 
         <item name="android:fontFamily">sans-serif</item>
 
+        <item name="colorPrimary">@color/animoon_primary</item>
+        <item name="colorOnPrimary">@color/animoon_text_on_primary</item>
+        <item name="colorSecondary">@color/animoon_primary</item>
+        <item name="colorOnSecondary">@color/animoon_text_on_primary</item>
+        <item name="colorSurface">@color/animoon_surface</item>
+        <item name="colorOnSurface">@color/animoon_text_primary</item>
+        <item name="colorError">@color/animoon_error</item>
+        <item name="colorOnError">@color/animoon_text_on_primary</item>
+
+        <item name="android:colorBackground">@color/animoon_background</item>
+        <item name="android:textColorPrimary">@color/animoon_text_primary</item>
+        <item name="android:textColorSecondary">@color/animoon_text_secondary</item>
+
+        <item name="materialButtonStyle">@style/Widget.Animoon.Button.Primary</item>
+        <item name="textInputStyle">@style/Widget.Animoon.TextInput</item>
+
         <item name="android:windowActionModeOverlay">true</item>
-
-        <item name="android:navigationBarColor">#17152F</item>
-
-        <item name="android:statusBarColor">#17152F</item>
-
+        <item name="android:navigationBarColor">@color/animoon_auth_background</item>
+        <item name="android:statusBarColor">@color/animoon_auth_background</item>
         <item name="android:windowLightStatusBar">false</item>
-
     </style>
-
 </resources>

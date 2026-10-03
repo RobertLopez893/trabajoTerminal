@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import android.widget.Button
@@ -15,13 +14,16 @@ import androidx.lifecycle.lifecycleScope
 import com.example.animoon.data.network.ApiClient
 import com.example.animoon.data.network.TokenManager
 import com.example.animoon.ui.base.BaseActivity
-import com.example.animoon.ui.minigame.Game1CinematicActivity
-import com.example.animoon.ui.splash.SplashActivity
+import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
 import com.example.animoon.ui.minigame.MinigamesActivity
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.animoon.ui.settings.SettingsActivity
+import com.example.animoon.ui.profile.DemoProfileSource
+import com.example.animoon.ui.profile.ProfileActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class MainActivity : BaseActivity() {
 
@@ -29,14 +31,34 @@ class MainActivity : BaseActivity() {
     // ON CREATE
     // =========================================================
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        TokenManager.init(applicationContext)
 
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // =====================================================
         // CONEXIÓN MULTIJUGADOR
         // =====================================================
         com.example.animoon.data.network.WebSocketManager.connect("base_principal")
+        // MI PERFIL
+        findViewById<MaterialButton>(
+            R.id.btnMyProfile
+        ).setOnClickListener {
+            startActivity(
+                ProfileActivity.myProfileIntent(this)
+            )
+        }
+
+        // PERFILES DE DEMOSTRACIÓN
+        findViewById<MaterialButton>(
+            R.id.btnDemoProfiles
+        ).setOnClickListener {
+            showDemoProfiles()
+        }
+
+        // Aquí continúa tu código actual:
+        // REFERENCIAS DEL HUD, Ajustes, Minijuegos, etc.
+
 
         // =====================================================
         // REFERENCIAS DEL HUD
@@ -45,8 +67,8 @@ class MainActivity : BaseActivity() {
         val btnCheckUsers =
             findViewById<MaterialButton>(R.id.btnCheckUsers)
 
-        val btnLogout =
-            findViewById<MaterialButton>(R.id.btnLogout)
+        val btnSettings =
+            findViewById<MaterialButton>(R.id.btnSettings)
 
         val btnMinigames =
             findViewById<MaterialButton>(R.id.btnMinigames)
@@ -71,24 +93,22 @@ class MainActivity : BaseActivity() {
 
 
         // =====================================================
-        // CERRAR SESIÓN
+        // AJUSTES
         // =====================================================
 
-        btnLogout.setOnClickListener {
-
-            logout()
+        btnSettings.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    SettingsActivity::class.java
+                )
+            )
         }
 
 
         // =====================================================
         // BOTÓN GENERAL DE MINIJUEGOS
         // =====================================================
-        //
-        // Este botón se conservará para posteriormente abrir
-        // una nueva Activity con todos los minijuegos.
-        //
-        // Por ahora NO tendrá ninguna acción.
-        //
 
         btnMinigames.setOnClickListener {
 
@@ -134,7 +154,6 @@ class MainActivity : BaseActivity() {
         dialog.setContentView(
             R.layout.dialog_enter_minigame
         )
-
 
         /*
          * Queremos que el niño tome una decisión explícita
@@ -196,6 +215,7 @@ class MainActivity : BaseActivity() {
         // ---------------------------------------------------------
 
         dialog.show()
+        ajustarTamanoDialogo(dialog)
 
         // ---------------------------------------------------------
         // OSCURECER SUAVEMENTE EL LOBBY
@@ -433,5 +453,28 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+    private fun showDemoProfiles() {
+        val players = DemoProfileSource.otherPlayers
+
+        val names = players
+            .map { it.nickname }
+            .toTypedArray()
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Perfiles de demostración")
+            .setItems(names) { _, position ->
+                val player = players[position]
+
+                startActivity(
+                    ProfileActivity.playerProfileIntent(
+                        context = this,
+                        userId = player.id
+                    )
+                )
+            }
+            .setNegativeButton("Cerrar", null)
+            .show()
     }
 }

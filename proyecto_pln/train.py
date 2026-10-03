@@ -42,6 +42,7 @@ NUM_CLASES        = 3
 SEM_RANDOM        = 42
 CAP_CLASE_BAJA    = 5_000
 GOAL_CLASES       = 4_000
+CAP_VAL_BAJA      = 2_000
 
 LORA_R            = 8
 LORA_ALPHA        = 16
@@ -58,13 +59,13 @@ def construir_ventanas(datos, ventana=VENTANA_MENSAJES):
     filas = []
 
     for id_bloque, grupo in datos.groupby("id_bloque"):
-        grupo = grupo.sort_values("orden_mensaje").reset_index(drop=True)
-        mensajes   = grupo["texto_mensaje"].tolist()
-        etiquetas  = grupo["nivel_riesgo"].tolist()
-        emisores   = grupo["emisor"].tolist()
+        grupo    = grupo.sort_values("orden_mensaje").reset_index(drop=True)
+        mensajes  = grupo["texto_mensaje"].tolist()
+        etiquetas = grupo["nivel_riesgo"].tolist()
+        emisores  = grupo["emisor"].tolist()
 
         for i in range(len(mensajes)):
-            inicio  = max(0, i - ventana + 1)
+            inicio         = max(0, i - ventana + 1)
             ventana_textos = []
             for j in range(inicio, i + 1):
                 ventana_textos.append(f"{emisores[j]}: {mensajes[j]}")
@@ -99,11 +100,32 @@ def balancear_train(df_train):
         random_state=SEM_RANDOM
     )
 
-    balanceado = pd.concat(
+    return pd.concat(
         [muestra_baja, muestra_media, muestra_alta]
     ).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
 
-    return balanceado
+
+def balancear_val(df_val):
+    clase_baja  = df_val[df_val.nivel_riesgo == 0]
+    clase_media = df_val[df_val.nivel_riesgo == 1]
+    clase_alta  = df_val[df_val.nivel_riesgo == 2]
+
+    muestra_baja = clase_baja.sample(
+        n=min(CAP_VAL_BAJA, len(clase_baja)),
+        random_state=SEM_RANDOM
+    )
+    muestra_media = clase_media.sample(
+        n=len(clase_media),
+        random_state=SEM_RANDOM
+    )
+    muestra_alta = clase_alta.sample(
+        n=len(clase_alta),
+        random_state=SEM_RANDOM
+    )
+
+    return pd.concat(
+        [muestra_baja, muestra_media, muestra_alta]
+    ).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
 
 
 def cargar_datos(ruta_corpus):
@@ -140,7 +162,14 @@ def cargar_datos(ruta_corpus):
         n = (df_train_bal.nivel_riesgo == nivel).sum()
         print(f"  Clase {nivel} {nombre}: {n:,}")
 
-    return df_train_bal, df_val
+    df_val_bal = balancear_val(df_val)
+
+    print(f"\n  Validacion balanceada: {len(df_val_bal):,} mensajes")
+    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
+        n = (df_val_bal.nivel_riesgo == nivel).sum()
+        print(f"  Clase {nivel} {nombre}: {n:,}")
+
+    return df_train_bal, df_val_bal
 
 
 class VentanaDataset(Dataset):
@@ -236,15 +265,15 @@ def guardar_grafica_f1(historial):
 
 
 def entrenar():
-    df_train_bal, df_val = cargar_datos(CORPUS_PATH)
+    df_train_bal, df_val_bal = cargar_datos(CORPUS_PATH)
 
-    textos_train   = df_train_bal["texto_ventana"].tolist()
+    textos_train    = df_train_bal["texto_ventana"].tolist()
     etiquetas_train = df_train_bal["nivel_riesgo"].tolist()
-    textos_val     = df_val["texto_ventana"].tolist()
-    etiquetas_val  = df_val["nivel_riesgo"].tolist()
+    textos_val      = df_val_bal["texto_ventana"].tolist()
+    etiquetas_val   = df_val_bal["nivel_riesgo"].tolist()
 
     print(f"\n[2/5] Descargando {PREENTRENO_MODELO} y configurando LoRA...")
-    tokenizer = BertTokenizer.from_pretrained(PREENTRENO_MODELO)
+    tokenizer   = BertTokenizer.from_pretrained(PREENTRENO_MODELO)
     modelo_base = BertForSequenceClassification.from_pretrained(
         PREENTRENO_MODELO,
         num_labels=NUM_CLASES
@@ -294,7 +323,10 @@ def entrenar():
     )
 
     print(f"\n[4/5] Entrenando {NUM_EPOCAS} epochs con LoRA...")
-    print(f"  Ventana de analisis: {VENTANA_MENSAJES} mensajes")
+    print(f"  Ventana de analisis : {VENTANA_MENSAJES} mensajes")
+    print(f"  Train               : {len(textos_train):,} ventanas")
+    print(f"  Validacion          : {len(textos_val):,} ventanas")
+
     mejor_f1  = 0.0
     historial = {"loss": [], "f1_macro": []}
 

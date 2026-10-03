@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="animoon_back">Volver</string>
+    <string name="animoon_play">Jugar</string>
+    <string name="animoon_available">DISPONIBLE</string>
+    <string name="animoon_moonie">Moonie</string>
+
+    <string name="animoon_game2_title">Reconecta a Moonie</string>
+    <string name="animoon_game2_description">Conecta cada mensaje con sus destinos y aprende a compartir información de forma segura.</string>
+
+    <string name="animoon_pause_title">Juego pausado</string>
+    <string name="animoon_pause_message">Tu partida seguirá como la dejaste.</string>
+    <string name="animoon_game2_pause_message">Tus cables seguirán como los dejaste.</string>
+    <string name="animoon_continue">Continuar</string>
+    <string name="animoon_exit_minigame">Salir del minijuego</string>
+    <string name="animoon_login_again">Volver a entrar</string>
+</resources>

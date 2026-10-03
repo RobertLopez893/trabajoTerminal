@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/animoon_background"
+    android:padding="@dimen/animoon_screen_padding">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSettingsBack"
+        style="@style/Widget.Animoon.Button.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regresar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtSettingsTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/animoon_space_large"
+        android:text="Ajustes"
+        android:textAppearance="@style/TextAppearance.Animoon.Title"
+        app:layout_constraintStart_toEndOf="@id/btnSettingsBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnSettingsBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnSettingsBack" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/animoon_space_medium"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/animoon_space_small"
+        app:layout_constraintWidth_max="760dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSettingsBack"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/animoon_space_small">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/animoon_card_padding">
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchLocalNotifications"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/animoon_button_min_height"
+                        android:text="Notificaciones locales"
+                        android:textAppearance="@style/TextAppearance.Animoon.Section" />
+
+                    <TextView
+                        android:id="@+id/txtNotificationStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_small"
+                        android:accessibilityLiveRegion="polite"
+                        android:text="Notificaciones desactivadas."
+                        android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSystemNotifications"
+                        style="@style/Widget.Animoon.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_medium"
+                        android:text="Revisar permisos de Android"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/animoon_space_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/animoon_card_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Información y ayuda"
+                        android:textAppearance="@style/TextAppearance.Animoon.Section" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSettingsHelp"
+                        style="@style/Widget.Animoon.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_medium"
+                        android:text="Ayuda" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSettingsParents"
+                        style="@style/Widget.Animoon.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_small"
+                        android:text="Para padres" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/animoon_space_medium">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/animoon_card_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mi sesión"
+                        android:textAppearance="@style/TextAppearance.Animoon.Section" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSettingsLogout"
+                        style="@style/Widget.Animoon.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_medium"
+                        android:text="Cerrar sesión" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

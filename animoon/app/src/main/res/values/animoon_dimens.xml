@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="animoon_space_small">8dp</dimen>
+    <dimen name="animoon_space_medium">16dp</dimen>
+    <dimen name="animoon_space_large">24dp</dimen>
+
+    <dimen name="animoon_screen_padding">20dp</dimen>
+    <dimen name="animoon_card_padding">20dp</dimen>
+
+    <dimen name="animoon_button_min_height">56dp</dimen>
+    <dimen name="animoon_button_radius">22dp</dimen>
+    <dimen name="animoon_card_radius">28dp</dimen>
+    <dimen name="animoon_border_width">2dp</dimen>
+    <dimen name="animoon_card_elevation">6dp</dimen>
+
+    <dimen name="animoon_title_size">28sp</dimen>
+    <dimen name="animoon_section_size">20sp</dimen>
+    <dimen name="animoon_body_size">16sp</dimen>
+    <dimen name="animoon_button_text_size">16sp</dimen>
+
+    <dimen name="animoon_dialog_max_width">420dp</dimen>
+    <dimen name="animoon_menu_image_size">120dp</dimen>
+</resources>
