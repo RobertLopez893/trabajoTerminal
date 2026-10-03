@@ -1,5 +1,5 @@
-# Detectar IP local (ignorando adaptadores virtuales de WSL/Hyper-V)
-$localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "vEthernet|WSL" -and $_.InterfaceAlias -notlike "Loopback*" } | Select-Object -First 1).IPAddress
+# Detectar IP local (ignorando adaptadores virtuales de WSL/Hyper-V y direcciones APIPA 169.254)
+$localIp = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notmatch "vEthernet|WSL" -and $_.InterfaceAlias -notlike "Loopback*" -and $_.IPAddress -notlike "169.254.*" } | Select-Object -First 1).IPAddress
 
 if (-not $localIp) {
     Write-Host "No se pudo detectar la IP. Usando 10.0.2.2 por defecto."

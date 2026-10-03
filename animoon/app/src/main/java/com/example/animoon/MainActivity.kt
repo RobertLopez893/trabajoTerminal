@@ -36,6 +36,10 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // =====================================================
+        // CONEXIÓN MULTIJUGADOR
+        // =====================================================
+        com.example.animoon.data.network.WebSocketManager.connect("base_principal")
         // MI PERFIL
         findViewById<MaterialButton>(
             R.id.btnMyProfile
@@ -257,6 +261,76 @@ class MainActivity : BaseActivity() {
 
         startActivity(intent)
     }
+
+
+    // =========================================================
+    // CERRAR SESIÓN
+    // =========================================================
+
+    private fun logout() {
+
+        lifecycleScope.launch(
+            Dispatchers.IO
+        ) {
+
+            try {
+
+                /*
+                 * Avisar al backend que el usuario
+                 * cerró su sesión.
+                 */
+                ApiClient.authService.logout()
+
+            } catch (e: Exception) {
+
+                /*
+                 * Si falla la red no impedimos
+                 * el cierre local de la sesión.
+                 */
+            }
+
+
+            withContext(
+                Dispatchers.Main
+            ) {
+
+                // Borrar token local y cerrar WebSocket
+                TokenManager.clearToken()
+                com.example.animoon.data.network.WebSocketManager.disconnect()
+
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "Sesión cerrada",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+
+                /*
+                 * Regresar al Splash.
+                 */
+                val intent = Intent(
+                    this@MainActivity,
+                    SplashActivity::class.java
+                )
+
+
+                /*
+                 * Eliminamos las Activities anteriores
+                 * para evitar volver al Lobby usando atrás.
+                 */
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+
+                startActivity(intent)
+
+                finish()
+            }
+        }
+    }
+
 
     // =========================================================
     // CONSULTAR USUARIOS ACTIVOS
