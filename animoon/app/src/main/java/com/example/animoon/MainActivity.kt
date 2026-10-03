@@ -33,6 +33,10 @@ class MainActivity : BaseActivity() {
 
         setContentView(R.layout.activity_main)
 
+        // =====================================================
+        // CONEXIÓN MULTIJUGADOR
+        // =====================================================
+        com.example.animoon.data.network.WebSocketManager.connect("base_principal")
 
         // =====================================================
         // REFERENCIAS DEL HUD
@@ -270,8 +274,9 @@ class MainActivity : BaseActivity() {
                 Dispatchers.Main
             ) {
 
-                // Borrar token local
+                // Borrar token local y cerrar WebSocket
                 TokenManager.clearToken()
+                com.example.animoon.data.network.WebSocketManager.disconnect()
 
 
                 Toast.makeText(

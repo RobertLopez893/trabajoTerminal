@@ -8,6 +8,9 @@ from backend.api.jwt_manager import verify_access_token, get_token_hash
 
 router = APIRouter(prefix="/api/env", tags=["environment"])
 
+import asyncio
+from collections import defaultdict
+
 class ConnectionManager:
     def __init__(self):
         # Estructura: {"nombre_zona": {"usuario_id": {"websocket": ws, "x": 0, "y": 0, "nickname": "...", "avatar": {...}}}}
@@ -17,9 +20,60 @@ class ConnectionManager:
             "aldea_lunatica": {},
             "lado_oscuro_de_la_luna": {}
         }
+        self.loop_task = None
+
+    def start_loop_if_needed(self):
+        if self.loop_task is None:
+            self.loop_task = asyncio.create_task(self.game_loop())
+
+    async def game_loop(self):
+        CHUNK_SIZE = 100
+        while True:
+            await asyncio.sleep(0.1) # Tick de 10 Hz
+            for zona, usuarios in self.zonas.items():
+                if not usuarios:
+                    continue
+                
+                # 1. Agrupar jugadores por chunks (Partición Espacial AoI)
+                chunks = defaultdict(list)
+                for uid, data in usuarios.items():
+                    cx = int(data["x"] // CHUNK_SIZE)
+                    cy = int(data["y"] // CHUNK_SIZE)
+                    data["chunk"] = (cx, cy)
+                    chunks[(cx, cy)].append({
+                        "usuario_id": uid,
+                        "nickname": data["nickname"],
+                        "avatar": data["avatar"],
+                        "x": data["x"],
+                        "y": data["y"]
+                    })
+                
+                # 2. Enviar a cada jugador los datos de su chunk y vecinos
+                for uid, data in usuarios.items():
+                    ws = data["websocket"]
+                    cx, cy = data["chunk"]
+                    
+                    visible_players = []
+                    for i in [-1, 0, 1]:
+                        for j in [-1, 0, 1]:
+                            visible_players.extend(chunks.get((cx + i, cy + j), []))
+                    
+                    # Remover al propio jugador para no enviarle su propio eco
+                    visible_players = [p for p in visible_players if p["usuario_id"] != uid]
+                    
+                    if visible_players:
+                        try:
+                            await ws.send_json({
+                                "type": "tick",
+                                "zona": zona,
+                                "players": visible_players
+                            })
+                        except Exception:
+                            pass
 
     async def connect(self, websocket: WebSocket, usuario_id: str, nickname: str, avatar: dict, zona_inicial: str = "base_principal"):
         await websocket.accept()
+        self.start_loop_if_needed()
         if zona_inicial not in self.zonas:
             zona_inicial = "base_principal"
             
@@ -31,32 +85,12 @@ class ConnectionManager:
             "avatar": avatar
         }
         
-        # Notificar a los demás en la zona que alguien entró
-        await self.broadcast_zone(zona_inicial, {
-            "type": "player_joined",
-            "usuario_id": usuario_id,
-            "nickname": nickname,
-            "avatar": avatar,
-            "x": 0.0,
-            "y": 0.0
-        }, exclude_ws=websocket)
-        
-        # Enviar al jugador la lista de todos los que ya están en la zona
-        current_players = []
-        for uid, data in self.zonas[zona_inicial].items():
-            if uid != usuario_id:
-                current_players.append({
-                    "usuario_id": uid,
-                    "nickname": data["nickname"],
-                    "avatar": data["avatar"],
-                    "x": data["x"],
-                    "y": data["y"]
-                })
-        
+        # Ya no enviamos "player_joined" porque el "tick" lo actualizará.
+        # Solo enviamos el estado inicial de bienvenida
         await websocket.send_json({
             "type": "zone_state",
             "zona": zona_inicial,
-            "players": current_players
+            "players": [] # El tick rellenará la pantalla en 100ms
         })
 
     def disconnect(self, websocket: WebSocket, usuario_id: str, zona: str):
@@ -65,17 +99,9 @@ class ConnectionManager:
             
     async def change_zone(self, websocket: WebSocket, usuario_id: str, old_zona: str, new_zona: str):
         if old_zona in self.zonas and usuario_id in self.zonas[old_zona]:
-            # Guardar datos actuales
             player_data = self.zonas[old_zona][usuario_id]
-            # Eliminar de zona antigua
             del self.zonas[old_zona][usuario_id]
-            # Notificar salida
-            await self.broadcast_zone(old_zona, {
-                "type": "player_left",
-                "usuario_id": usuario_id
-            })
             
-            # Resetear coordenadas y añadir a nueva zona
             if new_zona not in self.zonas:
                 new_zona = "base_principal"
                 
@@ -83,44 +109,13 @@ class ConnectionManager:
             player_data["y"] = 0.0
             self.zonas[new_zona][usuario_id] = player_data
             
-            # Notificar entrada
-            await self.broadcast_zone(new_zona, {
-                "type": "player_joined",
-                "usuario_id": usuario_id,
-                "nickname": player_data["nickname"],
-                "avatar": player_data["avatar"],
-                "x": 0.0,
-                "y": 0.0
-            }, exclude_ws=websocket)
-            
-            # Enviar nuevo estado
-            current_players = []
-            for uid, data in self.zonas[new_zona].items():
-                if uid != usuario_id:
-                    current_players.append({
-                        "usuario_id": uid,
-                        "nickname": data["nickname"],
-                        "avatar": data["avatar"],
-                        "x": data["x"],
-                        "y": data["y"]
-                    })
             await websocket.send_json({
                 "type": "zone_state",
                 "zona": new_zona,
-                "players": current_players
+                "players": []
             })
             return new_zona
         return old_zona
-
-    async def broadcast_zone(self, zona: str, message: dict, exclude_ws: WebSocket = None):
-        if zona in self.zonas:
-            for uid, data in self.zonas[zona].items():
-                ws = data["websocket"]
-                if ws != exclude_ws:
-                    try:
-                        await ws.send_json(message)
-                    except Exception:
-                        pass # Si falla, se manejará en el bucle principal de desconexión
 
 manager = ConnectionManager()
 
@@ -150,24 +145,33 @@ def authenticate_ws_token(token: str, db: Session) -> models.Usuario:
     return user
 
 
+from backend.database.db import SessionLocal
+
 @router.websocket("/ws")
-async def websocket_environment(websocket: WebSocket, token: str, db: Session = Depends(get_db)):
+async def websocket_environment(websocket: WebSocket, token: str):
     """
     Endpoint WebSocket para sincronización del entorno multijugador.
     El cliente debe enviar el token JWT como query parameter: /api/env/ws?token=XYZ
     """
-    user = authenticate_ws_token(token, db)
-    if not user:
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return
+    db = SessionLocal()
+    try:
+        user = authenticate_ws_token(token, db)
+        if not user:
+            await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+            return
 
-    # Obtener el avatar del usuario
-    avatar_record = db.query(models.Avatar).filter(models.Avatar.usuario_id == user.id).first()
-    avatar_json = avatar_record.avatar_config_json if avatar_record else {"especie": "desconocido", "color": "desconocido"}
+        # Obtener el avatar del usuario
+        avatar_record = db.query(models.Avatar).filter(models.Avatar.usuario_id == user.id).first()
+        avatar_json = avatar_record.avatar_config_json if avatar_record else {"especie": "desconocido", "color": "desconocido"}
+        
+        user_id = user.id
+        nickname = user.nickname
+    finally:
+        db.close() # LIBERAR LA CONEXIÓN INMEDIATAMENTE AL POOL
 
     zona_actual = "base_principal"
     
-    await manager.connect(websocket, user.id, user.nickname, avatar_json, zona_actual)
+    await manager.connect(websocket, user_id, nickname, avatar_json, zona_actual)
 
     try:
         while True:
@@ -180,14 +184,7 @@ async def websocket_environment(websocket: WebSocket, token: str, db: Session = 
                 if user.id in manager.zonas[zona_actual]:
                     manager.zonas[zona_actual][user.id]["x"] = data.get("x", 0.0)
                     manager.zonas[zona_actual][user.id]["y"] = data.get("y", 0.0)
-                    
-                    # Retransmitir a los demás en la zona
-                    await manager.broadcast_zone(zona_actual, {
-                        "type": "player_moved",
-                        "usuario_id": user.id,
-                        "x": data.get("x", 0.0),
-                        "y": data.get("y", 0.0)
-                    }, exclude_ws=websocket)
+                    # Ya NO hacemos broadcast aquí. El game_loop se encarga de enviarlo en el próximo "tick"
                     
             elif msg_type == "change_zone":
                 nueva_zona = data.get("zona")
@@ -196,10 +193,7 @@ async def websocket_environment(websocket: WebSocket, token: str, db: Session = 
                     
     except WebSocketDisconnect:
         manager.disconnect(websocket, user.id, zona_actual)
-        await manager.broadcast_zone(zona_actual, {
-            "type": "player_left",
-            "usuario_id": user.id
-        })
+        # Ya no enviamos "player_left" al instante, simplemente desaparece del "tick"
 
 @router.get("/active-users")
 def get_active_users():

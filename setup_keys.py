@@ -13,7 +13,7 @@ pem_bytes = private_key.private_bytes(
     format=serialization.PrivateFormat.PKCS8,
     encryption_algorithm=serialization.NoEncryption()
 )
-pem_str = pem_bytes.decode('utf-8').replace('\n', '\\n') # Reemplazamos saltos para que quede en una sola linea en el .env
+pem_str = pem_bytes.decode('utf-8').replace('\n', '\\n')
 
 # Escribir el .env
 with open('.env', 'w') as f:
