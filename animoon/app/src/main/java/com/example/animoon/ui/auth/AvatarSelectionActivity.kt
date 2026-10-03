@@ -6,12 +6,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.animoon.ui.base.BaseActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
 import kotlinx.coroutines.launch
 
-class AvatarSelectionActivity : AppCompatActivity() {
+class AvatarSelectionActivity : BaseActivity() {
+    override val observarSesionExpirada: Boolean = false
+
 
     // =========================================================
     // SELECCIÓN ACTUAL
@@ -196,6 +198,8 @@ class AvatarSelectionActivity : AppCompatActivity() {
             color = "Blanco"
         )
 
+        updateSelectionIndicators()
+        updateContinueButton()
         updateContinueButton()
     }
 
@@ -518,6 +522,37 @@ class AvatarSelectionActivity : AppCompatActivity() {
 
                 updateContinueButton()
             }
+        }
+    }
+
+    private fun updateSelectionIndicators() {
+        val speciesOptions = listOf(
+            btnRabbit to "Conejo",
+            btnCat to "Gato",
+            btnDog to "Perro",
+            btnFox to "Zorro"
+        )
+
+        speciesOptions.forEach { (view, species) ->
+            view.isSelected = selectedSpecies == species
+        }
+
+        val colorOptions = listOf(
+            btnWhite to "Blanco",
+            btnBlue to "Azul",
+            btnOrange to "Naranja",
+            btnGreen to "Verde"
+        )
+
+        colorOptions.forEach { (view, color) ->
+            val selected = selectedColor == color
+
+            view.isSelected = selected
+            view.scaleX = if (selected) 1.12f else 1f
+            view.scaleY = if (selected) 1.12f else 1f
+
+            view.contentDescription =
+                "Traje $color${if (selected) ", seleccionado" else ""}"
         }
     }
 }

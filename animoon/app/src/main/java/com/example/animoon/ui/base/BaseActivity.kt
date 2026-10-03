@@ -22,6 +22,8 @@ open class BaseActivity : AppCompatActivity() {
 
     private var sessionDialog: AlertDialog? = null
 
+    protected open val observarSesionExpirada: Boolean = true
+
 
     // =========================================================
     // ON CREATE
@@ -31,20 +33,12 @@ open class BaseActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
+        TokenManager.init(applicationContext)
 
         // -----------------------------------------------------
         // ORIENTACIÓN HORIZONTAL
         // -----------------------------------------------------
 
-        /*
-         * ANIMOON está diseñado exclusivamente
-         * para funcionar en orientación horizontal.
-         *
-         * SENSOR_LANDSCAPE permite utilizar ambas
-         * orientaciones horizontales dependiendo
-         * de cómo el usuario sostenga el dispositivo,
-         * pero impide utilizar la aplicación en vertical.
-         */
         requestedOrientation =
             ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
 
@@ -60,11 +54,11 @@ open class BaseActivity : AppCompatActivity() {
         // SESIÓN EXPIRADA
         // -----------------------------------------------------
 
-        lifecycleScope.launch {
-
-            TokenManager.sessionExpiredFlow.collect {
-
-                showSessionExpiredDialog()
+        if (observarSesionExpirada) {
+            lifecycleScope.launch {
+                TokenManager.sessionExpiredFlow.collect {
+                    showSessionExpiredDialog()
+                }
             }
         }
     }
@@ -73,22 +67,9 @@ open class BaseActivity : AppCompatActivity() {
     // =========================================================
     // MODO INMERSIVO
     // =========================================================
-
-    /**
-     * Oculta las barras del sistema:
-     *
-     * - barra de estado
-     * - barra de navegación
-     *
-     * El usuario puede mostrarlas temporalmente
-     * mediante un gesto desde el borde.
-     */
     private fun activarModoInmersivo() {
 
-        /*
-         * Permitimos que nuestra aplicación
-         * utilice toda la pantalla.
-         */
+
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
@@ -101,22 +82,11 @@ open class BaseActivity : AppCompatActivity() {
                 window.decorView
             )
 
-
-        /*
-         * Ocultamos tanto la barra superior
-         * como la navegación inferior.
-         */
         controller.hide(
             WindowInsetsCompat.Type.systemBars()
         )
 
 
-        /*
-         * Las barras pueden aparecer temporalmente
-         * mediante un gesto del usuario.
-         *
-         * Después Android las vuelve a ocultar.
-         */
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat
                 .BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE

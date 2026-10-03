@@ -14,7 +14,6 @@ import com.example.animoon.ui.minigame.game1.data.PreguntasRepository
 import com.example.animoon.ui.minigame.game1.model.Pregunta
 import com.google.android.material.button.MaterialButton
 import android.content.Intent
-import android.media.MediaPlayer
 import com.google.android.material.progressindicator.LinearProgressIndicator
 
 class Game1Activity : BaseActivity() {
@@ -43,8 +42,6 @@ class Game1Activity : BaseActivity() {
 
     // Referencia al diálogo para evitar abrir varios al mismo tiempo
     private var dialogPausa: Dialog? = null
-
-    private var musicPlayer: MediaPlayer? = null
 
 
     // ---------------------------------------------------------
@@ -90,12 +87,6 @@ class Game1Activity : BaseActivity() {
         prepararPartida()
 
         mostrarPreguntaActual()
-
-        musicPlayer = MediaPlayer.create(this, R.raw.game1_music).apply {
-            isLooping = true
-            setVolume(0.20f, 0.20f)
-            start()
-        }
     }
 
 

@@ -1,405 +1,249 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/ThemeOverlay.Animoon.Auth"
-    android:background="@color/animoon_auth_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ===================================================== -->
-    <!-- PANEL IZQUIERDO - PROGRESO DEL REGISTRO              -->
-    <!-- ===================================================== -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_auth_forms" />
 
-    <LinearLayout
-        android:id="@+id/registerStepsCard"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="#302451"
-        android:orientation="vertical"
-        android:padding="28dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!-- TÍTULO -->
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="Registro\nseguro"
-            android:textColor="@android:color/white"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-
-        <!-- ================================================= -->
-        <!-- PASO 1 - ACTUAL                                  -->
-        <!-- ================================================= -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="#57418C"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:background="#BCA6FF"
-                android:gravity="center"
-                android:text="1"
-                android:textColor="#302451"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Datos del tutor"
-                android:textColor="@android:color/white"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-
-        <!-- ================================================= -->
-        <!-- PASO 2 - PENDIENTE                               -->
-        <!-- ================================================= -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:alpha="0.55"
-                android:gravity="center"
-                android:text="2"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:alpha="0.55"
-                android:text="Verificación SMS"
-                android:textColor="@android:color/white"
-                android:textSize="17sp" />
-
-        </LinearLayout>
-
-
-        <!-- ================================================= -->
-        <!-- PASO 3 - PENDIENTE                               -->
-        <!-- ================================================= -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:alpha="0.55"
-                android:gravity="center"
-                android:text="3"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:alpha="0.55"
-                android:text="Avatar del niño"
-                android:textColor="@android:color/white"
-                android:textSize="17sp" />
-
-        </LinearLayout>
-
-
-        <!-- DIVISOR -->
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="18dp"
-            android:background="#70668A" />
-
-
-        <!-- MENSAJE INFORMATIVO -->
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="5dp"
-            android:text="👨‍🚀 Empecemos creando la cuenta. El tutor deberá proporcionar su número telefónico para verificar el registro."
-            android:textColor="#D9D3E5"
-            android:textSize="15sp" />
-
-    </LinearLayout>
-
-
-    <!-- ===================================================== -->
-    <!-- CONTENIDO PRINCIPAL                                  -->
-    <!-- ===================================================== -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#44302644"
+        android:importantForAccessibility="no" />
 
     <ScrollView
         android:id="@+id/registerScroll"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fillViewport="true"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/registerStepsCard"
-        app:layout_constraintTop_toTopOf="parent">
+        android:clipToPadding="false"
+        android:padding="24dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingStart="36dp"
-            android:paddingEnd="36dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp">
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-
-            <!-- ================================================= -->
-            <!-- TÍTULO                                           -->
-            <!-- ================================================= -->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Crea tu cuenta"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Un adulto responsable debe acompañar este proceso"
-                android:textAlignment="center"
-                android:textColor="#C8C3D6"
-                android:textSize="16sp" />
-
-
-            <!-- ================================================= -->
-            <!-- APELATIVO                                        -->
-            <!-- ================================================= -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:hint="Apelativo del niño"
-                android:textColorHint="#BEB8CB"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#A98BEC"
-                app:hintTextColor="#BEB8CB">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etRegisterApelativo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#8E8998" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- ================================================= -->
-            <!-- TELÉFONO DEL TUTOR                               -->
-            <!-- ================================================= -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="Número telefónico del tutor"
-                android:textColorHint="#BEB8CB"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#A98BEC"
-                app:hintTextColor="#BEB8CB"
-                app:prefixText="+52 ">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTutorPhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:maxLength="10"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#8E8998" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- ================================================= -->
-            <!-- CONTRASEÑA                                       -->
-            <!-- ================================================= -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="Contraseña"
-                android:textColorHint="#BEB8CB"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#A98BEC"
-                app:endIconMode="password_toggle"
-                app:hintTextColor="#BEB8CB">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etRegisterPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#8E8998" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- ================================================= -->
-            <!-- CONFIRMAR CONTRASEÑA                             -->
-            <!-- ================================================= -->
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:hint="Confirmar contraseña"
-                android:textColorHint="#BEB8CB"
-                app:boxBackgroundMode="outline"
-                app:boxStrokeColor="#A98BEC"
-                app:endIconMode="password_toggle"
-                app:hintTextColor="#BEB8CB">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etConfirmPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:maxLines="1"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="#8E8998" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <!-- ================================================= -->
-            <!-- REQUISITOS DE CONTRASEÑA                         -->
-            <!-- ================================================= -->
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="La contraseña debe tener al menos 8 caracteres."
-                android:textColor="#AFA9BC"
-                android:textSize="12sp" />
-
-
-            <!-- ================================================= -->
-            <!-- TÉRMINOS                                         -->
-            <!-- ================================================= -->
-
-            <CheckBox
-                android:id="@+id/checkTerms"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:buttonTint="#B99AF4"
-                android:text="El tutor acepta los lineamientos de privacidad y uso de datos."
-                android:textColor="#E0DBE8"
-                android:textSize="14sp" />
-
-
-            <!-- ================================================= -->
-            <!-- BOTONES                                          -->
-            <!-- ================================================= -->
+            <!-- Identidad y progreso -->
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_weight="0.36"
+                android:orientation="vertical"
+                android:paddingEnd="20dp">
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:contentDescription="ANIMOON"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/logo_animoon" />
 
-                <!-- CANCELAR -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="#FFF9FF"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="#CFBFEA"
+                    app:strokeWidth="1dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCancel"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp"
-                    android:backgroundTint="#3A3450"
-                    android:text="← Cancelar"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    app:cornerRadius="18dp"
-                    app:strokeColor="#807494"
-                    app:strokeWidth="2dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Tu aventura comienza aquí"
+                            android:textColor="#302644"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-                <!-- CONTINUAR / ENVIAR SMS -->
+                        <TextView
+                            style="@style/AnimoonRegistrationStepActive"
+                            android:layout_marginTop="16dp"
+                            android:text="1 · Datos de la cuenta"
+                            android:contentDescription="Paso 1, datos de la cuenta, actual" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSendSms"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1.35"
-                    android:layout_marginStart="10dp"
-                    android:backgroundTint="#8E61D6"
-                    android:enabled="false"
-                    android:text="Enviar código SMS →"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:cornerRadius="18dp" />
+                        <TextView
+                            style="@style/AnimoonRegistrationStep"
+                            android:layout_marginTop="6dp"
+                            android:text="2 · Código SMS" />
+
+                        <TextView
+                            style="@style/AnimoonRegistrationStep"
+                            android:layout_marginTop="6dp"
+                            android:text="3 · Elige tu avatar" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Realiza el registro con ayuda de tu mamá, papá o tutor."
+                            android:textColor="#655879"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="3dp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+
+            <!-- Formulario -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.64"
+                app:cardBackgroundColor="#FFF9FF"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
+                app:strokeColor="#CFBFEA"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PASO 1 DE 3"
+                        android:textColor="#7951B0"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:accessibilityHeading="true"
+                        android:text="Crea tu cuenta"
+                        android:textColor="#302644"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Elige cómo te conocerán en ANIMOON."
+                        android:textColor="#655879"
+                        android:textSize="15sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AnimoonRegistrationInput"
+                        android:hint="Apelativo del niño"
+                        app:helperText="Elige un apodo; evita utilizar tu nombre completo.">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRegisterApelativo"
+                            style="@style/AnimoonRegistrationEditText"
+                            android:inputType="text"
+                            android:imeOptions="actionNext"
+                            android:autofillHints="newUsername" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AnimoonRegistrationInput"
+                        android:hint="Teléfono del tutor"
+                        app:prefixText="+52 "
+                        app:helperText="Enviaremos un código por SMS a este número.">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etTutorPhone"
+                            style="@style/AnimoonRegistrationEditText"
+                            android:inputType="phone"
+                            android:digits="0123456789"
+                            android:maxLength="10"
+                            android:imeOptions="actionNext" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AnimoonRegistrationInput"
+                        android:hint="Contraseña"
+                        app:helperText="Utiliza al menos 8 caracteres."
+                        app:endIconMode="password_toggle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRegisterPassword"
+                            style="@style/AnimoonRegistrationEditText"
+                            android:inputType="textPassword"
+                            android:imeOptions="actionNext"
+                            android:autofillHints="newPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/AnimoonRegistrationInput"
+                        android:hint="Confirmar contraseña"
+                        app:endIconMode="password_toggle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etConfirmPassword"
+                            style="@style/AnimoonRegistrationEditText"
+                            android:inputType="textPassword"
+                            android:imeOptions="actionDone"
+                            android:autofillHints="newPassword" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <CheckBox
+                        android:id="@+id/checkTerms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:minHeight="48dp"
+                        android:buttonTint="#7951B0"
+                        android:text="El tutor acepta los lineamientos de privacidad y uso de datos."
+                        android:textColor="#493D5C"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnSendSms"
+                        style="@style/Widget.Animoon.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:minHeight="56dp"
+                        android:enabled="false"
+                        android:text="Enviar código SMS" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCancel"
+                        style="@style/Widget.Animoon.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="48dp"
+                        android:text="Volver al inicio de sesión" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

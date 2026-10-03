@@ -24,8 +24,18 @@ import com.example.animoon.ui.settings.SettingsActivity
 import com.example.animoon.ui.profile.DemoProfileSource
 import com.example.animoon.ui.profile.ProfileActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.widget.ImageView
+import com.example.animoon.ui.splash.SplashActivity
+import com.example.animoon.ui.world.WorldMapDialogFragment
+import com.example.animoon.ui.world.WorldZone
 
 class MainActivity : BaseActivity() {
+
+    companion object {
+        private const val STATE_WORLD_ZONE = "state_world_zone"
+    }
+
+    private var currentZone = WorldZone.BASE
 
     // =========================================================
     // ON CREATE
@@ -64,32 +74,11 @@ class MainActivity : BaseActivity() {
         // REFERENCIAS DEL HUD
         // =====================================================
 
-        val btnCheckUsers =
-            findViewById<MaterialButton>(R.id.btnCheckUsers)
-
         val btnSettings =
             findViewById<MaterialButton>(R.id.btnSettings)
 
         val btnMinigames =
             findViewById<MaterialButton>(R.id.btnMinigames)
-
-
-        // =====================================================
-        // ELEMENTOS DEL ESCENARIO
-        // =====================================================
-
-        val hotspotMinigames =
-            findViewById<View>(R.id.hotspotMinigames)
-
-
-        // =====================================================
-        // USUARIOS ACTIVOS
-        // =====================================================
-
-        btnCheckUsers.setOnClickListener {
-
-            checkActiveUsers()
-        }
 
 
         // =====================================================
@@ -105,6 +94,29 @@ class MainActivity : BaseActivity() {
             )
         }
 
+        currentZone = WorldZone.fromId(
+            savedInstanceState?.getString(STATE_WORLD_ZONE)
+        )
+
+        supportFragmentManager.setFragmentResultListener(
+            WorldMapDialogFragment.REQUEST_KEY,
+            this
+        ) { _, result ->
+
+            val selectedZone = WorldZone.fromId(
+                result.getString(WorldMapDialogFragment.RESULT_ZONE_ID)
+            )
+
+            renderZone(selectedZone)
+        }
+
+        findViewById<MaterialButton>(
+            R.id.btnWorldMap
+        ).setOnClickListener {
+            openWorldMap()
+        }
+
+        renderZone(currentZone)
 
         // =====================================================
         // BOTÓN GENERAL DE MINIJUEGOS
@@ -119,22 +131,6 @@ class MainActivity : BaseActivity() {
                 )
 
             startActivity(intent)
-        }
-
-
-        // =====================================================
-        // PORTAL DEL CENTRO DE ENTRENAMIENTO
-        // =====================================================
-        //
-        // El portal central sí pertenece directamente
-        // al Minijuego 1.
-        //
-        // Primero mostramos una confirmación.
-        //
-
-        hotspotMinigames.setOnClickListener {
-
-            showMinigameDialog()
         }
     }
 
@@ -476,5 +472,51 @@ class MainActivity : BaseActivity() {
             }
             .setNegativeButton("Cerrar", null)
             .show()
+    }
+
+    private fun openWorldMap() {
+        val manager = supportFragmentManager
+
+        if (manager.isStateSaved) return
+
+        if (
+            manager.findFragmentByTag(
+                WorldMapDialogFragment.TAG
+            ) != null
+        ) {
+            return
+        }
+
+        WorldMapDialogFragment
+            .newInstance(currentZone)
+            .showNow(manager, WorldMapDialogFragment.TAG)
+    }
+
+    private fun renderZone(zone: WorldZone) {
+        currentZone = zone
+
+        val background = findViewById<ImageView>(
+            R.id.ivLobbyBackground
+        )
+
+        findViewById<MaterialButton>(
+            R.id.btnZoneName
+        ).text = zone.title
+
+        val backgroundResource = when (zone) {
+            WorldZone.BASE ->
+                R.drawable.lobby_base_principal
+
+            WorldZone.CRATERS ->
+                R.drawable.world_crateres
+
+            WorldZone.VILLAGE ->
+                R.drawable.world_aldea
+
+            WorldZone.DARK_SIDE ->
+                R.drawable.world_lado_oscuro
+        }
+
+        background.setImageResource(backgroundResource)
     }
 }

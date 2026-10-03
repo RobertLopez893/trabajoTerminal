@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AnimoonRegistrationStep" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textColor">#655879</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AnimoonRegistrationStepActive"
+        parent="AnimoonRegistrationStep">
+        <item name="android:background">@drawable/bg_registration_step</item>
+        <item name="android:textColor">#49316B</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AnimoonRegistrationInput"
+        parent="Widget.Animoon.TextInput">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxBackgroundColor">#FFFFFF</item>
+    </style>
+
+    <style name="AnimoonRegistrationEditText"
+        parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">#302644</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AnimoonVerificationDigit" parent="">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginStart">3dp</item>
+        <item name="android:layout_marginEnd">3dp</item>
+        <item name="android:background">@drawable/bg_verification_digit</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:inputType">number</item>
+        <item name="android:digits">0123456789</item>
+        <item name="android:maxLength">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#49316B</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:selectAllOnFocus">true</item>
+    </style>
+
+</resources>

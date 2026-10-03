@@ -2,11 +2,12 @@ package com.example.animoon.ui.splash
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.R
 import com.example.animoon.ui.auth.LoginActivity
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
+    override val observarSesionExpirada: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

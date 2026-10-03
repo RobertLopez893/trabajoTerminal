@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,217 +8,171 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- ===================================================== -->
-    <!-- FONDO DEL LOBBY                                       -->
-    <!-- ===================================================== -->
+    <!-- Fondo de la zona actual -->
 
     <ImageView
         android:id="@+id/ivLobbyBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@null"
+        android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:src="@drawable/lobby_base_principal" />
 
-
-    <!-- ===================================================== -->
-    <!-- CAPA DEL MUNDO                                        -->
-    <!-- ===================================================== -->
+    <!-- Capa reservada para los avatares -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/worldLayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" />
 
-        <!--
-            HOTSPOT DEL CENTRO DE ENTRENAMIENTO
-
-            De momento dejamos el color semitransparente
-            para poder ubicar correctamente el área.
-
-            Cuando terminemos el punto del hotspot,
-            lo haremos completamente transparente.
-        -->
-
-        <View
-            android:id="@+id/hotspotMinigames"
-
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-
-            android:background="@drawable/bg_hotspot_portal"
-
-            android:clickable="true"
-            android:focusable="true"
-
-            android:contentDescription="Entrar al Centro de Entrenamiento"
-
-            app:layout_constraintWidth_percent="0.20"
-            app:layout_constraintHeight_percent="0.30"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-
-            app:layout_constraintHorizontal_bias="0.50"
-            app:layout_constraintVertical_bias="0.31" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <!-- ===================================================== -->
-    <!-- CAPA DEL HUD                                          -->
-    <!-- ===================================================== -->
+    <!-- Controles superpuestos al mundo -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/hudLayer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="24dp">
 
-
-        <!-- ================================================= -->
-        <!-- USUARIOS ACTIVOS                                  -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCheckUsers"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-
-            android:minWidth="130dp"
-
-            android:text="Usuarios"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
-
-            android:maxLines="1"
-            android:singleLine="true"
-
-            app:backgroundTint="#DD292241"
-            app:cornerRadius="28dp"
-            app:strokeColor="#887B70A5"
-            app:strokeWidth="1dp"
-
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMyProfile"
-            style="@style/Widget.Animoon.Button.Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:minWidth="150dp"
-            android:text="Mi perfil"
-            app:layout_constraintStart_toStartOf="@id/btnCheckUsers"
-            app:layout_constraintTop_toBottomOf="@id/btnCheckUsers" />
+        <!-- Único acceso provisional -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDemoProfiles"
-            style="@style/Widget.Animoon.Button.Secondary"
+            style="@style/Widget.Animoon.HudPill"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:minWidth="150dp"
-            android:text="Perfiles demo"
-            app:layout_constraintStart_toStartOf="@id/btnMyProfile"
-            app:layout_constraintTop_toBottomOf="@id/btnMyProfile" />
-
-
-        <!-- ================================================= -->
-        <!-- AJUSTES                                           -->
-        <!-- ================================================= -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSettings"
-            style="@style/Widget.Animoon.Button.Secondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="24dp"
-
-            android:minWidth="150dp"
-            android:text="Ajustes"
-
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Ver otro jugador"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-        <!-- ================================================= -->
-        <!-- NOMBRE DE LA ZONA                                 -->
-        <!-- ================================================= -->
+        <!-- Nombre de la zona: informativo -->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnZoneName"
+            style="@style/Widget.Animoon.HudPill"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
-
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="24dp"
-
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:maxWidth="300dp"
+            android:maxLines="2"
             android:clickable="false"
             android:focusable="false"
+            android:accessibilityLiveRegion="polite"
+            android:text="Base Principal"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/hudActions"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-            android:minWidth="180dp"
+        <!-- Accesos principales -->
 
-            android:text="📍 Base Principal"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
+        <LinearLayout
+            android:id="@+id/hudActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            android:maxLines="1"
-            android:singleLine="true"
+            <!-- MAPA -->
 
-            app:backgroundTint="#DD292241"
-            app:cornerRadius="28dp"
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnWorldMap"
+                    style="@style/Widget.Animoon.HudCircle"
+                    android:contentDescription="Abrir mapa"
+                    android:tooltipText="Mapa"
+                    app:icon="@drawable/ic_hud_map" />
 
+                <TextView
+                    style="@style/AnimoonHudCaption"
+                    android:text="Mapa" />
 
-        <!-- ================================================= -->
-        <!-- MENÚ GENERAL DE MINIJUEGOS                        -->
-        <!-- ================================================= -->
-        <!--
-            Este botón NO abre directamente el Minijuego 1.
+            </LinearLayout>
 
-            Posteriormente llevará a una pantalla donde estarán
-            disponibles todos los minijuegos de ANIMOON.
-        -->
+            <!-- MINIJUEGOS -->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnMinigames"
-            android:layout_width="210dp"
-            android:layout_height="64dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:minWidth="80dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMinigames"
+                    style="@style/Widget.Animoon.HudCircle"
+                    android:contentDescription="Abrir minijuegos"
+                    android:tooltipText="Minijuegos"
+                    app:icon="@drawable/ic_hud_games" />
 
-            android:text="🎮  Minijuegos"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:textStyle="bold"
+                <TextView
+                    style="@style/AnimoonHudCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="80dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:singleLine="true"
+                    android:text="Minijuegos" />
 
-            android:maxLines="1"
-            android:singleLine="true"
+            </LinearLayout>
 
-            app:backgroundTint="#E43E3268"
-            app:cornerRadius="32dp"
-            app:strokeColor="#AA8C7BD1"
-            app:strokeWidth="2dp"
+            <!-- MI PERFIL -->
 
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnMyProfile"
+                    style="@style/Widget.Animoon.HudCircle"
+                    android:contentDescription="Abrir mi perfil"
+                    android:tooltipText="Mi perfil"
+                    app:icon="@drawable/ic_hud_profile" />
+
+                <TextView
+                    style="@style/AnimoonHudCaption"
+                    android:text="Mi perfil" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- AJUSTES -->
+
+        <LinearLayout
+            android:id="@+id/hudSettings"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSettings"
+                style="@style/Widget.Animoon.HudCircle"
+                android:contentDescription="Abrir ajustes"
+                android:tooltipText="Ajustes"
+                app:icon="@drawable/ic_hud_settings" />
+
+            <TextView
+                style="@style/AnimoonHudCaption"
+                android:text="Ajustes" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

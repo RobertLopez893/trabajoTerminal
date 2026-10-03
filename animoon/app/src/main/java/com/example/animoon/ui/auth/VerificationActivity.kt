@@ -7,12 +7,15 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.R
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import androidx.core.widget.doAfterTextChanged
 
-class VerificationActivity : AppCompatActivity() {
+class VerificationActivity : BaseActivity() {
+    override val observarSesionExpirada: Boolean = false
+
 
     private lateinit var edtCode1: EditText
     private lateinit var edtCode2: EditText
@@ -74,7 +77,6 @@ class VerificationActivity : AppCompatActivity() {
     }
 
     private fun configureCodeInputs() {
-
         val inputs = listOf(
             edtCode1,
             edtCode2,
@@ -85,14 +87,14 @@ class VerificationActivity : AppCompatActivity() {
         )
 
         inputs.forEachIndexed { index, editText ->
-
-            editText.setOnKeyListener { _, _, _ ->
-
-                if (editText.text.length == 1 && index < inputs.lastIndex) {
+            editText.doAfterTextChanged { text ->
+                if (
+                    editText.hasFocus() &&
+                    text?.length == 1 &&
+                    index < inputs.lastIndex
+                ) {
                     inputs[index + 1].requestFocus()
                 }
-
-                false
             }
         }
     }

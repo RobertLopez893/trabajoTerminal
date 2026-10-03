@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import android.util.Log
 import com.example.animoon.data.model.MinijuegoScoreRequest
 import com.example.animoon.data.network.ApiClient
+import com.example.animoon.ui.minigame.MinigamesActivity
 
 class Game1ResultActivity : BaseActivity() {
 
@@ -413,32 +414,16 @@ class Game1ResultActivity : BaseActivity() {
         // -----------------------------------------------------
 
         btnReturn.setOnClickListener {
+            val menuIntent = Intent(
+                this,
+                MinigamesActivity::class.java
+            ).apply {
+                flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
 
-            /*
-             * TEMPORAL.
-             *
-             * Más adelante este botón regresará
-             * al jugador a la última ubicación
-             * desde la cual entró al minijuego.
-             *
-             * Por ahora regresamos a MainActivity
-             * mientras el sistema de zonas todavía
-             * no está implementado.
-             */
-            val intent =
-                Intent(
-                    this,
-                    MainActivity::class.java
-                )
-
-
-            intent.flags =
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP
-
-
-            startActivity(intent)
-
+            startActivity(menuIntent)
             finish()
         }
     }

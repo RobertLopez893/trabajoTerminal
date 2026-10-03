@@ -6,6 +6,7 @@ import android.widget.TextView
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
+import com.example.animoon.ui.minigame.MinigamesActivity
 
 
 class Game2ResultActivity : BaseActivity() {
@@ -161,15 +162,16 @@ class Game2ResultActivity : BaseActivity() {
 
 
         btnReturn.setOnClickListener {
+            val menuIntent = Intent(
+                this,
+                MinigamesActivity::class.java
+            ).apply {
+                flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
 
-
-            /*
-             * No enviamos al jugador a MainActivity
-             * de forma fija.
-             *
-             * finish() devuelve al lugar desde donde
-             * entró al flujo.
-             */
+            startActivity(menuIntent)
             finish()
         }
     }

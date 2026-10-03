@@ -1,258 +1,254 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/ThemeOverlay.Animoon.Auth"
-    android:background="@color/animoon_auth_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- ========================================= -->
-    <!-- PANEL IZQUIERDO: PROGRESO DEL REGISTRO   -->
-    <!-- ========================================= -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_auth_forms" />
 
-    <LinearLayout
-        android:id="@+id/registerStepsCard"
-        android:layout_width="300dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="28dp"
-        android:background="#302451"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#44302644"
+        android:importantForAccessibility="no" />
 
-        <TextView
-            android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:padding="24dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Registro\nseguro"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            android:layout_marginBottom="30dp"/>
-
-        <!-- PASO 1 COMPLETADO -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:gravity="center"
-                android:text="✓"
-                android:textSize="22sp"
-                android:textColor="@android:color/white"
-                android:background="#63DDA5"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Datos del tutor"
-                android:textColor="#E5E0EE"
-                android:textSize="17sp"
-                android:layout_marginStart="16dp"/>
-
-        </LinearLayout>
-
-        <!-- PASO 2 ACTIVO -->
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:orientation="horizontal"
+            android:baselineAligned="false"
             android:gravity="center_vertical"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:background="#57418C"
-            android:layout_marginTop="8dp">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:gravity="center"
-                android:text="2"
-                android:textSize="20sp"
-                android:textColor="#302451"
-                android:background="#BCA6FF"/>
+            <!-- Identidad y progreso -->
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Verificación SMS"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="17sp"
-                android:layout_marginStart="16dp"/>
+                android:layout_weight="0.36"
+                android:orientation="vertical"
+                android:paddingEnd="20dp">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:contentDescription="ANIMOON"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/logo_animoon" />
 
-        <!-- PASO 3 PENDIENTE -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:cardBackgroundColor="#FFF9FF"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="#CFBFEA"
+                    app:strokeWidth="1dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="18dp">
 
-            <TextView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:gravity="center"
-                android:text="3"
-                android:textSize="20sp"
-                android:textColor="#FFFFFF"
-                android:alpha="0.55"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Un paso más"
+                            android:textColor="#302644"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="wrap_content"
+                        <TextView
+                            style="@style/AnimoonRegistrationStep"
+                            android:layout_marginTop="16dp"
+                            android:text="✓ · Datos de la cuenta"
+                            android:textColor="#286A59"
+                            android:contentDescription="Paso 1, datos de la cuenta, completado" />
+
+                        <TextView
+                            style="@style/AnimoonRegistrationStepActive"
+                            android:layout_marginTop="6dp"
+                            android:text="2 · Código SMS"
+                            android:contentDescription="Paso 2, código SMS, actual" />
+
+                        <TextView
+                            style="@style/AnimoonRegistrationStep"
+                            android:layout_marginTop="6dp"
+                            android:text="3 · Elige tu avatar" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="Pide ayuda a tu tutor para consultar el mensaje recibido."
+                            android:textColor="#655879"
+                            android:textSize="14sp"
+                            android:lineSpacingExtra="3dp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Captura del código -->
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Avatar del niño"
-                android:textColor="#FFFFFF"
-                android:textSize="17sp"
-                android:alpha="0.55"
-                android:layout_marginStart="16dp"/>
+                android:layout_weight="0.64"
+                app:cardBackgroundColor="#FFF9FF"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="6dp"
+                app:strokeColor="#CFBFEA"
+                app:strokeWidth="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="PASO 2 DE 3"
+                        android:textColor="#7951B0"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:accessibilityHeading="true"
+                        android:text="Ingresa el código"
+                        android:textColor="#302644"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Enviamos un SMS al teléfono de tu tutor:"
+                        android:textColor="#655879"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/txtPhone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Teléfono del tutor"
+                        android:textColor="#624393"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Escribe los 6 números del mensaje."
+                        android:textColor="#655879"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:id="@+id/codeContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <EditText
+                            android:id="@+id/edtCode1"
+                            style="@style/AnimoonVerificationDigit"
+                            android:contentDescription="Dígito 1 del código" />
+
+                        <EditText
+                            android:id="@+id/edtCode2"
+                            style="@style/AnimoonVerificationDigit"
+                            android:contentDescription="Dígito 2 del código" />
+
+                        <EditText
+                            android:id="@+id/edtCode3"
+                            style="@style/AnimoonVerificationDigit"
+                            android:contentDescription="Dígito 3 del código" />
+
+                        <EditText
+                            android:id="@+id/edtCode4"
+                            style="@style/AnimoonVerificationDigit"
+                            android:contentDescription="Dígito 4 del código" />
+
+                        <EditText
+                            android:id="@+id/edtCode5"
+                            style="@style/AnimoonVerificationDigit"
+                            android:contentDescription="Dígito 5 del código" />
+
+                        <EditText
+                            android:id="@+id/edtCode6"
+                            style="@style/AnimoonVerificationDigit"
+                            android:imeOptions="actionDone"
+                            android:contentDescription="Dígito 6 del código" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txtResend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:minHeight="48dp"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:text="Reenviar código en 02:00"
+                        android:textColor="#624393"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVerify"
+                        style="@style/Widget.Animoon.Button.Primary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:minHeight="56dp"
+                        android:text="Continuar" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnBack"
+                        style="@style/Widget.Animoon.Button.Secondary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:minHeight="48dp"
+                        android:text="Volver a mis datos" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#70668A"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="18dp"/>
+    </ScrollView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="📱 Se envió un código de 6 dígitos al número del tutor. Vigencia: 2 minutos."
-            android:textColor="#D9D3E5"
-            android:textSize="15sp"
-            android:lineSpacingExtra="5dp"/>
-
-    </LinearLayout>
-
-
-    <!-- ========================================= -->
-    <!-- CONTENIDO PRINCIPAL                      -->
-    <!-- ========================================= -->
-
-    <LinearLayout
-        android:id="@+id/verificationContent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="32dp"
-        app:layout_constraintStart_toEndOf="@id/registerStepsCard"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ingresa el código"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/txtSubtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Código de 6 dígitos · Vigencia 2 min"
-            android:textColor="#D5D1E5"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp"/>
-
-        <TextView
-            android:id="@+id/txtPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+52 •••••• 4521"
-            android:textColor="#FFE174"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginTop="25dp"/>
-
-        <LinearLayout
-            android:id="@+id/codeContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="25dp">
-
-            <EditText
-                android:id="@+id/edtCode1"
-                style="@style/CodeInput"/>
-
-            <EditText
-                android:id="@+id/edtCode2"
-                style="@style/CodeInput"/>
-
-            <EditText
-                android:id="@+id/edtCode3"
-                style="@style/CodeInput"/>
-
-            <EditText
-                android:id="@+id/edtCode4"
-                style="@style/CodeInput"/>
-
-            <EditText
-                android:id="@+id/edtCode5"
-                style="@style/CodeInput"/>
-
-            <EditText
-                android:id="@+id/edtCode6"
-                style="@style/CodeInput"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtResend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reenviar código en 02:00"
-            android:textColor="#BBA6FF"
-            android:textSize="15sp"
-            android:padding="12dp"
-            android:layout_marginTop="12dp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="25dp">
-
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="220dp"
-                android:layout_height="56dp"
-                android:text="← Atrás"
-                android:textAllCaps="false"/>
-
-            <Button
-                android:id="@+id/btnVerify"
-                android:layout_width="280dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="20dp"
-                android:text="Verificar código →"
-                android:textAllCaps="false"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
