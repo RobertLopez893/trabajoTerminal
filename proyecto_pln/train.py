@@ -28,25 +28,30 @@ from sklearn.metrics import (
     f1_score
 )
 
-CORPUS_PATH       = "./output/corpus_final.csv"
-RESULTADOS_PATH   = "./output/training_results"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Asegúrese de que el CSV esté en la carpeta output
+CORPUS_PATH     = os.path.join(BASE_DIR, "output", "corpus_sintetico_llm.csv")
+RESULTADOS_PATH = os.path.join(BASE_DIR, "output", "training_results")
+
 os.makedirs(RESULTADOS_PATH, exist_ok=True)
 
-PREENTRENO_MODELO = "bert-base-multilingual-cased"
+# --- CAMBIO AL MODELO NATIVO EN ESPAÑOL (BETO) ---
+PREENTRENO_MODELO = "dccuchile/bert-base-spanish-wwm-cased"
 MAX_TOKEN_LEN     = 128
 VENTANA_MENSAJES  = 5
 BATCH_SIZE        = 32
-NUM_EPOCAS        = 4
-APRENDIZAJE_RATE  = 2e-5
+
+# --- HIPERPARÁMETROS OPTIMIZADOS ---
+NUM_EPOCAS        = 20      # Más tiempo para aprender patrones complejos
+APRENDIZAJE_RATE  = 1e-5    # Tasa más suave para evitar inestabilidad en las últimas épocas
+LORA_R            = 32      # Mayor capacidad de representación matricial
+LORA_ALPHA        = 64      # Escalado ajustado al nuevo R
+LORA_DROPOUT      = 0.1
+# -----------------------------------
+
 NUM_CLASES        = 3
 SEM_RANDOM        = 42
-CAP_CLASE_BAJA    = 5_000
-GOAL_CLASES       = 4_000
-CAP_VAL_BAJA      = 2_000
-
-LORA_R            = 8
-LORA_ALPHA        = 16
-LORA_DROPOUT      = 0.1
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Dispositivo: {device}")
@@ -59,7 +64,7 @@ def construir_ventanas(datos, ventana=VENTANA_MENSAJES):
     filas = []
 
     for id_bloque, grupo in datos.groupby("id_bloque"):
-        grupo    = grupo.sort_values("orden_mensaje").reset_index(drop=True)
+        grupo     = grupo.sort_values("orden_mensaje").reset_index(drop=True)
         mensajes  = grupo["texto_mensaje"].tolist()
         etiquetas = grupo["nivel_riesgo"].tolist()
         emisores  = grupo["emisor"].tolist()
@@ -85,24 +90,24 @@ def balancear_train(df_train):
     clase_media = df_train[df_train.nivel_riesgo == 1]
     clase_alta  = df_train[df_train.nivel_riesgo == 2]
 
+    goal_dinamico = max(500, len(clase_media))
+
     muestra_baja = clase_baja.sample(
-        n=min(CAP_CLASE_BAJA, len(clase_baja)),
+        n=min(goal_dinamico, len(clase_baja)),
         random_state=SEM_RANDOM
     )
     muestra_media = clase_media.sample(
-        n=min(GOAL_CLASES, len(clase_media)),
-        replace=len(clase_media) < GOAL_CLASES,
+        n=goal_dinamico,
+        replace=len(clase_media) < goal_dinamico,
         random_state=SEM_RANDOM
     )
     muestra_alta = clase_alta.sample(
-        n=min(GOAL_CLASES, len(clase_alta)),
-        replace=len(clase_alta) < GOAL_CLASES,
+        n=goal_dinamico,
+        replace=len(clase_alta) < goal_dinamico,
         random_state=SEM_RANDOM
     )
 
-    return pd.concat(
-        [muestra_baja, muestra_media, muestra_alta]
-    ).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
+    return pd.concat([muestra_baja, muestra_media, muestra_alta]).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
 
 
 def balancear_val(df_val):
@@ -110,22 +115,11 @@ def balancear_val(df_val):
     clase_media = df_val[df_val.nivel_riesgo == 1]
     clase_alta  = df_val[df_val.nivel_riesgo == 2]
 
-    muestra_baja = clase_baja.sample(
-        n=min(CAP_VAL_BAJA, len(clase_baja)),
-        random_state=SEM_RANDOM
-    )
-    muestra_media = clase_media.sample(
-        n=len(clase_media),
-        random_state=SEM_RANDOM
-    )
-    muestra_alta = clase_alta.sample(
-        n=len(clase_alta),
-        random_state=SEM_RANDOM
-    )
+    max_val = min(1000, len(clase_baja))
+    
+    muestra_baja = clase_baja.sample(n=max_val, random_state=SEM_RANDOM) if len(clase_baja) > max_val else clase_baja
 
-    return pd.concat(
-        [muestra_baja, muestra_media, muestra_alta]
-    ).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
+    return pd.concat([muestra_baja, clase_media, clase_alta]).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
 
 
 def cargar_datos(ruta_corpus):
@@ -135,10 +129,6 @@ def cargar_datos(ruta_corpus):
     datos["nivel_riesgo"] = datos["nivel_riesgo"].astype(int)
 
     print(f"  Total: {len(datos):,} mensajes")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n = (datos.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: {n:,}  ({n/len(datos)*100:.1f}%)")
-
     df_ventanas = construir_ventanas(datos)
 
     df_train, df_val = train_test_split(
@@ -148,26 +138,13 @@ def cargar_datos(ruta_corpus):
         random_state=SEM_RANDOM
     )
 
-    print(f"\n  Split sobre datos reales:")
-    print(f"  Train: {len(df_train):,} | Validacion: {len(df_val):,}")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n_t = (df_train.nivel_riesgo == nivel).sum()
-        n_v = (df_val.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: train={n_t:>6,}  val={n_v:>5,}")
+    print(f"\n  Split sobre datos reales (Train: {len(df_train):,} | Val: {len(df_val):,})")
 
     df_train_bal = balancear_train(df_train)
-
-    print(f"\n  Train balanceado: {len(df_train_bal):,} mensajes")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n = (df_train_bal.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: {n:,}")
+    print(f"  Train balanceado dinámico: {len(df_train_bal):,} mensajes")
 
     df_val_bal = balancear_val(df_val)
-
-    print(f"\n  Validacion balanceada: {len(df_val_bal):,} mensajes")
-    for nivel, nombre in [(0, "Bajo  "), (1, "Medio "), (2, "Alto  ")]:
-        n = (df_val_bal.nivel_riesgo == nivel).sum()
-        print(f"  Clase {nivel} {nombre}: {n:,}")
+    print(f"  Validacion ajustada: {len(df_val_bal):,} mensajes")
 
     return df_train_bal, df_val_bal
 
@@ -252,7 +229,7 @@ def guardar_grafica_f1(historial):
              color="green", linewidth=2, label="F1 Macro")
     plt.plot(epochs, historial["loss"], marker="s", linestyle="--",
              color="steelblue", linewidth=2, label="Loss")
-    plt.title("ANIMOON - F1 Macro y Loss (LoRA + Ventana)")
+    plt.title("ANIMOON - F1 Macro y Loss (BETO + LoRA + Ventana)")
     plt.xlabel("Epoch")
     plt.ylabel("Score / Loss")
     plt.legend()
@@ -276,7 +253,8 @@ def entrenar():
     tokenizer   = BertTokenizer.from_pretrained(PREENTRENO_MODELO)
     modelo_base = BertForSequenceClassification.from_pretrained(
         PREENTRENO_MODELO,
-        num_labels=NUM_CLASES
+        num_labels=NUM_CLASES,
+        use_safetensors=True
     )
 
     lora_config = LoraConfig(
@@ -312,7 +290,20 @@ def entrenar():
     pesos_tensor = torch.tensor(pesos, dtype=torch.float).to(device)
     print(f"\n  Pesos -> Bajo: {pesos[0]:.3f} | Medio: {pesos[1]:.3f} | Alto: {pesos[2]:.3f}")
 
-    perdida_fn  = nn.CrossEntropyLoss(weight=pesos_tensor)
+    class OrdinalLoss(nn.Module):
+        def __init__(self, pesos):
+            super().__init__()
+            self.ce = nn.CrossEntropyLoss(weight=pesos)
+            self.mse = nn.MSELoss()
+            
+        def forward(self, logits, targets):
+            loss_ce = self.ce(logits, targets)
+            probs = torch.softmax(logits, dim=1)
+            valores_predichos = probs[:, 0]*0 + probs[:, 1]*1 + probs[:, 2]*2
+            loss_mse = self.mse(valores_predichos, targets.float())
+            return loss_ce + (loss_mse * 0.3)
+
+    perdida_fn = OrdinalLoss(pesos_tensor)
     optimizador = AdamW(modelo.parameters(), lr=APRENDIZAJE_RATE, weight_decay=0.01)
 
     pasos_totales = len(loader_train) * NUM_EPOCAS
@@ -323,10 +314,6 @@ def entrenar():
     )
 
     print(f"\n[4/5] Entrenando {NUM_EPOCAS} epochs con LoRA...")
-    print(f"  Ventana de analisis : {VENTANA_MENSAJES} mensajes")
-    print(f"  Train               : {len(textos_train):,} ventanas")
-    print(f"  Validacion          : {len(textos_val):,} ventanas")
-
     mejor_f1  = 0.0
     historial = {"loss": [], "f1_macro": []}
 

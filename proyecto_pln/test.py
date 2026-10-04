@@ -1,8 +1,14 @@
+import os
 import torch
 from transformers import BertTokenizer, BertForSequenceClassification
 from peft import PeftModel
 
-RUTA_MODELO = "./output/training_results/mejor_modelo"
+# --- RUTAS DINÁMICAS ---
+# Obtiene el directorio donde se encuentra este script actualmente
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Define la ruta absoluta hacia el modelo guardado
+RUTA_MODELO  = os.path.join(BASE_DIR, "output", "training_results", "mejor_modelo")
 MAX_LEN      = 128
 VENTANA      = 5
 device       = torch.device("cuda" if torch.cuda.is_available() else "cpu")
