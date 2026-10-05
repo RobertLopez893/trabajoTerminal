@@ -118,6 +118,12 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
 
+        <!-- CHAT -->
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
     </application>
 
 </manifest>

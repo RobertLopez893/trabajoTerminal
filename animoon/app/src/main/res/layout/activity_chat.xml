@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chatRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Fondo de la escena (provisional) -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:src="@drawable/lobby_base_principal" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/animoon_screen_padding">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChatBack"
+            style="@style/Widget.Animoon.Button.Secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Regresar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Panel del chat -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.Animoon.Card"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/animoon_space_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btnChatBack"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="@dimen/animoon_space_medium">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvChatMessages"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/animoon_space_small"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.Animoon.TextInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Escribe un mensaje">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etChatMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionSend|flagNoExtractUi"
+                            android:inputType="textCapSentences"
+                            android:maxLength="300" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnChatSend"
+                        style="@style/Widget.Animoon.Button.Primary"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_marginStart="@dimen/animoon_space_small"
+                        android:contentDescription="Enviar mensaje"
+                        android:paddingStart="0dp"
+                        android:paddingTop="0dp"
+                        android:paddingEnd="0dp"
+                        android:paddingBottom="0dp"
+                        app:cornerRadius="28dp"
+                        app:icon="@drawable/ic_chat_send"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconTint="@color/animoon_text_on_primary" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

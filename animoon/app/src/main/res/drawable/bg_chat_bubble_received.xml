@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/animoon_surface_secondary" />
+    <corners android:radius="20dp" />
+    <stroke
+        android:width="@dimen/animoon_border_width"
+        android:color="@color/animoon_border" />
+</shape>
