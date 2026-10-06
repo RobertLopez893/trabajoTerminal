@@ -20,7 +20,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/animoon_screen_padding">
 
-        <com.google.android.material.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
             android:id="@+id/btnChatBack"
             style="@style/Widget.Animoon.Button.Secondary"
             android:layout_width="wrap_content"
@@ -28,6 +28,20 @@
             android:text="Regresar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtChatTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chat"
+            android:textColor="#302644"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/btnChatBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/btnChatBack"
+            app:layout_constraintBottom_toBottomOf="@id/btnChatBack"
+            app:layout_constraintHorizontal_bias="0.5" />
 
         <!-- Panel del chat -->
         <com.google.android.material.card.MaterialCardView

@@ -1,7 +1,10 @@
-package com.example.animoon.ui.chat
+import re
 
-import android.os.Bundle
-import android.widget.TextView
+with open('animoon/app/src/main/java/com/example/animoon/ui/chat/ChatActivity.kt', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Add imports
+imports = """import android.widget.TextView
 import android.util.Base64
 import org.json.JSONObject
 import com.example.animoon.data.network.TokenManager
@@ -9,23 +12,12 @@ import com.example.animoon.ui.profile.AvatarDrawableResolver
 import com.example.animoon.data.network.ApiClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+"""
+if "import android.widget.TextView" not in content:
+    content = content.replace("import android.os.Bundle", "import android.os.Bundle\n" + imports)
 
-import android.view.inputmethod.EditorInfo
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.animoon.R
-import com.example.animoon.ui.base.BaseActivity
-import com.example.animoon.network.ChatWebSocketManager
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import java.util.UUID
-
-class ChatActivity : BaseActivity() {
+# We will completely replace ChatActivity's logic
+new_class = """class ChatActivity : BaseActivity() {
 
     private val adapter = ChatAdapter()
     private lateinit var rvMessages: RecyclerView
@@ -154,4 +146,9 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+"""
 
+content = re.sub(r'class ChatActivity : BaseActivity\(\) \{.*\}', new_class, content, flags=re.DOTALL)
+
+with open('animoon/app/src/main/java/com/example/animoon/ui/chat/ChatActivity.kt', 'w', encoding='utf-8') as f:
+    f.write(content)
