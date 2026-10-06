@@ -20,6 +20,7 @@ data class EncryptedMessagePayload(
 data class ChatMessagePayload(
     val chat_id: String? = null,
     val sender_id: String,
+    val target_id: String? = null,
     val encrypted_message: EncryptedMessagePayload,
     val system: Boolean = false
 )
@@ -38,14 +39,16 @@ object ChatWebSocketManager : WebSocketListener() {
     
     private var currentChatId: String = ""
     private var myUserId: String = ""
+    private var targetUserId: String = ""
 
     // Flow to emit received chat messages to UI
     private val _messages = MutableSharedFlow<DecryptedChatMessage>(extraBufferCapacity = 64)
     val messages: SharedFlow<DecryptedChatMessage> = _messages.asSharedFlow()
 
-    fun connect(chatId: String, userId: String) {
+    fun connect(chatId: String, userId: String, targetId: String = "") {
         currentChatId = chatId
         myUserId = userId
+        targetUserId = targetId
 
         val baseUrl = BuildConfig.API_BASE_URL.replaceFirst("http://", "ws://").replaceFirst("https://", "wss://")
         
@@ -85,6 +88,7 @@ object ChatWebSocketManager : WebSocketListener() {
             val payload = ChatMessagePayload(
                 chat_id = currentChatId,
                 sender_id = myUserId,
+                target_id = targetUserId,
                 encrypted_message = EncryptedMessagePayload(
                     encData.ciphertextB64,
                     encData.nonceB64,
@@ -133,4 +137,5 @@ object ChatWebSocketManager : WebSocketListener() {
         Log.e(TAG, "Chat WS Error: \${t.message}")
     }
 }
+
 

@@ -93,7 +93,8 @@ class ChatActivity : BaseActivity() {
 
         // Crear un chat_id unívoco ordenando los IDs
         val ids = listOf(myUserId, targetUserId).sorted()
-        currentChatId = "chat_${ids[0]}_${ids[1]}"
+        val rawChatId = "chat_${ids[0]}_${ids[1]}"
+        currentChatId = java.util.UUID.nameUUIDFromBytes(rawChatId.toByteArray()).toString()
 
         // Fetch mi perfil para mi avatar
         lifecycleScope.launch(Dispatchers.IO) {
@@ -110,7 +111,7 @@ class ChatActivity : BaseActivity() {
             
             withContext(Dispatchers.Main) {
                 // Conectar WebSocket después de configurar
-                ChatWebSocketManager.connect(currentChatId, myUserId)
+                ChatWebSocketManager.connect(currentChatId, myUserId, targetUserId)
             }
         }
 
@@ -154,4 +155,6 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+
+
 

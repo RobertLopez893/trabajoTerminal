@@ -26,7 +26,7 @@ from backend.database.models import Mensaje, Chat
 chat_rooms = {}
 aes_cipher = AESGCMCipher()
 
-def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int = 1):
+def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int = 1, target_id: str = None):
     """
     Guarda el mensaje cifrado en la base de datos de forma síncrona.
     Será ejecutado dentro de asyncio.to_thread para no bloquear el servidor.
@@ -35,16 +35,14 @@ def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int 
     try:
         # Verificar si el chat existe
         chat = db.query(Chat).filter(Chat.id == chat_id).first()
-        if not chat:
-            partes = chat_id.split('_')
-            if len(partes) == 3:
-                nuevo_chat = Chat(
-                    id=chat_id,
-                    usuario_a_id=partes[1],
-                    usuario_b_id=partes[2]
-                )
-                db.add(nuevo_chat)
-                db.commit()
+        if not chat and target_id:
+            nuevo_chat = Chat(
+                id=chat_id,
+                usuario_a_id=sender_id,
+                usuario_b_id=target_id
+            )
+            db.add(nuevo_chat)
+            db.commit()
 
         nuevo_mensaje = Mensaje(
             id=str(uuid.uuid4()),
@@ -102,6 +100,7 @@ async def handle_client(websocket):
                 # Ahora requerimos chat_id y sender_id para poder guardar en DB
                 chat_id = data.get("chat_id")
                 sender_id = data.get("sender_id", "Usuario_Desconocido")
+                target_id = data.get("target_id")
                 enc_data = data.get("encrypted_message")
                 
                 if not chat_id or not sender_id or not enc_data:
@@ -133,7 +132,7 @@ async def handle_client(websocket):
                     continue
 
                 # 1. Guardar en Base de Datos de forma asíncrona
-                await asyncio.to_thread(save_message_to_db, chat_id, sender_id, enc_data)
+                await asyncio.to_thread(save_message_to_db, chat_id, sender_id, enc_data, 1, target_id)
 
                 # 2. Retransmitir a la sala
                 broadcast_msg = {
