@@ -111,8 +111,34 @@ class ChatActivity : BaseActivity() {
             } catch (e: Exception) {}
             
             withContext(Dispatchers.Main) {
-                // Conectar WebSocket después de configurar
+                // Conectar WebSocket despues de configurar
                 ChatWebSocketManager.connect(currentChatId, myUserId, targetUserId)
+            }
+            
+            // Cargar historial
+            try {
+                val historyRes = ApiClient.chatService.getChatHistory(currentChatId)
+                if (historyRes.isSuccessful && historyRes.body() != null) {
+                    val history = historyRes.body()!!
+                    val items = history.mapNotNull { msg ->
+                        try {
+                            val text = AESGCMCipher.decrypt(msg.contenido_cifrado_aes_gcm, msg.iv_nonce, msg.aes_gcm_tag)
+                            val esMio = (msg.emisor_usuario_id == myUserId)
+                            val avatarRes = if (esMio) avatarPropio else avatarOtro
+                            ChatItem(text, esMio, avatarRes)
+                        } catch (e: Exception) {
+                            null
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        items.forEach { adapter.agregar(it) }
+                        if (items.isNotEmpty()) {
+                            rvMessages.scrollToPosition(items.size - 1)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
 
