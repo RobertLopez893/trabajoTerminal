@@ -84,14 +84,6 @@ async def handle_client(websocket):
     current_chat_id = None
 
     try:
-        # Mensaje de bienvenida
-        welcome_text = "Bienvenido al chat seguro de Animoon (Doble Cifrado y Persistencia Activa)."
-        encrypted_welcome = aes_cipher.encrypt(welcome_text)
-        await websocket.send(json.dumps({
-            "sender_id": "System",
-            "encrypted_message": encrypted_welcome,
-            "system": True
-        }))
 
         async for raw_message in websocket:
             try:

@@ -131,11 +131,10 @@ class ChatActivity : BaseActivity() {
                         }
                     }
                     withContext(Dispatchers.Main) {
-                        if (items.isEmpty()) {
-                            adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. ¡Diviértete con cuidado!", false, com.example.animoon.R.drawable.ic_hud_settings))
-                        } else {
-                            items.forEach { adapter.agregar(it) }
-                            rvMessages.scrollToPosition(items.size - 1)
+                        adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. Diviertete con cuidado.", false, com.example.animoon.R.drawable.ic_hud_settings))
+                        items.forEach { adapter.agregar(it) }
+                        if (items.isNotEmpty()) {
+                            rvMessages.scrollToPosition(items.size)
                         }
                     }
                 }
@@ -193,6 +192,8 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+
+
 
 
 
