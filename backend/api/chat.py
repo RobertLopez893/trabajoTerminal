@@ -66,7 +66,7 @@ async def websocket_endpoint(websocket: WebSocket, token: str):
         manager.disconnect(user_id)
 
 from sqlalchemy.orm import Session
-from backend.database.database import get_db
+from backend.database.db import get_db
 from backend.database.models import Mensaje
 from pydantic import BaseModel
 from typing import List
@@ -87,3 +87,4 @@ class MensajeResponse(BaseModel):
 def get_chat_history(chat_id: str, db: Session = Depends(get_db)):
     mensajes = db.query(Mensaje).filter(Mensaje.chat_id == chat_id).order_by(Mensaje.sent_at.asc()).all()
     return mensajes
+
