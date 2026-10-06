@@ -1,54 +1,74 @@
 #!/bin/bash
 
-# Ir al directorio donde está el script
+# Ir al directorio donde estǭ el script
 cd "$(dirname "$0")"
 
-echo "Detectando IP local de tu red..."
+echo "======================================"
+echo "   CONFIGURACI"N DE ENTORNO ANIMOON"
+echo "======================================"
 
 # Intentar obtener la IP (compatible con Windows Git Bash, Linux y Mac)
 if command -v ipconfig.exe >/dev/null 2>&1; then
-    # Windows
-    LOCAL_IP=$(ipconfig.exe | grep IPv4 | grep -v "127.0.0.1" | awk '{print $NF}' | tr -d '\r' | head -n 1)
+    AUTO_IP=$(ipconfig.exe | grep IPv4 | grep -v "127.0.0.1" | awk '{print $NF}' | tr -d '\r' | head -n 1)
 else
-    # Linux/Mac
-    LOCAL_IP=$(hostname -I | awk '{print $1}')
+    AUTO_IP=$(hostname -I | awk '{print $1}')
 fi
 
-if [ -z "$LOCAL_IP" ]; then
-    echo "No se pudo detectar la IP. Se usará 10.0.2.2 (emulador Android)."
-    LOCAL_IP="10.0.2.2"
+if [ -z "$AUTO_IP" ]; then
+    AUTO_IP="10.0.2.2"
 fi
 
-echo "======================================"
-echo "IP detectada: $LOCAL_IP"
-echo "======================================"
+echo "1) Correr backend en esta computadora (IP detectada: $AUTO_IP)"
+echo "2) El backend corre en OTRA computadora (Configurar Android manualmente)"
+read -p "Elige una opcin [1]: " OP
+OP=${OP:-1}
+
+if [ "$OP" == "1" ]; then
+    LOCAL_IP=$AUTO_IP
+    INICIAR_DOCKER=true
+elif [ "$OP" == "2" ]; then
+    read -p "Ingresa la IP de la otra computadora (ej. 192.168.0.100): " LOCAL_IP
+    if [ -z "$LOCAL_IP" ]; then
+        echo "IP invǭlida. Saliendo..."
+        exit 1
+    fi
+    INICIAR_DOCKER=false
+else
+    echo "Opcin invǭlida."
+    exit 1
+fi
+
+echo -e "\nAplicando configuracin para la IP: $LOCAL_IP"
 
 PROPERTIES_FILE="animoon/local.properties"
 GRADLE_FILE="animoon/app/build.gradle.kts"
 
 # Actualizar local.properties
 if [ -f "$PROPERTIES_FILE" ]; then
-    # Eliminar cualquier linea previa con API_BASE_URL
     sed -i.bak '/^API_BASE_URL=/d' "$PROPERTIES_FILE"
-    # Agregar la nueva IP
     echo "API_BASE_URL=http://$LOCAL_IP:8000/" >> "$PROPERTIES_FILE"
-    echo "✓ local.properties actualizado"
+    echo "[x] local.properties actualizado"
 else
-    echo "x No se encontró $PROPERTIES_FILE"
+    echo "API_BASE_URL=http://$LOCAL_IP:8000/" > "$PROPERTIES_FILE"
+    echo "[x] local.properties creado y actualizado"
 fi
 
-# Opcional: Actualizar la IP por defecto en build.gradle.kts si hace falta
+# Actualizar build.gradle.kts
 if [ -f "$GRADLE_FILE" ]; then
-    # Busca la IP actual en el fallback (sea cual sea) y la cambia
     sed -i.bak -E "s|http://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:8000/|http://$LOCAL_IP:8000/|g" "$GRADLE_FILE"
-    echo "✓ build.gradle.kts actualizado"
+    echo "[x] build.gradle.kts actualizado"
 fi
 
-echo "Limpiando contenedores anteriores y levantando Docker..."
-docker-compose down -v
-docker-compose up -d --build
+if [ "$INICIAR_DOCKER" = true ]; then
+    echo -e "\nLimpiando contenedores y levantando Docker..."
+    docker-compose down -v
+    docker-compose up -d --build
+    echo "======================================"
+    echo "Listo! El backend estǭ corriendo localmente."
+else
+    echo "======================================"
+    echo "Listo! Frontend configurado. No se inici Docker."
+fi
 
-echo "======================================"
-echo "¡Listo! El backend está corriendo localmente."
-echo "La app en Kotlin ya debería apuntar a http://$LOCAL_IP:8000/"
+echo "La app de Android apunta a http://$LOCAL_IP:8000/"
 echo "======================================"
