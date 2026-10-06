@@ -2,9 +2,8 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import psycopg2
 
-# Credenciales para el servidor AWS (Base de datos remota)
-# IMPORTANTE: Debes abrir el puerto 5433 en el Security Group de AWS para que funcione.
-DB_HOST = "192.168.0.104"
+# Credenciales para la base de datos (Ajustado para entorno local Docker)
+DB_HOST = "localhost"
 DB_PORT = "5433"
 DB_USER = "postgres"
 DB_PASSWORD = "password"

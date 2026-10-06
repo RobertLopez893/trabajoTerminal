@@ -3,26 +3,67 @@ import json
 import os
 import ssl
 import sys
-import websockets
+import logging
 
-# Agregar la raíz del proyecto al sys.path para importar correctamente el motor criptográfico
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
+logger = logging.getLogger("ChatServer")
+
+import uuid
+import websockets
+from datetime import datetime
+
+# Agregar la raíz del proyecto al sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from security.aes.aes_gcm import AESGCMCipher
+from backend.database.db import SessionLocal
+from backend.database.models import Mensaje, Chat
 
-# Conjunto de clientes conectados
-clients = set()
-# Inicializar el cifrador AES-GCM
+# Diccionario para agrupar conexiones por chat_id: { "chat_id": set(websocket1, websocket2) }
+chat_rooms = {}
 aes_cipher = AESGCMCipher()
 
-async def broadcast(message_dict, sender_ws):
+def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int = 1):
     """
-    Envía un mensaje a todos los clientes conectados excepto al remitente.
-    El mensaje ya viene cifrado a nivel de aplicación.
+    Guarda el mensaje cifrado en la base de datos de forma síncrona.
+    Será ejecutado dentro de asyncio.to_thread para no bloquear el servidor.
     """
-    if clients:
+    db = SessionLocal()
+    try:
+        # Verificar si el chat existe (opcional, pero recomendado para evitar errores de FK)
+        # chat = db.query(Chat).filter(Chat.id == chat_id).first()
+        # Si no existe, podría lanzar error de llave foránea según la BD.
+
+        nuevo_mensaje = Mensaje(
+            id=str(uuid.uuid4()),
+            chat_id=chat_id,
+            emisor_usuario_id=sender_id,
+            contenido_cifrado_aes_gcm=enc_data.get('ciphertext_b64'),
+            iv_nonce=enc_data.get('nonce_b64'),
+            aes_gcm_tag=enc_data.get('tag_b64'),
+            orden_global=orden  # Ojo: Aquí iría la lógica de acumulación en el futuro
+        )
+        db.add(nuevo_mensaje)
+        db.commit()
+        logger.info(f"[DB] Mensaje guardado en base de datos. ID: {nuevo_mensaje.id}")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"[DB ERROR] Error al guardar mensaje: {e}")
+    finally:
+        db.close()
+
+async def broadcast_to_room(chat_id, message_dict, sender_ws):
+    """
+    Envía un mensaje a todos los clientes conectados en un chat_id específico.
+    """
+    if chat_id in chat_rooms:
+        room_clients = chat_rooms[chat_id]
         payload = json.dumps(message_dict)
         await asyncio.gather(
-            *[client.send(payload) for client in clients if client != sender_ws],
+            *[client.send(payload) for client in room_clients if client != sender_ws],
             return_exceptions=True
         )
 
@@ -30,78 +71,80 @@ async def handle_client(websocket):
     """
     Maneja el ciclo de vida de la conexión de un cliente en el chat.
     """
-    clients.add(websocket)
-    
-    # Obtener información de la capa SSL/TLS para verificación
-    ssl_object = websocket.transport.get_extra_info('ssl_object')
     client_address = websocket.remote_address
+    logger.info(f"\n[+] Nueva conexión establecida desde {client_address[0]}:{client_address[1]}")
     
-    print(f"\n[+] Nueva conexión establecida desde {client_address[0]}:{client_address[1]}")
-    if ssl_object:
-        version = ssl_object.version()
-        cipher = ssl_object.cipher()
-        print(f"    [TLS 1.3] Protocolo: {version}")
-        print(f"    [TLS 1.3] Suite de cifrado: {cipher[0]} ({cipher[2]} bits)")
-    else:
-        print("    [ALERTA] Conexión no segura (Sin SSL/TLS)")
+    current_chat_id = None
 
     try:
-        # Cifrar el mensaje de bienvenida a nivel de aplicación
-        welcome_text = "Bienvenido al chat seguro de Animoon (Doble Cifrado: TLS 1.3 + AES-GCM activo)."
+        # Mensaje de bienvenida
+        welcome_text = "Bienvenido al chat seguro de Animoon (Doble Cifrado y Persistencia Activa)."
         encrypted_welcome = aes_cipher.encrypt(welcome_text)
-        
-        welcome_msg = {
-            "sender": "System",
+        await websocket.send(json.dumps({
+            "sender_id": "System",
             "encrypted_message": encrypted_welcome,
             "system": True
-        }
-        await websocket.send(json.dumps(welcome_msg))
+        }))
 
-        # Escuchar mensajes del cliente
         async for raw_message in websocket:
             try:
                 data = json.loads(raw_message)
-                sender = data.get("sender", "Usuario Anónimo")
+                
+                # Ahora requerimos chat_id y sender_id para poder guardar en DB
+                chat_id = data.get("chat_id")
+                sender_id = data.get("sender_id", "Usuario_Desconocido")
                 enc_data = data.get("encrypted_message")
                 
-                if not enc_data:
-                    print(f"[-] Mensaje rechazado de {sender}: no contiene cifrado de aplicación.")
+                if not chat_id or not sender_id or not enc_data:
+                    logger.warning(f"[-] Mensaje rechazado: Falta chat_id, sender_id o encrypted_message.")
                     continue
                 
-                print(f"\n--- MENSAJE RECIBIDO DE {sender} ---")
-                print("[Capa 1: TLS 1.3] Mensaje recibido a través del túnel seguro de transporte.")
-                print("[Capa 2: Aplicación] Datos cifrados recibidos:")
-                print(f"    Ciphertext B64: {enc_data.get('ciphertext_b64')}")
-                print(f"    Nonce B64:      {enc_data.get('nonce_b64')}")
-                print(f"    Tag B64:        {enc_data.get('tag_b64')}")
+                # Registrar el socket en la sala si no estaba
+                if current_chat_id != chat_id:
+                    if current_chat_id and current_chat_id in chat_rooms:
+                        chat_rooms[current_chat_id].discard(websocket)
+                    
+                    current_chat_id = chat_id
+                    if chat_id not in chat_rooms:
+                        chat_rooms[chat_id] = set()
+                    chat_rooms[chat_id].add(websocket)
+
+                logger.info(f"\n--- MENSAJE RECIBIDO (Sala: {chat_id} | Emisor: {sender_id}) ---")
                 
-                # Descifrar en memoria para simular el análisis del modelo de moderación BERT
+                # Intentar descifrar en memoria para verificar integridad
                 try:
                     plaintext = aes_cipher.decrypt(
                         enc_data.get('ciphertext_b64'),
                         enc_data.get('nonce_b64'),
                         enc_data.get('tag_b64')
                     )
-                    print(f"[Capa 2: Memoria del Servidor] Descifrado exitoso: '{plaintext}'")
+                    logger.info(f"[Memoria] Descifrado exitoso: '{plaintext}'")
                 except ValueError as crypto_err:
-                    print(f"[ERROR Criptográfico] Fallo de integridad o manipulación detectada: {crypto_err}")
+                    logger.error(f"[ERROR Criptográfico]: {crypto_err}")
                     continue
 
-                # Retransmitir el mensaje cifrado tal cual a los demás participantes (Zero-Trust)
+                # 1. Guardar en Base de Datos de forma asíncrona
+                await asyncio.to_thread(save_message_to_db, chat_id, sender_id, enc_data)
+
+                # 2. Retransmitir a la sala
                 broadcast_msg = {
-                    "sender": sender,
+                    "chat_id": chat_id,
+                    "sender_id": sender_id,
                     "encrypted_message": enc_data,
                     "system": False
                 }
-                await broadcast(broadcast_msg, websocket)
+                await broadcast_to_room(chat_id, broadcast_msg, websocket)
                 
             except json.JSONDecodeError:
-                print(f"[-] Error decodificando JSON del cliente {client_address}")
-    except websockets.exceptions.ConnectionClosed as e:
-        print(f"[-] Conexión cerrada con {client_address}: {e}")
+                logger.error(f"[-] Error decodificando JSON del cliente {client_address}")
+    except websockets.exceptions.ConnectionClosed:
+        pass
     finally:
-        clients.remove(websocket)
-        print(f"[-] Conexión finalizada para {client_address[0]}:{client_address[1]}")
+        if current_chat_id and current_chat_id in chat_rooms:
+            chat_rooms[current_chat_id].discard(websocket)
+            if not chat_rooms[current_chat_id]:
+                del chat_rooms[current_chat_id]
+        logger.info(f"[-] Conexión finalizada para {client_address[0]}:{client_address[1]}")
 
 async def main():
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -109,31 +152,20 @@ async def main():
     key_path = os.path.join(base_dir, "server.key")
 
     if not os.path.exists(cert_path) or not os.path.exists(key_path):
-        print("[ERROR] No se encontraron los archivos de certificado o llave.")
-        print("Por favor ejecuta 'generate_certs.py' antes de iniciar el servidor.")
+        logger.error("[ERROR] Faltan los certificados SSL en la carpeta chat.")
         return
 
-    # Configuración estricta del contexto SSL para TLS 1.3
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     ssl_context.minimum_version = ssl.TLSVersion.TLSv1_3
     ssl_context.maximum_version = ssl.TLSVersion.TLSv1_3
     ssl_context.load_cert_chain(certfile=cert_path, keyfile=key_path)
     
-    print("=== INICIANDO SERVIDOR DE CHAT SEGURO DE ANIMOON (DOBLE CIFRADO) ===")
-    print("Transporte: TLS 1.3 strictly enforced")
-    print("Aplicación: AES-256-GCM (Motor del proyecto)")
-    print("Puerto de escucha: 8765")
+    logger.info("=== INICIANDO SERVIDOR DE CHAT SEGURO DE ANIMOON ===")
+    logger.info("Características: TLS 1.3, AES-GCM, y Persistencia en PostgreSQL")
+    logger.info("Puerto de escucha: 8765")
     
-    async with websockets.serve(
-        handle_client,
-        "localhost",
-        8765,
-        ssl=ssl_context
-    ):
+    async with websockets.serve(handle_client, "0.0.0.0", 8765, ssl=ssl_context):
         await asyncio.Future()
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        print("\n[+] Servidor detenido por el usuario.")
+    asyncio.run(main())

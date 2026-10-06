@@ -4,12 +4,17 @@ import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
+import com.example.animoon.network.ChatWebSocketManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ChatActivity : BaseActivity() {
 
@@ -17,9 +22,12 @@ class ChatActivity : BaseActivity() {
     private lateinit var rvMessages: RecyclerView
     private lateinit var etMessage: TextInputEditText
 
-    // TODO: reemplazar por el avatar real del jugador (AvatarDrawableResolver)
     private val avatarPropio = R.drawable.avatar_cat_blue
     private val avatarOtro = R.drawable.avatar_fox_orange
+
+    // Generamos un ID de usuario temporal para esta sesin y usamos un chat global
+    private val myUserId = UUID.randomUUID().toString()
+    private val currentChatId = "sala_global_1"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,28 +51,41 @@ class ChatActivity : BaseActivity() {
             }
         }
 
-        // Con modo inmersivo el teclado no redimensiona solo: subimos el contenido
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.chatContent)) { v, insets ->
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
             v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, ime.bottom)
             insets
         }
 
-        cargarMensajesDemo()
+        // Conectar WebSocket
+        ChatWebSocketManager.connect(currentChatId, myUserId)
+
+        // Escuchar mensajes entrantes
+        lifecycleScope.launch {
+            ChatWebSocketManager.messages.collectLatest { msg ->
+                runOnUiThread {
+                    if (msg.isSystem) {
+                        agregarMensaje(ChatItem(msg.text, esMio = false, avatarRes = R.drawable.ic_hud_settings)) // Avatar de sistema
+                    } else if (!msg.isMine) {
+                        recibirMensaje(msg.text)
+                    }
+                }
+            }
+        }
     }
 
     private fun enviarMensaje() {
         val texto = etMessage.text?.toString()?.trim().orEmpty()
         if (texto.isEmpty()) return
 
+        // Mostramos nuestro mensaje en la UI
         agregarMensaje(ChatItem(texto, esMio = true, avatarRes = avatarPropio))
         etMessage.text?.clear()
 
-        // TODO(backend): enviar por el WebSocket del chat (/ws/chat/) cuando
-        // el backend defina el formato de los mensajes (AES-GCM pendiente)
+        // Enviamos al backend por WebSocket usando AES-GCM
+        ChatWebSocketManager.sendMessage(texto)
     }
 
-    /** Se llamará cuando llegue un mensaje de otro jugador. */
     private fun recibirMensaje(texto: String) {
         agregarMensaje(ChatItem(texto, esMio = false, avatarRes = avatarOtro))
     }
@@ -74,9 +95,8 @@ class ChatActivity : BaseActivity() {
         rvMessages.scrollToPosition(adapter.itemCount - 1)
     }
 
-    // TODO: borrar cuando el chat esté conectado al backend
-    private fun cargarMensajesDemo() {
-        recibirMensaje("¡Hola! ¿Jugamos un rato?")
-        agregarMensaje(ChatItem("¡Sí! ¿A qué minijuego?", esMio = true, avatarRes = avatarPropio))
+    override fun onDestroy() {
+        super.onDestroy()
+        ChatWebSocketManager.disconnect()
     }
-}
+}

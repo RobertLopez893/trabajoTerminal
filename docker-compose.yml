@@ -39,5 +39,24 @@ services:
       - ./backend:/app/backend
       - ./security:/app/security
 
+  chat_server:
+    build: .
+    container_name: animoon_chat
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+    ports:
+      - "8765:8765"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "python backend/chat/chat_server.py"
+    volumes:
+      - ./backend:/app/backend
+      - ./security:/app/security
+
 volumes:
   animoon_pgdata:

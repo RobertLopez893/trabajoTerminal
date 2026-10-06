@@ -11,13 +11,12 @@ val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://10.0.2.2
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.animoon"
-    compileSdk {
-        version = release(37)
-    }
+    compileSdk = 34
 
     buildFeatures {
         buildConfig = true
@@ -26,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.example.animoon"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -48,6 +47,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
     }
 }
 
