@@ -1,79 +1,77 @@
-package com.example.animoon.ui.profile
+import re
 
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
+with open('animoon/app/src/main/java/com/example/animoon/ui/profile/ProfileActivity.kt', 'r', encoding='utf-8') as f:
+    content = f.read()
+
+# Add imports
+imports = """import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.animoon.data.network.ApiClient
 import com.example.animoon.data.network.TokenManager
+"""
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import com.example.animoon.R
-import com.example.animoon.ui.base.BaseActivity
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+if "import androidx.lifecycle.lifecycleScope" not in content:
+    content = content.replace("import android.os.Bundle", "import android.os.Bundle\n" + imports)
 
-class ProfileActivity : BaseActivity() {
+# Replace the onCreate loading logic
+old_logic = """
+        val userId =
+            intent.getStringExtra(EXTRA_USER_ID)
 
-    companion object {
-        private const val EXTRA_USER_ID = "profile_user_id"
+        val profile =
+            userId?.let { DemoProfileSource.findProfile(it) }
 
-        fun myProfileIntent(context: Context): Intent {
-            return Intent(context, ProfileActivity::class.java)
-                .putExtra(
-                    EXTRA_USER_ID,
-                    "me"
-                )
+        if (profile == null) {
+            profileCard.visibility = View.GONE
+            errorText.visibility = View.VISIBLE
+            return
         }
 
-        fun playerProfileIntent(
-            context: Context,
-            userId: String
-        ): Intent {
-            return Intent(context, ProfileActivity::class.java)
-                .putExtra(EXTRA_USER_ID, userId)
-        }
-    }
+        val isOwnProfile =
+            DemoProfileSource.isMyProfile(profile.id)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        titleText.text =
+            if (isOwnProfile) {
+                "Mi perfil"
+            } else {
+                "Perfil de jugador"
+            }
 
-        val backButton =
-            findViewById<MaterialButton>(R.id.btnProfileBack)
+        nicknameText.text = profile.nickname
 
-        val titleText =
-            findViewById<TextView>(R.id.txtProfileTitle)
-
-        val nicknameText =
-            findViewById<TextView>(R.id.txtProfileNickname)
-
-        val avatarImage =
-            findViewById<ImageView>(R.id.imgProfileAvatar)
-
-        val avatarUnavailable =
-            findViewById<TextView>(
-                R.id.txtProfileAvatarUnavailable
+        val avatarDrawable =
+            AvatarDrawableResolver.resolve(
+                species = profile.species,
+                color = profile.color
             )
 
-        val profileCard =
-            findViewById<View>(R.id.cardProfile)
+        if (avatarDrawable != null) {
+            avatarImage.setImageResource(avatarDrawable)
+            avatarImage.contentDescription =
+                "Avatar de ${profile.nickname}"
 
-        val errorText =
-            findViewById<TextView>(R.id.txtProfileError)
-
-        val chatButton =
-            findViewById<MaterialButton>(R.id.btnProfileChat)
-
-        backButton.setOnClickListener {
-            finish()
+            avatarImage.visibility = View.VISIBLE
+            avatarUnavailable.visibility = View.GONE
+        } else {
+            avatarImage.visibility = View.GONE
+            avatarUnavailable.visibility = View.VISIBLE
         }
 
+        chatButton.visibility =
+            if (isOwnProfile) View.GONE else View.VISIBLE
+
+        chatButton.setOnClickListener {
+            val intent = Intent(this, com.example.animoon.ui.chat.ChatActivity::class.java)
+            startActivity(intent)
+        }
+
+        errorText.visibility = View.GONE
+        profileCard.visibility = View.VISIBLE
+"""
+
+new_logic = """
         val userId = intent.getStringExtra(EXTRA_USER_ID) ?: return
 
         // Hide initially
@@ -127,5 +125,11 @@ class ProfileActivity : BaseActivity() {
                 }
             }
         }
-    }
-}
+"""
+content = content.replace(old_logic, new_logic)
+
+# Replace myProfileIntent to use "me" instead of DemoProfileSource.myProfile.id
+content = content.replace("DemoProfileSource.myProfile.id", '"me"')
+
+with open('animoon/app/src/main/java/com/example/animoon/ui/profile/ProfileActivity.kt', 'w', encoding='utf-8') as f:
+    f.write(content)

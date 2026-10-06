@@ -32,4 +32,10 @@ interface AuthApiService {
 
     @POST("/api/auth/logout")
     suspend fun logout(): Response<DefaultResponse>
+
+    @retrofit2.http.GET("/api/auth/profile/{user_id}")
+    suspend fun getProfile(
+        @retrofit2.http.Path("user_id") userId: String
+    ): Response<com.example.animoon.data.model.ProfileResponse>
 }
+

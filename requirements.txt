@@ -6,8 +6,9 @@ PyJWT>=2.8.0
 
 fastapi~=0.135.3
 uvicorn
-sqlalchemy~=2.0.51
+sqlalchemy==2.0.35
 psycopg2-binary
 pydantic~=2.13.1
 requests
 twilio
+

@@ -28,7 +28,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.animoon.ui.settings.SettingsActivity
-import com.example.animoon.ui.profile.DemoProfileSource
 import com.example.animoon.ui.profile.ProfileActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.widget.ImageView
@@ -73,12 +72,8 @@ class MainActivity : BaseActivity() {
             )
         }
 
-        // PERFILES DE DEMOSTRACIÓN
-        findViewById<MaterialButton>(
-            R.id.btnDemoProfiles
-        ).setOnClickListener {
-            showDemoProfiles()
-        }
+        
+        
 
         // Aquí continúa tu código actual:
         // REFERENCIAS DEL HUD, Ajustes, Minijuegos, etc.
@@ -513,28 +508,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun showDemoProfiles() {
-        val players = DemoProfileSource.otherPlayers
-
-        val names = players
-            .map { it.nickname }
-            .toTypedArray()
-
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Perfiles de demostración")
-            .setItems(names) { _, position ->
-                val player = players[position]
-
-                startActivity(
-                    ProfileActivity.playerProfileIntent(
-                        context = this,
-                        userId = player.id
-                    )
-                )
-            }
-            .setNegativeButton("Cerrar", null)
-            .show()
-    }
+    
 
     private fun openWorldMap() {
         val manager = supportFragmentManager
@@ -582,3 +556,5 @@ class MainActivity : BaseActivity() {
         background.setImageResource(backgroundResource)
     }
 }
+
+

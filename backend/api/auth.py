@@ -3,6 +3,7 @@ import re
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import schemas, models
+from backend.api.deps import get_current_user
 from backend.database.db import get_db
 from security.aes.aes_gcm import AESGCMCipher
 from security.argon2.argon_hasher import ArgonHasher
@@ -195,3 +196,21 @@ def logout(
     db.commit()
     
     return {"message": "Sesión cerrada correctamente.", "status": "success"}
+
+@router.get('/profile/{user_id}', response_model=schemas.ProfileResponse)
+def get_user_profile(user_id: str, db: Session = Depends(get_db), current_user: models.Usuario = Depends(get_current_user)):
+    target_id = current_user.id if user_id == 'me' else user_id
+    usuario = db.query(models.Usuario).filter(models.Usuario.id == target_id).first()
+    if not usuario:
+        raise HTTPException(status_code=404, detail='Usuario no encontrado')
+    avatar = db.query(models.Avatar).filter(models.Avatar.usuario_id == target_id).first()
+    stat = db.query(models.UsuarioMinijuego).filter(models.UsuarioMinijuego.usuario_id == target_id).first()
+    return schemas.ProfileResponse(
+        id=usuario.id,
+        nickname=usuario.nickname,
+        species=avatar.avatar_config_json.get('especie', 'gato') if avatar else 'gato',
+        color=avatar.avatar_config_json.get('color', 'azul') if avatar else 'azul',
+        games_played=stat.nivel_max_alcanzado if stat else 0,
+        highest_score=stat.record_puntaje if stat else 0
+    )
+
