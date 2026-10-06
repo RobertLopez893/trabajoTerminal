@@ -1,4 +1,4 @@
-package com.example.animoon.ui.chat
+﻿package com.example.animoon.ui.chat
 
 import android.os.Bundle
 import android.widget.TextView
@@ -131,8 +131,10 @@ class ChatActivity : BaseActivity() {
                         }
                     }
                     withContext(Dispatchers.Main) {
-                        items.forEach { adapter.agregar(it) }
-                        if (items.isNotEmpty()) {
+                        if (items.isEmpty()) {
+                            adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. ¡Diviértete con cuidado!", false, com.example.animoon.R.drawable.ic_hud_settings))
+                        } else {
+                            items.forEach { adapter.agregar(it) }
                             rvMessages.scrollToPosition(items.size - 1)
                         }
                     }
@@ -191,6 +193,8 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+
+
 
 
 
