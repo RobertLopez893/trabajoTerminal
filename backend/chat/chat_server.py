@@ -33,9 +33,18 @@ def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int 
     """
     db = SessionLocal()
     try:
-        # Verificar si el chat existe (opcional, pero recomendado para evitar errores de FK)
-        # chat = db.query(Chat).filter(Chat.id == chat_id).first()
-        # Si no existe, podría lanzar error de llave foránea según la BD.
+        # Verificar si el chat existe
+        chat = db.query(Chat).filter(Chat.id == chat_id).first()
+        if not chat:
+            partes = chat_id.split('_')
+            if len(partes) == 3:
+                nuevo_chat = Chat(
+                    id=chat_id,
+                    usuario_a_id=partes[1],
+                    usuario_b_id=partes[2]
+                )
+                db.add(nuevo_chat)
+                db.commit()
 
         nuevo_mensaje = Mensaje(
             id=str(uuid.uuid4()),
@@ -169,3 +178,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+

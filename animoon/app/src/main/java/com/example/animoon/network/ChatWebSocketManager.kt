@@ -55,7 +55,7 @@ object ChatWebSocketManager : WebSocketListener() {
         val host = if (baseUrl.contains("10.0.2.2")) "10.0.2.2" else baseUrl.split("://")[1].split(":")[0].split("/")[0]
         
         // Usamos wss si era https, ws si era http
-        val scheme = if (baseUrl.startsWith("wss")) "wss" else "ws"
+        val scheme = "wss" // El servidor python siempre usa TLS 1.3 con certificados autofirmados
         val wsUrl = "$scheme://$host:8765"
 
         Log.d(TAG, "Conectando chat a: \$wsUrl para chat_id: \$chatId")
@@ -133,3 +133,4 @@ object ChatWebSocketManager : WebSocketListener() {
         Log.e(TAG, "Chat WS Error: \${t.message}")
     }
 }
+
