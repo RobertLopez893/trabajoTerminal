@@ -46,16 +46,34 @@
                 android:orientation="vertical"
                 android:padding="@dimen/animoon_space_medium">
 
-                <TextView
-                    android:id="@+id/txtChatTitle"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Chat"
-                    android:textColor="#302644"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
                     android:gravity="center"
-                    android:paddingBottom="8dp" />
+                    android:orientation="horizontal"
+                    android:paddingBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/txtChatTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chat"
+                        android:textColor="#302644"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/btnChatInfo"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="8dp"
+                        android:src="@drawable/ic_lock"
+                        app:tint="#606060"
+                        android:contentDescription="Info Privacidad"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvChatMessages"
@@ -111,3 +129,4 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
+

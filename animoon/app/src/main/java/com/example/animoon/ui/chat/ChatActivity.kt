@@ -142,6 +142,15 @@ class ChatActivity : BaseActivity() {
             }
         }
 
+        // Boton de privacidad (candado)
+        findViewById<android.widget.ImageView>(R.id.btnChatInfo)?.setOnClickListener {
+            android.app.AlertDialog.Builder(this)
+                .setTitle("Privacidad y Seguridad")
+                .setMessage("Tus mensajes están cifrados. Además, los utilizamos para alimentar el modelo de IA. Consulta nuestro aviso de privacidad.")
+                .setPositiveButton("Entendido", null)
+                .show()
+        }
+
         // Escuchar mensajes entrantes
         lifecycleScope.launch {
             ChatWebSocketManager.messages.collectLatest { msg ->
@@ -182,6 +191,7 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+
 
 
 
