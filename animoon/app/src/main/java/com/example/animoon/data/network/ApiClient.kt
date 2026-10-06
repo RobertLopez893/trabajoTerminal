@@ -41,4 +41,8 @@ object ApiClient {
     val envService: EnvApiService by lazy {
         retrofit.create(EnvApiService::class.java)
     }
+    val chatService: ChatApiService by lazy {
+        retrofit.create(ChatApiService::class.java)
+    }
 }
+

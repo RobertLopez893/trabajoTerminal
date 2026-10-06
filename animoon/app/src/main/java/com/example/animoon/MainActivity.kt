@@ -56,6 +56,15 @@ class MainActivity : BaseActivity() {
         // CONEXIÓN MULTIJUGADOR
         // =====================================================
         com.example.animoon.data.network.WebSocketManager.connect("base_principal")
+        
+        findViewById<ConstraintLayout>(R.id.worldLayer)?.setOnTouchListener { _, event ->
+            if (event.action == android.view.MotionEvent.ACTION_UP) {
+                com.example.animoon.data.network.WebSocketManager.sendMessage(
+                    com.example.animoon.data.model.MoveMessage(event.x, event.y)
+                )
+            }
+            true
+        }
 
         lifecycleScope.launch {
             com.example.animoon.data.network.WebSocketManager.playersInZone.collectLatest { players ->
@@ -150,7 +159,7 @@ class MainActivity : BaseActivity() {
 
     
     private fun renderPlayersInZone(players: List<PlayerState>) {
-        val worldLayer = findViewById<ConstraintLayout>(R.id.worldLayer)
+        val worldLayer = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.worldLayer)
         if (worldLayer == null) return
         worldLayer.removeAllViews()
 
@@ -159,40 +168,41 @@ class MainActivity : BaseActivity() {
             playerView.orientation = android.widget.LinearLayout.VERTICAL
             playerView.gravity = android.view.Gravity.CENTER
             
-            val avatarImage = ImageView(this)
+            // Set position based on backend data
+            playerView.x = player.x
+            playerView.y = player.y
+            
+            val avatarImage = android.widget.ImageView(this)
             avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(160, 160)
             
             val species = player.avatar?.get("especie") ?: "gato"
             val color = player.avatar?.get("color") ?: "azul"
-            val avatarRes = AvatarDrawableResolver.resolve(species, color) ?: R.drawable.avatar_cat_blue
+            val avatarRes = com.example.animoon.ui.profile.AvatarDrawableResolver.resolve(species, color) ?: R.drawable.avatar_cat_blue
             avatarImage.setImageResource(avatarRes)
             
             val nicknameText = android.widget.TextView(this)
             nicknameText.text = player.nickname
-            nicknameText.setTextColor(Color.WHITE)
-            nicknameText.setShadowLayer(4f, 0f, 0f, Color.BLACK)
+            nicknameText.setTextColor(android.graphics.Color.WHITE)
+            nicknameText.setShadowLayer(4f, 0f, 0f, android.graphics.Color.BLACK)
             nicknameText.textSize = 14f
             
             playerView.addView(avatarImage)
             playerView.addView(nicknameText)
             
             playerView.setOnClickListener {
-                startActivity(ProfileActivity.playerProfileIntent(this, player.usuarioId))
+                startActivity(com.example.animoon.ui.profile.ProfileActivity.playerProfileIntent(this, player.usuarioId))
             }
             
-            val params = ConstraintLayout.LayoutParams(
-                ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT
+            // Fix absolute positioning by overriding top/start constraints to parent
+            val params = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
+                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
             )
-            params.leftToLeft = ConstraintLayout.LayoutParams.PARENT_ID
-            params.topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            params.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            params.startToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            playerView.layoutParams = params
             
-            // Basic screen positioning based on x, y (0 to 1 range usually, or raw floats)
-            // We multiply by an arbitrary scale to spread them out on the screen
-            params.leftMargin = ((player.x % 100) * 10).toInt().coerceIn(50, 800)
-            params.topMargin = ((player.y % 100) * 10).toInt().coerceIn(200, 1500)
-            
-            worldLayer.addView(playerView, params)
+            worldLayer.addView(playerView)
         }
     }
 

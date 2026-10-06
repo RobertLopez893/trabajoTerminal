@@ -2,6 +2,7 @@ package com.example.animoon.ui.chat
 
 import android.os.Bundle
 import android.widget.TextView
+import com.example.animoon.security.AESGCMCipher
 import android.util.Base64
 import org.json.JSONObject
 import com.example.animoon.data.network.TokenManager
@@ -155,6 +156,7 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
+
 
 
 
