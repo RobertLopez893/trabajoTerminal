@@ -227,6 +227,7 @@ class RegisterActivity : BaseActivity() {
 
         // Llamadas al API (Corrutina)
         btnSendSms.isEnabled = false
+        showLoading("Comprobando apelativo...")
         lifecycleScope.launch {
             try {
                 // 1. Verificar apelativo
@@ -234,6 +235,7 @@ class RegisterActivity : BaseActivity() {
                 val nicknameRes = com.example.animoon.data.network.ApiClient.authService.verifyNickname(nicknameReq)
                 
                 if (!nicknameRes.isSuccessful) {
+                    hideLoading()
                     Toast.makeText(this@RegisterActivity, "El apelativo ya está en uso", Toast.LENGTH_SHORT).show()
                     btnSendSms.isEnabled = true
                     return@launch
@@ -244,14 +246,17 @@ class RegisterActivity : BaseActivity() {
                 val smsRes = com.example.animoon.data.network.ApiClient.authService.sendSmsCode(smsReq)
                 
                 if (!smsRes.isSuccessful) {
+                    hideLoading()
                     Toast.makeText(this@RegisterActivity, "Error al enviar SMS", Toast.LENGTH_SHORT).show()
                     btnSendSms.isEnabled = true
                     return@launch
                 }
 
                 // 3. Continuar a la verificación SMS
+                hideLoading()
                 goToVerification(apelativo, phone, password)
             } catch (e: Exception) {
+                hideLoading()
                 Toast.makeText(this@RegisterActivity, "Error de red: ${e.message}", Toast.LENGTH_SHORT).show()
                 btnSendSms.isEnabled = true
             }

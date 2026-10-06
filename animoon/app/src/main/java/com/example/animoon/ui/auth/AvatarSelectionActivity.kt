@@ -428,7 +428,7 @@ class AvatarSelectionActivity : BaseActivity() {
 
         // Evitar múltiples envíos.
         btnContinue.isEnabled = false
-
+        showLoading("Creando tu avatar y configurando tu mundo...")
 
         lifecycleScope.launch {
 
@@ -465,6 +465,8 @@ class AvatarSelectionActivity : BaseActivity() {
                 // REGISTRO EXITOSO
                 // =================================================
 
+                
+                hideLoading()
                 if (res.isSuccessful) {
 
                     Toast.makeText(
@@ -494,7 +496,7 @@ class AvatarSelectionActivity : BaseActivity() {
                 // =================================================
 
                 else {
-
+                    hideLoading()
                     Toast.makeText(
                         this@AvatarSelectionActivity,
                         "Error al completar el registro",

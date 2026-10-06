@@ -54,12 +54,14 @@ class LoginActivity : BaseActivity() {
             val clientKeyPair = com.example.animoon.security.CryptoManager.generateEphemeralKeyPair()
             val clientPubKeyB64 = com.example.animoon.security.CryptoManager.getPublicKeyBase64(clientKeyPair)
 
-            lifecycleScope.launch(Dispatchers.IO) {
+            showLoading("Iniciando sesión...")
+lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val request = com.example.animoon.data.model.LoginRequest(apelativo, password, clientPubKeyB64)
                     val response = com.example.animoon.data.network.ApiClient.authService.login(request)
                     
                     withContext(Dispatchers.Main) {
+hideLoading()
                         btnLogin.isEnabled = true
                         if (response.isSuccessful) {
                             val token = response.body()?.access_token
@@ -108,6 +110,7 @@ class LoginActivity : BaseActivity() {
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
+hideLoading()
                         btnLogin.isEnabled = true
                         Log.e("LoginActivity", "Error de red", e)
                         Toast.makeText(
@@ -140,3 +143,4 @@ class LoginActivity : BaseActivity() {
         }
     }
 }
+

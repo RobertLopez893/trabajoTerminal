@@ -24,6 +24,30 @@ open class BaseActivity : AppCompatActivity() {
 
     protected open val observarSesionExpirada: Boolean = true
 
+    private var loadingDialog: AlertDialog? = null
+
+    fun showLoading(message: String) {
+        if (isFinishing || isDestroyed) return
+        if (loadingDialog?.isShowing == true) return
+
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_loading, null)
+        view.findViewById<android.widget.TextView>(R.id.txtLoadingMessage).text = message
+        
+        val builder = AlertDialog.Builder(this)
+        builder.setView(view)
+        builder.setCancelable(false)
+        
+        loadingDialog = builder.create()
+        loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog?.show()
+    }
+
+    fun hideLoading() {
+        loadingDialog?.dismiss()
+        loadingDialog = null
+    }
+
+
 
     // =========================================================
     // ON CREATE
