@@ -113,13 +113,8 @@ class ProfileActivity : BaseActivity() {
             if (isOwnProfile) View.GONE else View.VISIBLE
 
         chatButton.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Chatear")
-                .setMessage(
-                    "Las solicitudes de chat estarán disponibles próximamente."
-                )
-                .setPositiveButton("Entendido", null)
-                .show()
+            val intent = Intent(this, com.example.animoon.ui.chat.ChatActivity::class.java)
+            startActivity(intent)
         }
 
         errorText.visibility = View.GONE
