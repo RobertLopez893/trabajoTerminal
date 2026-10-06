@@ -3,6 +3,12 @@ package com.example.animoon.ui.minigame.game2
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import android.util.Log
+import com.example.animoon.data.network.ApiClient
+import com.example.animoon.data.model.MinijuegoScoreRequest
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
@@ -76,6 +82,27 @@ class Game2ResultActivity : BaseActivity() {
             maxScore
         )
 
+
+        
+
+        // --- ENVIAR AL BACKEND ---
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val req = MinijuegoScoreRequest(
+                    minijuego_id = "minijuego_2",
+                    puntaje = score,
+                    nivel_max_alcanzado = 1
+                )
+                val response = ApiClient.minigameService.guardarPuntaje(req)
+                if (response.isSuccessful) {
+                    Log.d("Game2Result", "Puntaje guardado: ${response.body()?.message}")
+                } else {
+                    Log.e("Game2Result", "Error al guardar: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("Game2Result", "Excepción al guardar", e)
+            }
+        }
 
         configurarBotones()
     }
@@ -176,3 +203,4 @@ class Game2ResultActivity : BaseActivity() {
         }
     }
 }
+
