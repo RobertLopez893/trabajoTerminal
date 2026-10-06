@@ -59,7 +59,8 @@ class ConnectionManager:
                             visible_players.extend(chunks.get((cx + i, cy + j), []))
                     
                     # Remover al propio jugador para no enviarle su propio eco
-                    visible_players = [p for p in visible_players if p["usuario_id"] != uid]
+                    # No removemos al propio jugador para que se vea a s mismo
+                    # visible_players = [p for p in visible_players if p["usuario_id"] != uid]
                     
                     if visible_players:
                         try:
@@ -211,3 +212,4 @@ def get_active_users():
                 "y": data.get("y")
             })
     return {"status": "success", "zonas": resultado}
+

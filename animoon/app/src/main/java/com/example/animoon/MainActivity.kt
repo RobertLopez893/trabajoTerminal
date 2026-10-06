@@ -72,13 +72,28 @@ class MainActivity : BaseActivity() {
             }
         }
 
-        // MI PERFIL
+                // MI PERFIL
         findViewById<MaterialButton>(
             R.id.btnMyProfile
         ).setOnClickListener {
             startActivity(
                 ProfileActivity.myProfileIntent(this)
             )
+        }
+
+        findViewById<MaterialButton>(R.id.btnDemoProfiles)?.setOnClickListener {
+            val players = com.example.animoon.data.network.WebSocketManager.playersInZone.value
+            if (players.isEmpty()) {
+                android.widget.Toast.makeText(this, "No hay otros jugadores conectados", android.widget.Toast.LENGTH_SHORT).show()
+            } else {
+                val names = players.map { it.nickname }.toTypedArray()
+                android.app.AlertDialog.Builder(this)
+                    .setTitle("Jugadores Activos")
+                    .setItems(names) { _, which ->
+                        startActivity(ProfileActivity.playerProfileIntent(this, players[which].usuarioId))
+                    }
+                    .show()
+            }
         }
 
         
@@ -169,8 +184,7 @@ class MainActivity : BaseActivity() {
             playerView.gravity = android.view.Gravity.CENTER
             
             // Set position based on backend data
-            playerView.x = player.x
-            playerView.y = player.y
+            
             
             val avatarImage = android.widget.ImageView(this)
             avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(160, 160)
@@ -566,5 +580,7 @@ class MainActivity : BaseActivity() {
         background.setImageResource(backgroundResource)
     }
 }
+
+
 
 
