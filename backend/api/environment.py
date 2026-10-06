@@ -27,7 +27,7 @@ class ConnectionManager:
             self.loop_task = asyncio.create_task(self.game_loop())
 
     async def game_loop(self):
-        CHUNK_SIZE = 100
+        CHUNK_SIZE = 10000
         while True:
             await asyncio.sleep(0.1) # Tick de 10 Hz
             for zona, usuarios in self.zonas.items():
@@ -212,4 +212,5 @@ def get_active_users():
                 "y": data.get("y")
             })
     return {"status": "success", "zonas": resultado}
+
 

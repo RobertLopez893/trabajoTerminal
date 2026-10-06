@@ -173,150 +173,72 @@ class MainActivity : BaseActivity() {
     // =========================================================
 
     
-    private fun renderPlayersInZone(players: List<PlayerState>) {
+    private val playerViews = mutableMapOf<String, android.view.View>()
+
+    private fun renderPlayersInZone(players: List<com.example.animoon.data.model.PlayerState>) {
         val worldLayer = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.worldLayer)
         if (worldLayer == null) return
-        worldLayer.removeAllViews()
+
+        val currentIds = players.map { it.usuarioId }.toSet()
+        val toRemove = playerViews.keys.filter { it !in currentIds }
+        for (id in toRemove) {
+            worldLayer.removeView(playerViews[id])
+            playerViews.remove(id)
+        }
 
         for (player in players) {
-            val playerView = android.widget.LinearLayout(this)
-            playerView.orientation = android.widget.LinearLayout.VERTICAL
-            playerView.gravity = android.view.Gravity.CENTER
-            
-            // Set position based on backend data
-            
-            
-            val avatarImage = android.widget.ImageView(this)
-            avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(160, 160)
-            
-            val species = player.avatar?.get("especie") ?: "gato"
-            val color = player.avatar?.get("color") ?: "azul"
-            val avatarRes = com.example.animoon.ui.profile.AvatarDrawableResolver.resolve(species, color) ?: R.drawable.avatar_cat_blue
-            avatarImage.setImageResource(avatarRes)
-            
-            val nicknameText = android.widget.TextView(this)
-            nicknameText.text = player.nickname
-            nicknameText.setTextColor(android.graphics.Color.WHITE)
-            nicknameText.setShadowLayer(4f, 0f, 0f, android.graphics.Color.BLACK)
-            nicknameText.textSize = 14f
-            
-            playerView.addView(avatarImage)
-            playerView.addView(nicknameText)
-            
-            playerView.setOnClickListener {
-                startActivity(com.example.animoon.ui.profile.ProfileActivity.playerProfileIntent(this, player.usuarioId))
+            val playerView = playerViews[player.usuarioId] ?: run {
+                val newView = android.widget.LinearLayout(this)
+                newView.orientation = android.widget.LinearLayout.VERTICAL
+                newView.gravity = android.view.Gravity.CENTER
+                
+                val avatarImage = android.widget.ImageView(this)
+                avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(160, 160)
+                
+                val species = player.avatar?.get("especie") ?: "gato"
+                val color = player.avatar?.get("color") ?: "azul"
+                val avatarRes = com.example.animoon.ui.profile.AvatarDrawableResolver.resolve(species, color) ?: R.drawable.avatar_cat_blue
+                avatarImage.setImageResource(avatarRes)
+                
+                val nicknameText = android.widget.TextView(this)
+                nicknameText.text = player.nickname
+                nicknameText.setTextColor(android.graphics.Color.WHITE)
+                nicknameText.setShadowLayer(4f, 0f, 0f, android.graphics.Color.BLACK)
+                nicknameText.textSize = 14f
+                
+                newView.addView(avatarImage)
+                newView.addView(nicknameText)
+                
+                newView.setOnClickListener {
+                    startActivity(com.example.animoon.ui.profile.ProfileActivity.playerProfileIntent(this, player.usuarioId))
+                }
+                
+                val params = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
+                    androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                    androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
+                )
+                params.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+                params.startToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+                newView.layoutParams = params
+                
+                worldLayer.addView(newView)
+                playerViews[player.usuarioId] = newView
+                
+                // Posicion inicial sin animacion
+                newView.translationX = player.x - 80f // centrar
+                newView.translationY = player.y - 100f // centrar
+                
+                newView
             }
             
-            // Fix absolute positioning by overriding top/start constraints to parent
-            val params = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams(
-                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-            params.startToStart = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-            playerView.layoutParams = params
-            
-            worldLayer.addView(playerView)
+            // Actualizar posicion con animacion suave
+            playerView.animate()
+                .translationX(player.x - 80f)
+                .translationY(player.y - 100f)
+                .setDuration(150)
+                .start()
         }
     }
-
-    private fun showMinigameDialog() {
-
-        val dialog = Dialog(this)
-
-        dialog.requestWindowFeature(
-            Window.FEATURE_NO_TITLE
-        )
-
-        dialog.setContentView(
-            R.layout.dialog_enter_minigame
-        )
-
-        /*
-         * Queremos que el niño tome una decisión explícita
-         * usando uno de los dos botones.
-         */
-        dialog.setCancelable(true)
-
-        /*
-         * Evitamos que un toque accidental fuera del cuadro
-         * cierre el diálogo.
-         */
-        dialog.setCanceledOnTouchOutside(false)
-
-
-        /*
-         * Fondo transparente para dejar visible únicamente
-         * nuestra tarjeta personalizada.
-         */
-        dialog.window?.setBackgroundDrawable(
-            ColorDrawable(Color.TRANSPARENT)
-        )
-
-
-        val btnStay =
-            dialog.findViewById<MaterialButton>(
-                R.id.btnStay
-            )
-
-        val btnEnter =
-            dialog.findViewById<Button>(
-                R.id.btnEnter
-            )
-
-
-        // ---------------------------------------------------------
-        // QUEDARME EN LA BASE PRINCIPAL
-        // ---------------------------------------------------------
-
-        btnStay.setOnClickListener {
-
-            dialog.dismiss()
-        }
-
-
-        // ---------------------------------------------------------
-        // ENTRAR AL CENTRO DE ENTRENAMIENTO
-        // ---------------------------------------------------------
-
-        btnEnter.setOnClickListener {
-
-            dialog.dismiss()
-
-            openGame1()
-        }
-
-
-        // ---------------------------------------------------------
-        // MOSTRAR
-        // ---------------------------------------------------------
-
-        dialog.show()
-        ajustarTamanoDialogo(dialog)
-
-        // ---------------------------------------------------------
-        // OSCURECER SUAVEMENTE EL LOBBY
-        // ---------------------------------------------------------
-        //
-        // Ayuda a que el usuario concentre su atención
-        // en la confirmación sin ocultar completamente
-        // el escenario.
-        //
-
-        dialog.window?.let { window ->
-
-            window.addFlags(
-                android.view.WindowManager.LayoutParams.FLAG_DIM_BEHIND
-            )
-
-            val params = window.attributes
-
-            params.dimAmount = 0.35f
-
-            window.attributes = params
-        }
-    }
-
 
     // =========================================================
     // ABRIR MINIJUEGO 1

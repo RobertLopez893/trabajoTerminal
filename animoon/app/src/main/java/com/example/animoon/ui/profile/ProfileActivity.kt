@@ -90,7 +90,19 @@ class ProfileActivity : BaseActivity() {
                         // Asumimos que si userId es "me", es propio, 
                         // de lo contrario deberiamos tener el ID real guardado en TokenManager.
                         // Para esto usaremos si el EXTRA_USER_ID era "me" (o puedes ajustar luego)
-                        val isOwnProfile = (userId == "me")
+                                                val token = com.example.animoon.data.network.TokenManager.getToken()
+                        var myId = "me"
+                        if (!token.isNullOrEmpty()) {
+                            try {
+                                val parts = token.split(".")
+                                if (parts.size >= 2) {
+                                    val tokenPayload = String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE))
+                                    val json = org.json.JSONObject(tokenPayload)
+                                    myId = json.getString("sub")
+                                }
+                            } catch (e: Exception) {}
+                        }
+                        val isOwnProfile = (userId == "me" || userId == myId)
                         
                         titleText.text = if (isOwnProfile) "Mi perfil" else "Perfil de jugador"
                         nicknameText.text = profile.nickname
@@ -134,3 +146,4 @@ class ProfileActivity : BaseActivity() {
         }
     }
 }
+
