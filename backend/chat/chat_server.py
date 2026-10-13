@@ -118,7 +118,7 @@ async def handle_client(websocket):
                         enc_data.get('nonce_b64'),
                         enc_data.get('tag_b64')
                     )
-                    logger.info(f"[Memoria] Descifrado exitoso: '{plaintext}'")
+                    logger.info(f"[Crypto] Integridad verificada y descifrado en memoria correcto (Longitud: {len(plaintext)} caracteres)")
                 except ValueError as crypto_err:
                     logger.error(f"[ERROR Criptográfico]: {crypto_err}")
                     continue
@@ -162,7 +162,7 @@ async def main():
     
     logger.info("=== INICIANDO SERVIDOR DE CHAT SEGURO DE ANIMOON ===")
     logger.info("Características: TLS 1.3, AES-GCM, y Persistencia en PostgreSQL")
-    logger.info(f"AES Key activa: {aes_cipher.key.hex()[:8]}...{aes_cipher.key.hex()[-8:]}")
+    logger.info("[Crypto] Llaves maestras cargadas correctamente desde el entorno")
     logger.info("Puerto de escucha: 8765")
     
     async with websockets.serve(handle_client, "0.0.0.0", 8765, ssl=ssl_context):
