@@ -15,6 +15,15 @@ def init_db():
     models.Base.metadata.create_all(bind=engine)
     print("    [OK] Tablas operacionales creadas.")
     
+    # Migraciones rápidas para tablas existentes
+    try:
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE sesion ADD COLUMN IF NOT EXISTS shared_secret_b64 VARCHAR(255);"))
+            conn.commit()
+    except Exception as e:
+        print(f"    [!] Advertencia en migración: {e}")
+    
     # 2. Base de Auditoria
     print("[2] Creando tablas en animoon_auditoria...")
     models_auditoria.BaseAuditoria.metadata.create_all(bind=engine_auditoria)
@@ -30,8 +39,7 @@ def init_db():
         minijuegos_seed = [
             models.Minijuego(id="minijuego_1", nombre="Reparando a Moonie", descripcion="Minijuego de trivia y conceptos básicos sobre seguridad en internet."),
             models.Minijuego(id="minijuego_2", nombre="Minijuego 2", descripcion="Pendiente por definir."),
-            models.Minijuego(id="minijuego_3", nombre="Minijuego 3", descripcion="Pendiente por definir."),
-            models.Minijuego(id="minijuego_4", nombre="Minijuego 4", descripcion="Pendiente por definir.")
+            models.Minijuego(id="minijuego_3", nombre="Minijuego 3", descripcion="Pendiente por definir.")
         ]
         
         insertados = 0
