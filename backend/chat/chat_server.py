@@ -24,7 +24,8 @@ from backend.database.models import Mensaje, Chat
 
 # Diccionario para agrupar conexiones por chat_id: { "chat_id": set(websocket1, websocket2) }
 chat_rooms = {}
-aes_cipher = AESGCMCipher()
+ANDROID_AES_KEY = "825fafe94b06cb4741126a928e43cd92d46c5e122257da849a631f606a04ca2b"
+aes_cipher = AESGCMCipher(hex_key=ANDROID_AES_KEY)
 
 def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int = 1, target_id: str = None):
     """
@@ -162,6 +163,7 @@ async def main():
     
     logger.info("=== INICIANDO SERVIDOR DE CHAT SEGURO DE ANIMOON ===")
     logger.info("Características: TLS 1.3, AES-GCM, y Persistencia en PostgreSQL")
+    logger.info(f"AES Key activa: {aes_cipher.key.hex()[:8]}...{aes_cipher.key.hex()[-8:]}")
     logger.info("Puerto de escucha: 8765")
     
     async with websockets.serve(handle_client, "0.0.0.0", 8765, ssl=ssl_context):

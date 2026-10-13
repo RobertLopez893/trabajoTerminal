@@ -45,4 +45,13 @@ class AESGCMCipher:
             plaintext = self.aesgcm.decrypt(nonce, data, None)
             return plaintext.decode('utf-8')
         except Exception as e:
-            raise ValueError(f"Fallo de integridad o llave incorrecta: {e}")
+            # Fallback automático: Intentar con la llave fija del cliente Android si difiere
+            android_key_hex = "825fafe94b06cb4741126a928e43cd92d46c5e122257da849a631f606a04ca2b"
+            if self.key != bytes.fromhex(android_key_hex):
+                try:
+                    fallback_cipher = AESGCM(bytes.fromhex(android_key_hex))
+                    plaintext = fallback_cipher.decrypt(nonce, data, None)
+                    return plaintext.decode('utf-8')
+                except Exception:
+                    pass
+            raise ValueError(f"Fallo de integridad o llave incorrecta (llave usada: {self.key.hex()[:8]}...): {e}")
