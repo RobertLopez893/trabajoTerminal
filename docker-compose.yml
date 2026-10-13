@@ -24,12 +24,13 @@ services:
     build: .
     container_name: animoon_backend
     restart: always
+    env_file:
+      - .env
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=password
-      - AES_MASTER_KEY=${AES_MASTER_KEY:-825fafe94b06cb4741126a928e43cd92d46c5e122257da849a631f606a04ca2b}
     ports:
       - "8000:8000"
     depends_on:
@@ -44,12 +45,13 @@ services:
     build: .
     container_name: animoon_chat
     restart: always
+    env_file:
+      - .env
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=password
-      - AES_MASTER_KEY=${AES_MASTER_KEY:-825fafe94b06cb4741126a928e43cd92d46c5e122257da849a631f606a04ca2b}
     ports:
       - "8765:8765"
     depends_on:

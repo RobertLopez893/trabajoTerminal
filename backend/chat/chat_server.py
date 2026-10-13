@@ -24,8 +24,7 @@ from backend.database.models import Mensaje, Chat
 
 # Diccionario para agrupar conexiones por chat_id: { "chat_id": set(websocket1, websocket2) }
 chat_rooms = {}
-ANDROID_AES_KEY = "825fafe94b06cb4741126a928e43cd92d46c5e122257da849a631f606a04ca2b"
-aes_cipher = AESGCMCipher(hex_key=ANDROID_AES_KEY)
+aes_cipher = AESGCMCipher()
 
 def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, orden: int = 1, target_id: str = None):
     """
