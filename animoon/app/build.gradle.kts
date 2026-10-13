@@ -7,7 +7,7 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 // Por defecto apuntamos al emulador local
-val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://10.0.2.2:8000/"
+val apiBaseUrl = localProperties.getProperty("API_BASE_URL") ?: "http://18.191.151.124:8000/"
 
 plugins {
     alias(libs.plugins.android.application)
