@@ -31,8 +31,8 @@ from sklearn.metrics import (
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Asegúrese de que el CSV esté en la carpeta output
-CORPUS_PATH     = os.path.join(BASE_DIR, "output", "corpus_sintetico_llm.csv")
-RESULTADOS_PATH = os.path.join(BASE_DIR, "output", "training_results")
+CORPUS_PATH = os.path.join(BASE_DIR, "output", "corpus_definitivo_v3.csv")
+RESULTADOS_PATH = os.path.join(BASE_DIR, "output", "training_results_v5")
 
 os.makedirs(RESULTADOS_PATH, exist_ok=True)
 
@@ -85,68 +85,48 @@ def construir_ventanas(datos, ventana=VENTANA_MENSAJES):
     return df_ventanas
 
 
-def balancear_train(df_train):
-    clase_baja  = df_train[df_train.nivel_riesgo == 0]
-    clase_media = df_train[df_train.nivel_riesgo == 1]
-    clase_alta  = df_train[df_train.nivel_riesgo == 2]
-
-    goal_dinamico = max(500, len(clase_media))
-
-    muestra_baja = clase_baja.sample(
-        n=min(goal_dinamico, len(clase_baja)),
-        random_state=SEM_RANDOM
-    )
-    muestra_media = clase_media.sample(
-        n=goal_dinamico,
-        replace=len(clase_media) < goal_dinamico,
-        random_state=SEM_RANDOM
-    )
-    muestra_alta = clase_alta.sample(
-        n=goal_dinamico,
-        replace=len(clase_alta) < goal_dinamico,
-        random_state=SEM_RANDOM
-    )
-
-    return pd.concat([muestra_baja, muestra_media, muestra_alta]).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
-
-
-def balancear_val(df_val):
-    clase_baja  = df_val[df_val.nivel_riesgo == 0]
-    clase_media = df_val[df_val.nivel_riesgo == 1]
-    clase_alta  = df_val[df_val.nivel_riesgo == 2]
-
-    max_val = min(1000, len(clase_baja))
-    
-    muestra_baja = clase_baja.sample(n=max_val, random_state=SEM_RANDOM) if len(clase_baja) > max_val else clase_baja
-
-    return pd.concat([muestra_baja, clase_media, clase_alta]).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
-
-
 def cargar_datos(ruta_corpus):
-    print("\n[1/5] Cargando corpus...")
+    print("\n[1/5] Cargando corpus y separando por conversaciones...")
     datos = pd.read_csv(ruta_corpus, encoding="utf-8-sig")
     datos = datos.dropna(subset=["texto_mensaje", "nivel_riesgo"]).copy()
     datos["nivel_riesgo"] = datos["nivel_riesgo"].astype(int)
 
-    print(f"  Total: {len(datos):,} mensajes")
-    df_ventanas = construir_ventanas(datos)
-
-    df_train, df_val = train_test_split(
-        df_ventanas,
+    # 1. Identificar el riesgo máximo de cada conversación para estratificar
+    riesgo_por_bloque = datos.groupby('id_bloque')['nivel_riesgo'].max().reset_index()
+    
+    # 2. Separar IDs de conversaciones en Train y Val (80/20)
+    train_ids, val_ids = train_test_split(
+        riesgo_por_bloque['id_bloque'],
         test_size=0.2,
-        stratify=df_ventanas["nivel_riesgo"],
+        stratify=riesgo_por_bloque['nivel_riesgo'],
         random_state=SEM_RANDOM
     )
 
-    print(f"\n  Split sobre datos reales (Train: {len(df_train):,} | Val: {len(df_val):,})")
+    # 3. Filtrar los DataFrames originales usando los IDs aislados
+    df_train_full = datos[datos['id_bloque'].isin(train_ids)].copy()
+    df_val_full = datos[datos['id_bloque'].isin(val_ids)].copy()
 
-    df_train_bal = balancear_train(df_train)
-    print(f"  Train balanceado dinámico: {len(df_train_bal):,} mensajes")
+    # 4. Construir las ventanas respetando la integridad de la conversación
+    print("\n -> Procesando Train Set:")
+    df_train = construir_ventanas(df_train_full)
+    print("\n -> Procesando Validation Set:")
+    df_val = construir_ventanas(df_val_full) # Validación se queda intacta para reflejar la realidad
 
-    df_val_bal = balancear_val(df_val)
-    print(f"  Validacion ajustada: {len(df_val_bal):,} mensajes")
+    # 5. Balanceo suave (Eliminamos el undersampling de clase baja)
+    clase_baja  = df_train[df_train.nivel_riesgo == 0]
+    clase_media = df_train[df_train.nivel_riesgo == 1]
+    clase_alta  = df_train[df_train.nivel_riesgo == 2]
 
-    return df_train_bal, df_val_bal
+    # Clonamos ligeramente el Nivel 2 solo si es menor al Nivel 1 para darles el mismo peso
+    if len(clase_alta) < len(clase_media):
+        clase_alta = clase_alta.sample(n=len(clase_media), replace=True, random_state=SEM_RANDOM)
+
+    # Concatenamos usando TODA la clase baja
+    df_train_bal = pd.concat([clase_baja, clase_media, clase_alta]).sample(frac=1, random_state=SEM_RANDOM).reset_index(drop=True)
+    
+    print(f"\n  Split Final Limpio -> Train: {len(df_train_bal):,} ventanas | Val: {len(df_val):,} ventanas")
+
+    return df_train_bal, df_val
 
 
 class VentanaDataset(Dataset):
@@ -263,6 +243,7 @@ def entrenar():
         lora_alpha=LORA_ALPHA,
         lora_dropout=LORA_DROPOUT,
         target_modules=["query", "value"],
+        modules_to_save=["classifier", "pooler"],
         bias="none"
     )
     modelo = get_peft_model(modelo_base, lora_config)

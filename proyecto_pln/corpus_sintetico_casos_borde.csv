@@ -1,0 +1,890 @@
+﻿id_bloque,texto_mensaje,emisor,orden_mensaje,nivel_riesgo
+800000,"Ay, que emoción! Acabo de llegar a la isla de la aventura en Animoon. ¡Voy a ganar todos los puntos!",Usuario B,1,0
+800000,¡Eso es genial! ¿Has pasado el nivel de la caverna secreta aún?,Usuario A,2,0
+800000,"Sí, fue fácil. Solo debí hacer un salto de trampolín perfecto. ¿Tú pasaste el nivel anterior?",Usuario B,3,0
+800000,"Sí, con la ayuda de mi amiga Emma. Nosotros estamos formando un equipo en Animoon. ¿Tú tienes equipo?",Usuario A,4,0
+800000,"Sí, mis hermanos y yo formamos un equipo. Estamos buscando a un líder para ganar todos los niveles. ¿Tú quieres ser nuestro líder?",Usuario B,5,0
+800000,¡Claro que sí! Vamos a ganar todos los niveles y seremos los mejores en Animoon.,Usuario A,6,0
+800001,¿Has visto el nuevo nivel de Animoon?,Usuario A,1,0
+800001,"Sí, ¡lo acabé ayer!",Usuario B,2,0
+800001,¡Eso es genial! ¿Cuántos puntos me quedan para pasar al siguiente?,Usuario A,3,0
+800001,Creo que 10 puntos.,Usuario B,4,0
+800001,"Vale, voy a intentarlo ahora.",Usuario A,5,0
+800001,¡Buena suerte!,Usuario B,6,0
+800001,¡Gracias! ¿Te apuntas a una alianza para el próximo nivel?,Usuario A,7,0
+800001,"Sí, ¿quieres formar equipo?",Usuario B,8,0
+800002,¡Hola! ¿Te gustó el videojuego que descubrí anoche? Se llama Animoon.,Usuario B,1,0
+800002,¡Genial! También lo estoy jugando. ¿Conoces al personaje principal?,Usuario A,2,0
+800002,"Sí, lo amo! Me encanta la manera en que se mueve.",Usuario B,3,0
+800002,¿Sabes qué? Acabo de pasar el nivel de los bloques rojos. ¡Fue difícil!,Usuario A,4,0
+800002,¡Ja! Yo estoy intentando superar al jefe de los dragones. ¿Tienes alguna pista para mí?,Usuario B,5,0
+800002,"Bueno, he oído que si le das un objeto especial, puede ser más fácil.",Usuario A,6,0
+800002,"¡Genial! Te agradezco, amigo. ¿Quieres unirse a mi equipo en el próximo nivel?",Usuario B,7,0
+800003,¡Ey! ¿Viste el último nivel de Animoon? ¡Es tan difícil!,Usuario B,1,0
+800003,¡Sí! ¿Sabes por qué no pude superarlo? ¿Cuál es el truco?,Usuario A,2,0
+800003,¿Crees que si jugamos juntos podemos pasar de nivel en un minuto?,Usuario A,3,0
+800003,"¡Sí! Mi hermano me dijo que si formamos un equipo en Animoon, podemos ganar puntos dobles.",Usuario B,4,0
+800004,Hola! ¿Quieres jugar a Animoon conmigo?,Usuario A,1,0
+800004,Sí! Quiero tener más puntos para ganar la estrella de oro.,Usuario B,2,0
+800004,¡Genial! ¡Llegamos al nivel 5 juntos! ¿Quieres hacer equipo o jugar solos?,Usuario A,3,0
+800004,"Quiero hacer equipo contigo, ¡así podemos compartir puntos!",Usuario B,4,0
+800004,¡Excelente idea! ¡Vamos a ganar!,Usuario A,5,0
+800004,¿Qué pasará si nos quedamos sin vidas?,Usuario B,6,0
+800004,"No te preocupes, ¡podremos jugar de nuevo y seguir avanzando!",Usuario A,7,0
+800004,¡Genial! ¡Vamos a ganar la estrella de oro de una vez por todas!,Usuario B,8,0
+800005,"Hola, ¿quieres jugar a Animoon conmigo? Me encanta ese juego.",Usuario B,1,0
+800005,¡Claro! Acabo de empezar a jugar. ¿Qué te gusta de él?,Usuario A,2,0
+800005,Me encanta ganar puntos para mejorar mi equipo. Mi mamá me dice que es un buen juego para la concentración.,Usuario B,3,0
+800005,"Sí, es divertido. ¿Has pasado algún nivel difícil?",Usuario A,4,0
+800005,"Sí, el último nivel de la zona del bosque. Fue complicado. ¿Y tú? ¿Has hecho equipo con alguien?",Usuario B,5,0
+800005,"Sí, hace un rato. Fue divertido. ¿Quieres hacer equipo conmigo en el próximo nivel?",Usuario A,6,0
+800006,¿Tienes cuenta en Animoon? Me di cuenta de que gané puntos ayer.,Usuario A,1,0
+800006,"Sí, yo también, gané 500 puntos. ¿Cómo ganamos tantos puntos?",Usuario B,2,0
+800006,"No sé, pensé que fue un error, pero mi mamá dijo que me los había ganado. ¿Quieres pasar a nivel 5 juntos?",Usuario A,3,0
+800006,"Sí, puedo pasar al siguiente nivel. ¡Vamos!",Usuario B,4,0
+800006,"Genial, ya vamos para el nivel 5. ¿Te gusta la misión del capitán en Animoon?",Usuario A,5,0
+800006,"Sí, es muy divertido. ¿Puedo unirme a tu equipo?",Usuario B,6,0
+800006,"Claro, ya que estabas dispuesto a unirte. Ahora somos dos.",Usuario A,7,0
+800006,"¡Genial, entonces ganaremos puntos rápido!",Usuario B,8,0
+800007,¡Hola! ¿Te gusta Animoon?,Usuario B,1,0
+800007,¡Sí! Me encanta. Acabo de ganar 10 puntos en el nivel 5.,Usuario A,2,0
+800007,¡Eso es genial! ¿Qué hiciste para ganar tantos puntos?,Usuario B,3,0
+800007,Me uní a un equipo y trabajamos juntos para derrotar al enemigo final.,Usuario A,4,0
+800007,¡Genial! Me encanta hacer equipo. ¿Qué nivel estás tratando de pasar ahora?,Usuario B,5,0
+800007,"El 7. Me parece muy difícil, pero voy a intentarlo.",Usuario A,6,0
+800007,¡Buena suerte! ¿Qué te parece si jugamos juntos y nos ayudamos mutuamente?,Usuario B,7,0
+800007,¡Genial! Me alegraría jugar contigo.,Usuario A,8,0
+800008,"¡Hola, acabamos de subir al nivel 5! ¿Viste que hay un nuevo personaje?",Usuario B,1,0
+800008,"Sí, me encanta el ninja azul! ¿Qué equipo tienes? ¿Aún no tienes el poder del dragón?",Usuario A,2,0
+800008,"No, pero estoy trabajando en eso. ¿Y tú? ¿Cuántos puntos has recogido esta semana?",Usuario B,3,0
+800008,"¡Más de 100! Mis padres están muy contentos con mi progreso. ¿Por qué te gusta el juego, ¿te gusta salvar al rey?",Usuario A,4,0
+800008,"¡Sí! Me encanta. ¡Puedo salvarlo esta vez, creo!",Usuario B,5,0
+800008,¡Genial! ¡Vamos a hacer equipo y pasar el nivel 6 juntos!,Usuario A,6,0
+800009,¿Sabes si hoy vamos a jugar a Animoon en clase?,Usuario A,1,0
+800009,¡Sí! Mi hermano me dijo que ganamos puntos si completamos el nivel 5.,Usuario B,2,0
+800009,"¡Exacto! Eso es lo que siempre digo a mi mamá, pero ella siempre me dice que primero tengo que pasar el nivel 3.",Usuario A,3,0
+800009,¿Por qué? ¿Es difícil?,Usuario B,4,0
+800009,"No, solo hay un jefe muy difícil, pero si trabajamos en equipo, podemos vencerlo.",Usuario A,5,0
+800009,¡Vamos a hacerlo! ¿Cuándo empezamos?,Usuario B,6,0
+800010,"¿Has jugado a Animoon, tío? Me encanta recorrer las selvas.",Usuario A,1,0
+800010,¡Sí! Me gusta ganar puntos y pasar al siguiente nivel. ¿Cómo estás en el juego?,Usuario B,2,0
+800010,"Estoy bien, pero no tengo suficientes vidas. ¿Cómo puedes hacer equipo para ganar recompensas?",Usuario A,3,0
+800010,"Es fácil, solo debes hablar con otros jugadores para formar un equipo.",Usuario B,4,0
+800010,¿Y cómo puedes ayudarme a pasar el nivel difícil?,Usuario A,5,0
+800010,Puedes pedir ayuda a los demás jugadores en el chat del juego.,Usuario B,6,0
+800010,"Genial, gracias por la idea. ¿Cómo es jugar con amigos en Animoon?",Usuario A,7,0
+800010,"Es divertido, porque puedes cooperar y ganar puntos juntos.",Usuario B,8,0
+800011,"Hola, ¿qué onda? ¿Tienes alguna recomendación de juegos en línea?",Usuario A,1,0
+800011,"Sí, yo tengo Animoon. Es super divertido, hay niveles muy fáciles para principiantes.",Usuario B,2,0
+800011,"Ah, me encantaría probarlo. ¿Qué es lo que más te gusta de Animoon?",Usuario A,3,0
+800011,Me encanta hacer equipo con mis amigos y ganar puntos para pasar al siguiente nivel.,Usuario B,4,0
+800011,¡Eso suena genial! ¿Has logrado algún récord en el juego?,Usuario A,5,0
+800011,"Sí, me costó mucho tiempo, pero finalmente pude pasar el nivel más difícil. Fue increíble.",Usuario B,6,0
+800011,¡Eso es emocionante! Me gustaría ver cómo se juega. ¿Puedo ver cómo pasaste ese nivel?,Usuario A,7,0
+800011,"Claro, puedo mostrártelo.",Usuario B,8,0
+800012,¿Sabes que tenemos que hacer un proyecto sobre nuestro juego favorito para la escuela?,Usuario A,1,0
+800012,¡Sí! ¡El mío es Animoon! Me encanta ganar puntos para comprar estrellas.,Usuario B,2,0
+800012,¡Eso es divertido! A mí también me gusta jugar con mi amigo en equipo para pasar los niveles difíciles.,Usuario A,3,0
+800012,"Sí, es más fácil con un amigo. ¿Has completado el nivel de la ciudad en el espacio?",Usuario B,4,0
+800012,"¡Sí! Fue difícil pero valió la pena. ¿Y tú, qué nivel estás jugando ahora?",Usuario A,5,0
+800012,Estoy en el nivel del bosque. Me gusta cazar a los enemigos con mi personaje.,Usuario B,6,0
+800013,¡Hola! Tienes un avatar de Animoon muy cool en el juego. ¿Qué nivel estás en?,Usuario B,1,0
+800013,"¡Hola! Sí, me encanta el juego. Estoy en el nivel 7. ¿Y tú?",Usuario A,2,0
+800013,Estoy en el 5. Quiero pasar a la misión secreta.,Usuario B,3,0
+800013,¡Esa es difícil! ¿Sabes qué hay en la misión secreta?,Usuario A,4,0
+800013,"Sí, hay muchos puntos y un bonus para el equipo.",Usuario B,5,0
+800013,¡Eso es genial! ¿Quieres jugar juntos para ganar más puntos?,Usuario A,6,0
+800013,"¡Sí, eso sería divertido! ¿Cuándo empezamos?",Usuario B,7,0
+800014,¡Mira! Mi hermano me enseñó a jugar a Animoon. ¿Has probado el juego?,Usuario B,1,0
+800014,"Sí, me encanta. ¿Por qué te gusta?",Usuario A,2,0
+800014,Puedo jugar con mi amiga y juntos podemos ganar muchas puntos.,Usuario B,3,0
+800014,Eso es genial. Yo también juego con mis amigos. ¿Cuál es tu nivel favorito?,Usuario A,4,0
+800014,"El nivel de la ciudad, es divertido correr y saltar.",Usuario B,5,0
+800014,"Lo sé, yo estoy tratando de pasar al nivel siguiente pero no puedo hacerlo.",Usuario A,6,0
+800014,¡Puedo ayudarte! Juguemos juntos y veremos si podemos pasar el nivel.,Usuario B,7,0
+800015,"¡Hey, ¿tú también estás jugando a Animoon? ¡Me encanta hacer equipo con mis amigos!",Usuario A,1,0
+800015,"Sí, ¡me encanta ganar puntos en la Isla de los Dinosaurios!",Usuario B,2,0
+800015,¡Eso es divertido! ¿Has podido superar el nivel de las Aves Fugaces?,Usuario A,3,0
+800015,"Sí, ¡me costó un poco pero lo hice! Mi amigo me ayudó.",Usuario B,4,0
+800015,¡Eso es genial! Me gustaría hacerlo también. ¿Cuál es el secreto para superar ese nivel?,Usuario A,5,0
+800015,"Bueno, ¡ten que ser rápido en la parte de adivinar el código!",Usuario B,6,0
+800016,¿Sabes que ayer gané 500 puntos en Animoon? ¿Tú también juegas?,Usuario A,1,0
+800016,"Sí, juego con mi hermano. ¿Puedo pasar el nivel 5 si ganas todos los puntos?",Usuario B,2,0
+800016,Eso es fácil. Juega conmigo esta noche y verás. ¿Tú tienes un equipo en Animoon?,Usuario A,3,0
+800016,"No, pero quiero tener uno. ¿Cómo se hace?",Usuario B,4,0
+800016,Pregúntale a tu hermano. Él juega conmigo.,Usuario A,5,0
+800016,Lo haré. ¿Vamos a jugar juntos pronto?,Usuario B,6,0
+800016,"Sí, pronto.",Usuario A,7,0
+800017,¿Sabes cuál es el videojuego más divertido que he jugado últimamente?,Usuario A,1,0
+800017,¡Sí! Mi mamá me ha comprado Animoon para mi cumpleaños y es increíble.,Usuario B,2,0
+800017,"¡Es verdad! Me encanta el juego, ¿has logrado llegar a la zona VIP?",Usuario A,3,0
+800017,"¡Sí! Me tomó un tiempo, pero ahora tengo muchísimos puntos para comprar nuevos personajes.",Usuario B,4,0
+800017,"Eso es genial, ¡me gustaría jugar contigo y hacer un equipo poderoso! ¿Tienes un nombre para tu personaje?",Usuario A,5,0
+800017,"Sí, se llama Astero. ¿Y tú?",Usuario B,6,0
+800017,Me llamo Zorro y tengo un equipo muy bueno. ¡Vamos a hacer un duelo y ver quién gana!,Usuario A,7,0
+800018,¿Tú también jugaste al concurso de dibujo de mi escuela?,Usuario A,1,0
+800018,Sí! ¡Me encantó!,Usuario B,2,0
+800018,¡Me alegra saberlo! ¿Qué tanto tiempo pasaste jugando a Animoon después de eso?,Usuario A,3,0
+800018,Mucho! Quiero pasar el nivel 5.,Usuario B,4,0
+800018,¡Eso es fácil! ¡Puedo ayudarte! ¿Vamos a hacer equipo.,Usuario A,5,0
+800018,¡Genial! Será más divertido.,Usuario B,6,0
+800019,Hola! ¿Tienes cuenta en Animoon?,Usuario A,1,0
+800019,"Sí, yo tengo cuenta! ¿Y tú?",Usuario B,2,0
+800019,"Sí, ya estoy en el nivel 10. ¿Cómo me vas?",Usuario A,3,0
+800019,"Ah, estoy en el nivel 7, estoy intentando pasar al 8. ¿Por qué te ha ido bien?",Usuario B,4,0
+800019,¡Porque me di cuenta de que los trucos son super fáciles! Y luego puedes hacer equipo con otros jugadores.,Usuario A,5,0
+800019,¡Eso es genial! ¿Quieres unirse a mi equipo?,Usuario B,6,0
+800020,"¡Hola, ¿tú también estás jugando a Animoon? Me encanta!",Usuario B,1,0
+800020,"Sí, yo estoy jugando. ¿A cuánto subiste tu puntuación en la última aventura?",Usuario A,2,0
+800020,A 100 puntos. Quiero pasar al nivel secreto. ¿Tú has pasado de nivel?,Usuario B,3,0
+800020,"Sí, fui el primero en pasar el nivel de la mansión de fantasmas. ¡Es muy divertido!",Usuario A,4,0
+800020,¡Me gustaría pasar de nivel! ¿Cómo ganas puntos si vas en equipo?,Usuario B,5,0
+800021,"Hola, ¿tú también estás jugando a Animoon?",Usuario B,1,0
+800021,"Sí, estoy en el nivel 5 y necesito puntos para pasar al 6.",Usuario A,2,0
+800021,¡Eso es fácil! Te daré algunos puntos si juegas conmigo en equipo.,Usuario B,3,0
+800021,¿Cómo funciona eso?,Usuario A,4,0
+800021,Puedes unirte a mi equipo y juntos podemos ganar más puntos.,Usuario B,5,0
+800021,¡Genial! ¿Qué hay en el nivel 6?,Usuario A,6,0
+800021,Dicen que hay un cofre con muchos puntos escondido en el nivel 6.,Usuario B,7,0
+800021,Vamos a hacerlo entonces.,Usuario A,8,0
+800022,¡Hola! ¿Adivina qué juego estoy jugando en la tablet?,Usuario A,1,0
+800022,¿El juego con los dibujos animados?,Usuario B,2,0
+800022,¡Exacto! ¿Qué nivel estás tú jugando en Animoon?,Usuario A,3,0
+800022,Estoy en el nivel de la biblioteca.,Usuario B,4,0
+800022,"Eso es fácil, a mí me gusta el nivel de la aventura submarina. ¿Quieres unirse a mi equipo para ganar puntos?",Usuario A,5,0
+800022,"Sí, ¡sería divertido!",Usuario B,6,0
+800023,"Hola, ¿tú juegas a Animoon?",Usuario B,1,0
+800023,"Sí, es divertido. ¿Qué nivel estás ahora?",Usuario A,2,0
+800023,"Estoy en el 5, ¿y tú?",Usuario B,3,0
+800023,"Estoy en el 7, pero me gustaría pasar a tu nivel.",Usuario A,4,0
+800023,¡Eso es fácil! Necesitas ganar 500 puntos más.,Usuario B,5,0
+800023,¿Tú sabes cómo hacer equipo con mis amigos?,Usuario A,6,0
+800023,"Sí, simplemente entra a la página de equipo y haz clic en Unir equipo.",Usuario B,7,0
+800024,¡Hola! ¿Quieres jugar a Animoon conmigo?,Usuario A,1,0
+800024,"Sí, ¿qué nivel vamos a jugar?",Usuario B,2,0
+800024,"¡El 5! Es el más difícil, pero ganamos muchos puntos.",Usuario A,3,0
+800024,¡Genial! ¿Puedo ser el héroe?,Usuario B,4,0
+800024,"Sí, claro. ¡Vamos a hacer equipo y derrotar al malo!",Usuario A,5,0
+800025,¿Viste el juego Animoon en la escuela?,Usuario A,1,0
+800025,"Sí, gané 100 puntos en el nivel 5.",Usuario B,2,0
+800025,¡Muy bien! ¿Cómo es el nivel 6?,Usuario A,3,0
+800025,"Tiene muchos enemigos, pero puedo pasar con un amigo.",Usuario B,4,0
+800025,"Ah, sí, hay una opción de equipo, ¿no?",Usuario A,5,0
+800025,"Sí, mi amigo y yo somos la mejor pareja.",Usuario B,6,0
+800026,"Hola, ¿qué hay de nuevo en Animoon? Mi hermano me dijo que hay un nuevo nivel muy difícil.",Usuario A,1,0
+800026,"¡Ah, sí! Me encanta Animoon. Gané 500 puntos ayer en el juego de plataformas. Quiero ganar 1000 puntos para pasar al siguiente nivel.",Usuario B,2,0
+800026,Eso es genial. Mi hermano y yo pasamos el nivel de bloques hace un rato. ¿Quieres hacer equipo con nosotros para completar el nivel de plataformas?,Usuario A,3,0
+800026,"Sí, estaría bien. Me encanta hacer equipo en Animoon. Podemos trabajar juntos para ganar puntos rápidamente.",Usuario B,4,0
+800026,¡Genial! Estoy seguro de que podemos ganar 1000 puntos en poco tiempo. ¿Quieres comenzar ahora?,Usuario A,5,0
+800026,"Sí, comencemos. ¿Dónde nos reunimos en el juego?",Usuario B,6,0
+800026,Puedes encontrarme en el menú de equipo. Estoy esperando a que llegues. ¡Vamos a ganar!,Usuario A,7,0
+800027,"¡Mira, soy el mejor en Animoon! He ganado 500 puntos en el último nivel.",Usuario B,1,0
+800027,¡Eso es increíble! ¿Cómo lo haces? ¿Tienes algún truco?,Usuario A,2,0
+800027,"Sí, mi hermano me enseñó. Ahora soy el líder en mi grupo.",Usuario B,3,0
+800027,Genial! ¿Te gustaría jugar conmigo? Podemos hacer equipo.,Usuario A,4,0
+800027,¡Claro! ¿Cuál es el nivel más difícil que has superado?,Usuario B,5,0
+800027,He superado el nivel 10. ¿Tú también?,Usuario A,6,0
+800027,"Sí, ¡hoy lo superé!",Usuario B,7,0
+800028,"¡Hey, acabo de conseguir mi personaje de oro en Animoon! ¿Tú has subido de nivel?",Usuario A,1,0
+800028,"Sí, ayer pasé el nivel 10. Mi hermano me ayudó.",Usuario B,2,0
+800028,Eso es genial. ¿Qué equipo tienes? Yo tengo un personaje de ataque con un látigo de fuego.,Usuario A,3,0
+800028,¡Un látigo de fuego! Me encantaría eso. ¿Cómo consigues puntos?,Usuario B,4,0
+800028,"Bueno, la forma más fácil es jugar con amigos, porque así ganamos más puntos.",Usuario A,5,0
+800028,"Vaya, voy a intentarlo. ¿Puedo unirme a tu equipo?",Usuario B,6,0
+800029,"Hola, ¿qué estabas jugando?",Usuario A,1,0
+800029,Estaba jugando a Animoon con mis amigos en línea.,Usuario B,2,0
+800029,¿Y qué tanto puntos tienes?,Usuario A,3,0
+800029,¡Muchos! Gané puntos por pasar el nivel 5.,Usuario B,4,0
+800029,¡Genial! ¿Vamos a jugar juntos en equipo?,Usuario A,5,0
+800029,¡Sí! ¡Vamos a ser superhéroes en Animoon!,Usuario B,6,0
+800030,¿Quieres jugar a Animoon conmigo?,Usuario B,1,0
+800030,¡Sí! Acabo de ganar 100 puntos en el nivel de dragones. ¿Qué nivel estás pasando?,Usuario A,2,0
+800030,Estoy en el castillo de hielo. Mi amigo Max me está ayudando a resolver el rompecabezas.,Usuario B,3,0
+800030,¡Eso es genial! Me encanta jugar en equipo. ¿Cuántos puntos te han dado los fantasmas por resolver el rompecabezas?,Usuario A,4,0
+800030,50 puntos. ¿Cuántos has ganado en el nivel de dragones?,Usuario B,5,0
+800030,120. Me gustaría pasar a el nivel de piratas.,Usuario A,6,0
+800030,¡Eso sería divertido! Me gustaría ayudarte a derrotar al jefe del nivel de piratas.,Usuario B,7,0
+800030,¡Genial! ¿Quieres jugar los dos niveles juntos?,Usuario A,8,0
+800031,"Hoy jugamos a Animoon en la escuela, me encantó el nuevo nivel.",Usuario B,1,0
+800031,"Sí, me gustó la misión en la que teníamos que proteger al héroe de los goblins.",Usuario A,2,0
+800031,¡Eso fue divertido! Me alegra haber pasado ese nivel sin problemas.,Usuario B,3,0
+800031,Y a mí también. ¿Qué te parece si seguimos jugando y vemos si podemos ganar más puntos?,Usuario A,4,0
+800031,"Sí, puedo ayudar a ti en el juego si lo necesitas.",Usuario B,5,0
+800031,"Genial, podemos jugar en equipo y ver quién gana.",Usuario A,6,0
+800032,¿Sabes que acabo de descubrir que en Animoon hay un nivel secreto que es super divertido?,Usuario A,1,0
+800032,¡Eso es genial! ¿Cuál es el nivel secreto?,Usuario B,2,0
+800032,"Es el de las islas, tienes que encontrar todas las llaves para abrir la puerta de la torre.",Usuario A,3,0
+800032,¡Eso suena emocionante! ¿Has llegado al final?,Usuario B,4,0
+800032,"Sí, y me dio 1000 puntos adicionales. ¿Y tú, ¿cómo te ha ido?",Usuario A,5,0
+800032,"Acabo de pasar el nivel de las ovejas, es fácil pero divertido.",Usuario B,6,0
+800032,¡Genial! Me encanta jugar en equipo con mis amigos en Animoon.,Usuario A,7,0
+800032,"Sí, es divertido trabajar juntos y ganar más puntos.",Usuario B,8,0
+800033,¿Qué tal si mañana jugamos al nuevo mapa de Animoon? Me encanta el nivel de los galeones.,Usuario A,1,0
+800033,"Sí, eso sería genial! Pero tengo que pasar el nivel de los castillos antes. ¿Puedo pedirle a mi amigo que me ayude?",Usuario B,2,0
+800033,¡Claro que sí! El equipo es muy importante en Animoon. ¿Qué te parece si jugamos todos juntos y hacemos equipo?,Usuario A,3,0
+800034,¡Hoy jugué a Animoon con mi hermano! ¿Y a ti qué te gusta hacer en el juego?,Usuario A,1,0
+800034,¡Me gusta pasar niveles y ganar puntos! Me encanta ser el héroe.,Usuario B,2,0
+800034,¡Eso es fácil! Me encanta jugar con mis amigos en equipo. ¿Tienes algún amigo con el que jugar?,Usuario A,3,0
+800034,"Sí, tengo a mis primos. Jugamos juntos y ayudamos al héroe a ganar.",Usuario B,4,0
+800034,¡Eso es genial! Me gustaría jugar con ellos. ¿Has llegado a alguna meta en el juego?,Usuario A,5,0
+800034,"Sí, logré pasar el nivel 10 sin morir.",Usuario B,6,0
+800034,¡Eso es increíble! Yo solo llegué al 8. ¿Crees que puedo llegar al final si juego todos los días?,Usuario A,7,0
+800034,¡Claro que sí! Mi primo llegó al final en una semana.,Usuario B,8,0
+800035,¿Qué pasó con tu cuenta en Animoon? No me deja jugar en la misión 5.,Usuario A,1,0
+800035,"¡Oh, eso es porque me quedé sin puntos! Mi mamá me compró más en la tienda.",Usuario B,2,0
+800035,¡Genial! Yo también necesito más puntos para pasar al siguiente nivel. ¿Quieres hacer equipo conmigo?,Usuario A,3,0
+800035,"Sí, ¿qué tenemos que hacer?",Usuario B,4,0
+800035,Tenemos que derrotar al jefe del nivel 6. Puedes ser mi compañero de equipo.,Usuario A,5,0
+800035,"¡Genial, vamos a ganar muchos puntos!",Usuario B,6,0
+800036,"Hola, ¿quién ganó el campeonato de fútbol en nuestro barrio el fin de semana pasado?",Usuario A,1,0
+800036,"Mi amigo Tomás ganó, ¡y su equipo está en la final de Animoon!",Usuario B,2,0
+800036,¿Qué nivel estás en Animoon ahora? ¿Puedo ver tus avances?,Usuario A,3,0
+800036,Estoy en el nivel 12 y mi objetivo es pasar a la etapa de los dragones!,Usuario B,4,0
+800036,¡Eso es genial! ¿Has podido formar un equipo con tus amigos en el juego?,Usuario A,5,0
+800036,"Sí, formamos un equipo llamado La Pandilla de los Dragones y estamos trabajando juntos para conquistar el juego.",Usuario B,6,0
+800036,¡Muy bien hecho! ¿Cuántos puntos has ganado hasta ahora en la temporada?,Usuario A,7,0
+800036,He ganado 1500 puntos y mi meta es alcanzar los 2000 para conseguir el reloj de oro en Animoon.,Usuario B,8,0
+800037,"Hola, ¿has jugado a Animoon?",Usuario A,1,0
+800037,"Sí, es divertido. Me encanta ganar puntos.",Usuario B,2,0
+800037,¡Eso es fácil! Solo tienes que pasar el nivel de los gatos rojos.,Usuario A,3,0
+800037,Pero mi hermano es mejor que yo en eso.,Usuario B,4,0
+800037,"No te preocupes, puedes hacer equipo con otros jugadores y así ganar más fácilmente.",Usuario A,5,0
+800037,¡Genial! Me gustaría jugar con amigos.,Usuario B,6,0
+800037,"Puedes hacerlo. La próxima vez que juguemos, podemos hacerlo juntos.",Usuario A,7,0
+800038,Estoy jugando a Animoon con mi mamá en casa.,Usuario B,1,0
+800038,¡Eso es genial! ¿Qué nivel estás en?,Usuario A,2,0
+800038,"Estoy en el nivel 5, pero no puedo pasar a la siguiente ronda.",Usuario B,3,0
+800038,¡Vamos! A mí me gusta hacer equipo con mis amigos en el juego. ¿Crees que deberías hacer equipo?,Usuario A,4,0
+800038,"No sé, a mí me gusta hacerlo solo. Además, mi mamá me está ayudando.",Usuario B,5,0
+800038,"Ah, genial. ¿Cuántos puntos tienes hasta ahora?",Usuario A,6,0
+800038,¡Más de 1000! Pero no sé si llegaré a los 5000 puntos para ganar el premio.,Usuario B,7,0
+800039,"Hola, ¿has jugado a Animoon este fin de semana?",Usuario A,1,0
+800039,Sí! He ganado muchos puntos en el nivel de la ciudad,Usuario B,2,0
+800039,¡Eso es genial! Yo estoy intentando pasar el nivel de los castores,Usuario A,3,0
+800039,Puedo ayudarte. He hecho equipo con mi amigo y ahora somos muy fuertes,Usuario B,4,0
+800039,¿Cuántos puntos te faltan para pasar el nivel?,Usuario A,5,0
+800039,Unos cuantos. ¿Quieres unir nuestro equipo y juntarlos?,Usuario B,6,0
+800040,"Hoy fui a la biblioteca y vi un libro sobre Animoon, ¿te has enterado que hay un nuevo personaje?",Usuario A,1,0
+800040,"¡Sí! Me encanta ese juego, ¿qué tal si nos unimos en línea y jugamos juntos?",Usuario B,2,0
+800040,"Claro, puedo mostrarle a mi hermano cómo hacer equipo y ganar puntos, es divertido.",Usuario A,3,0
+800040,"Sí, me gusta pasar niveles y obtener estrellas, ¿qué te parece si nos unimos y lo intentamos?",Usuario B,4,0
+800040,"Genial, así podemos ayudarnos mutuamente y mejorar nuestros scores.",Usuario A,5,0
+800041,¿Tienes un nuevo juego en tu consola?,Usuario A,1,0
+800041,"Sí, está muy bien. Me gusta jugar a Animoon. ¿Tú también lo juegas?",Usuario B,2,0
+800041,"Sí, estoy en el nivel 5. ¿Y tú?",Usuario A,3,0
+800041,Estoy en el 3. Quiero llegar al 10 para ganar el trofeo.,Usuario B,4,0
+800041,Eso es genial. ¿Has hecho equipo con nadie?,Usuario A,5,0
+800041,"Sí, con mi amigo de la escuela. Gana más puntos si juegas en equipo.",Usuario B,6,0
+800041,¡Eso es cierto! Me gustaría hacerlo también.,Usuario A,7,0
+800042,"Hola, ¿has jugado a Animoon?",Usuario A,1,0
+800042,"Sí, me encanta ganar puntos y pasar al nivel 5.",Usuario B,2,0
+800042,¡Genial! Yo estoy tratando de hacer equipo con mis amigos para derrotar al jefe de ese nivel.,Usuario A,3,0
+800042,¡Es divertido! Me pregunto si tenemos suficientes vidas para intentarlo de nuevo.,Usuario B,4,0
+800042,"No hay problema, siempre podemos recuperarlas jugando al modo fácil.",Usuario A,5,0
+800042,¡Eso es justo! ¿Has conseguido un anuncio de oro últimamente?,Usuario B,6,0
+800042,"Sí, me dio muchos puntos y ayudó a mejorar mi equipo.",Usuario A,7,0
+800043,¿Sabes que ayer no pude llegar al nivel 10 en Animoon? Me quedé sin vidas.,Usuario A,1,0
+800043,¡Eso es triste! Yo llegué al 10 y gané muchos puntos.,Usuario B,2,0
+800043,¿Cómo lo hiciste? Me gustaría saber.,Usuario A,3,0
+800043,Me uní con un amigo y juntos superamos el nivel.,Usuario B,4,0
+800043,Eso es genial. ¿Qué nivel vas a intentar ahora?,Usuario A,5,0
+800043,El 15. Quiero ver la nueva área secreta.,Usuario B,6,0
+800043,¡Buena suerte! ¿Quieres hacer equipo conmigo?,Usuario A,7,0
+800043,"Sí, sería divertido.",Usuario B,8,0
+800044,¡Hola! ¿Quieres jugar a Animoon conmigo? Me encantó el nivel del bosque con los conejitos.,Usuario B,1,0
+800044,¡Claro que sí! ¿Cuántos puntos tienes tú ahora?,Usuario A,2,0
+800044,Tengo 350 puntos. ¿Tú ya ganaste el nivel de la montaña?,Usuario B,3,0
+800044,"Sí, yo ya lo pasé. Mi equipo es mejor que el tuyo porque tenemos más estrellas.",Usuario A,4,0
+800044,¡Eso no es verdad! Puedo ganar fácilmente. ¿Quieres jugar en equipo?,Usuario B,5,0
+800045,Estoy jugando a Animoon y estoy a punto de ganar 100 puntos en el nivel 5.,Usuario B,1,0
+800045,"Eso es emocionante, ¿qué vas a hacer cuando llegues al nivel 6?",Usuario A,2,0
+800045,Me gustaría hacer equipo con mis amigos para pasar el nivel difícil.,Usuario B,3,0
+800045,¡Genial! ¿Por qué no jugamos juntos esta noche?,Usuario A,4,0
+800045,"Claro, pero tienes que ganar primero ese juego de fútbol en el videojuego de mi hermano.",Usuario B,5,0
+800046,¡Hola! ¿Te gusta Animoon? Me encanta!,Usuario A,1,0
+800046,"Sí, es divertido. Gane mucho puntos en el nivel 5.",Usuario B,2,0
+800046,¡Eso es genial! ¿Puedes darme algunos consejos para pasar el nivel 6?,Usuario A,3,0
+800046,Puedes hacer equipo con amigos y vencer al jefe.,Usuario B,4,0
+800046,"Perfecto, gracias. ¿Qué equipo prefieres en Animoon?",Usuario A,5,0
+800046,Me gusta el equipo de aviones azules.,Usuario B,6,0
+800047,¿Has visto el nuevo videojuego de animales que se llama Animoon?,Usuario A,1,0
+800047,"¡Sí! Me encanta, puedo hacer que mi personaje sea un león.",Usuario B,2,0
+800047,¡Eso es genial! Yo tengo un personaje que es un gato y estoy tratando de ganar puntos para pasar al siguiente nivel.,Usuario A,3,0
+800047,¿Qué nivel es? ¿Es difícil?,Usuario B,4,0
+800047,"Es el nivel de la selva, pero no es muy difícil. ¿Tú pasaste ya el nivel de la montaña?",Usuario A,5,0
+800047,"Sí, lo hice. ¿Por qué quieres hacer equipo conmigo?",Usuario B,6,0
+800047,Quiero que juguemos juntos y podamos ganar más puntos.,Usuario A,7,0
+800047,¡Genial! ¿Qué equipo elegimos?,Usuario B,8,0
+800048,¿Sabes que mi hermano es muy bueno en Animoon? Ha ganado 1000 puntos en la última semana.,Usuario A,1,0
+800048,¡Eso es increíble! ¿Cómo hace para ganar tantos puntos?,Usuario B,2,0
+800048,"Bueno, él es muy bueno en pasar niveles. Lo hace muy rápido.",Usuario A,3,0
+800048,¡Quiero jugar con él! ¿Sabes si puedo unirme a su equipo?,Usuario B,4,0
+800048,¡Claro que sí! Lo voy a preguntar a mi mamá si puedo hacer una cuenta nueva.,Usuario A,5,0
+800048,Genial. ¿Podemos jugar juntos hoy después de la escuela?,Usuario B,6,0
+800049,"¡Hola, ¿te gustó el fin de semana en Animoon?",Usuario A,1,0
+800049,¡Sí! Gané un montón de puntos en el nivel de los dragones.,Usuario B,2,0
+800049,¡Eso es genial! Me gustaría pasar al siguiente nivel y ver a los dragones azules.,Usuario A,3,0
+800049,¡Estoy en el siguiente nivel! Puedes pasar conmigo y juntos podemos hacer un equipo fuerte.,Usuario B,4,0
+800049,¡Eso sería divertido! ¿Sabes cuál es el nivel secreto en el bosque de los árboles?,Usuario A,5,0
+800049,¡Sí! Es el que tiene los gnomos. ¿Quieres jugar conmigo allí?,Usuario B,6,0
+800050,"Hola, ¿qué te parece si vamos a jugar Animoon juntos?",Usuario A,1,0
+800050,¡Genial! Acabo de pasar el nivel de la granja y quiero saber qué es eso de los puntos de poder que te dejan en el aula de maestros.,Usuario B,2,0
+800050,"Ahah, ¡eso es para comprar cosas útiles para tu personaje! Podrías comprar un bote para recolectar recursos más rápido o mejorar tu escudo.",Usuario A,3,0
+800050,Me encantaría tener un bote así. ¿Puedes ayudarme a pasar el siguiente nivel?,Usuario B,4,0
+800050,"Claro, vamos a hacer equipo y nos lo ganaremos. ¿Quieres unirse al equipo de Héroes del Planeta?",Usuario A,5,0
+800050,¡Sí! Estoy listo para ayudar a salvar el planeta.,Usuario B,6,0
+800051,"Ay, estoy jugando a Animoon en la escuela. ¿Qué niveles has alcanzado en tu cuenta?",Usuario B,1,0
+800051,Acabo de ganar 500 puntos en el nivel 5 de la isla de los dinosaurios. ¡No quiero perder la puntuación!,Usuario A,2,0
+800051,¡Eso es increíble! Yo estoy tratando de pasar el nivel 3 de la selva de los monos. ¿Puedo ver tu cuenta para darte consejos?,Usuario B,3,0
+800051,La semana pasada gané un estrellita en la selva de los monos. Deberías intentarlo.,Usuario A,4,0
+800051,¿Qué hice mal?,Usuario B,5,0
+800051,¡Está bien! Asegúrate de que tu avatar esté en el equipo de la estrella roja. ¡Eso te dará una ventaja!,Usuario A,6,0
+800051,Gracias. ¡Voy a hacerlo!,Usuario B,7,0
+800051,¡Buena suerte! Recuerda no dar golpes a tu hermano que juegue al mismo tiempo.,Usuario A,8,0
+800052,"¡Hola, ¿jugaste a ese juego de dibujos recién lanzado, Animalón? Me parece muy divertido.",Usuario A,1,0
+800052,"¡Sí, lo jugué con mi hermano! ¿Viste la escena en la que tienes que atrapar los conejitos rojos?",Usuario B,2,0
+800052,"¡Eso es el mejor! Gané 100 puntos en ese nivel, ¿y a ti qué pasó?",Usuario A,3,0
+800052,Me faltó un punto para pasar al nivel 5. Mi hermano ayudó a mi personaje a salvar a los conejitos.,Usuario B,4,0
+800052,¡Bien hecho! Jugamos juntos y logramos pasar el nivel 8 en equipo. ¿Quieres jugar de nuevo?,Usuario A,5,0
+800052,"Sí, me encantaría. Vamos a ver si podemos ganar la medalla de oro en el nivel de los dragones azules.",Usuario B,6,0
+800053,¿Eres un fan de Animoon? ¡Me encanta!,Usuario B,1,0
+800053,¡Sí! Acabo de ganar 100 puntos en el nivel 5. ¿Y tú qué nivel estás en?,Usuario A,2,0
+800053,Estoy en el nivel 3. Mi hermano me ayudó a pasar el nivel 2.,Usuario B,3,0
+800053,¡Genial! ¿Quieres hacer equipo conmigo y superar juntos el nivel 6?,Usuario A,4,0
+800053,"Sí, ¡genial!",Usuario B,5,0
+800053,¡Genial! Nos vamos a ganar mucho dinero en el nivel 6.,Usuario A,6,0
+800053,¿Qué dinero?,Usuario B,7,0
+800053,"Bueno, solo es un juego, pero es divertido. ¡Vamos a hacer equipo y ganar!",Usuario A,8,0
+800054,¿Sabes qué me pasó ayer en el videojuego Animoon? Gané 500 puntos y pude pasar al nivel 7.,Usuario A,1,0
+800054,¡Eso es increíble! Yo solo llegué a 250 puntos en mi última partida. ¿Cómo ganaste tantos puntos?,Usuario B,2,0
+800054,"Bueno, estaba jugando con mi hermano y éramos un equipo. Siempre se nos da mejor cuando jugamos juntos.",Usuario A,3,0
+800054,¡Eso es lo que debería hacer yo! Mi hermana siempre juega con su amigo y ganan mucho. ¿Quieres jugar juntos de verdad?,Usuario B,4,0
+800054,"Sí, sería divertido. ¿Te gustaría pasar al nivel 8 si ganamos 1000 puntos en equipo?",Usuario A,5,0
+800054,¡Eso es una buena idea! Estoy listo para jugar con ti. ¿Cuándo empezamos?,Usuario B,6,0
+800055,"Hola, ¿has jugado el nuevo juego de aventuras que sale con el cumpleaños de mi hermano?",Usuario A,1,0
+800055,"Sí, ¡lo estoy jugando ahora! Acabo de pasar el nivel 5.",Usuario B,2,0
+800055,"¡Eso es genial! Yo también estoy jugando, estoy en el 3. ¿Crees que vamos a poder hacer equipo?",Usuario A,3,0
+800055,"Sí, seguro que lo podemos hacer. ¡Vamos a ganar mucho!",Usuario B,4,0
+800055,¡Estoy tan emocionado! ¿Sabes qué necesitamos hacer para superar el nivel 6?,Usuario A,5,0
+800055,"Pues, creo que solo necesitamos seguir avanzando y conseguir más puntos. ¿Te han dado muchas estrellas?",Usuario B,6,0
+800056,¡Hola! ¿Quieres jugar un rato a Animoon?,Usuario A,1,0
+800056,"Sí, voy a ganar todos los puntos, ¡mi mamá dice que lo voy a lograr!",Usuario B,2,0
+800056,¡Eso es genial! ¿Qué nivel te gustaría empezar a jugar?,Usuario A,3,0
+800056,"Quiero jugar con mis amigos, ¿podemos hacer equipo?",Usuario B,4,0
+800056,¡Claro que sí! Nosotros podemos ser un equipo y ayudarnos mutuamente.,Usuario A,5,0
+800056,¡Eso sería divertido! ¿Cuántos niveles necesitamos pasar para ganar la recompensa?,Usuario B,6,0
+800056,"¡No sé! Pero si pasamos todos los niveles, podemos tener una sorpresa.",Usuario A,7,0
+800056,¡Genial! Empecemos a jugar entonces.,Usuario B,8,0
+800057,¡Hola! Acabo de empezar a jugar a Animoon y ya gané 100 puntos. ¿Te gusta?,Usuario B,1,0
+800057,"¡Genial! Sí, es divertido. ¿Cuál es tu personaje favorito en Animoon?",Usuario A,2,0
+800057,Mi personaje es un unicornio azul. ¿Y tú tienes un personaje especial?,Usuario B,3,0
+800057,"Sí, tengo un dragón rojo. Estoy tratando de llegar al nivel 5. ¿Cómo es el nivel 3 en Animoon?",Usuario A,4,0
+800057,El nivel 3 es fácil. Solo tienes que recoger 3 estrellas y llegar a la meta. ¿Quieres jugar juntos?,Usuario B,5,0
+800057,¡Claro! Me encantaría jugar contigo. ¡Vamos a ganar 1000 puntos y hacer equipo en Animoon!,Usuario A,6,0
+800058,"Hola, ¿jugaste a Animoon el fin de semana?",Usuario A,1,0
+800058,"Sí, gané 100 puntos en el nivel de la selva.",Usuario B,2,0
+800058,¿Y pasaste al siguiente nivel?,Usuario A,3,0
+800058,"Sí, estaba difícil pero mi hermano me ayudó.",Usuario B,4,0
+800058,"Eso es genial, ¿qué te gusta de Animoon?",Usuario A,5,0
+800058,Ganas puntos y puedes comprar cosas para tu personaje.,Usuario B,6,0
+800058,¿Te gustaría hacer equipo conmigo en Animoon?,Usuario A,7,0
+800058,"Sí, sería divertido, ¿qué equipo queremos hacer?",Usuario B,8,0
+800058,"Un equipo de guerreros, ¿qué te parece?",Usuario A,9,0
+800058,"Me parece genial, empezamos.",Usuario B,10,0
+800059,¡Hola! ¿Te gusta jugar a Animoon?,Usuario A,1,0
+800059,"Sí, es divertido. ¡He pasado el nivel de la selva!",Usuario B,2,0
+800059,¡Eso es genial! Me ha estado costando ganar puntos en el nivel de la ciudad. ¿Tienes alguna estrategia para ganar puntos rápidos?,Usuario A,3,0
+800059,Puedes hacer equipo con amigos. Así ganas puntos más rápido.,Usuario B,4,0
+800059,¡Genial! No sabía eso. ¿Y cómo haces equipo?,Usuario A,5,0
+800059,Lo preguntas a tu amigo y él te acepta.,Usuario B,6,0
+800059,"Vale, gracias. ¡Parece que voy a ganar puntos de golpe ahora!",Usuario A,7,0
+800059,"¡Sí, es divertido!",Usuario B,8,0
+800060,"Hola, ¿sabes que el fin de semana voy a jugar a Animoon?",Usuario A,1,0
+800060,"Sí, ¡mi hermano también quiere jugar! ¿Tú estás en el nivel 5?",Usuario B,2,0
+800060,¡Exacto! ¿Y tú? ¿Has pasado el nivel 3?,Usuario A,3,0
+800060,"Sí, mi hermano me ayudó, ahora estoy en el 4.",Usuario B,4,0
+800060,¡Eso es genial! Podemos hacer equipo en el 5 y ganar más puntos.,Usuario A,5,0
+800060,¡Genial! ¿Tú crees que podemos llegar al 10?,Usuario B,6,0
+800061,¡Hola! ¿Sabes que tengo 5.000 puntos en Animoon?,Usuario B,1,0
+800061,¡Eso es increíble! ¿Cómo los ganaste?,Usuario A,2,0
+800061,"Hice un nivel difícil, y luego ayudé a mi amigo en el juego.",Usuario B,3,0
+800061,¡Genial! ¿Puedes hacer un equipo conmigo?,Usuario A,4,0
+800062,¿Sabes lo que me encanta hacer en la escuela?,Usuario A,1,0
+800062,"No, ¿qué es?",Usuario B,2,0
+800062,Jugar a juegos de computadora después de las clases,Usuario A,3,0
+800062,¡Eso es divertido! ¿Y sabes qué juego me gusta mucho?,Usuario B,4,0
+800062,"¡Claro! Es Animoon, ¿no?",Usuario A,5,0
+800062,¡Exacto! Me encanta ganar puntos y pasar de nivel,Usuario B,6,0
+800062,"Sí, yo también. ¿Te has unido a algún equipo en el juego?",Usuario A,7,0
+800062,"Sí, jugué con mi amigo Carlos la semana pasada",Usuario B,8,0
+800062,"¡Eso es genial! Me encantaría unirme a un equipo de nuevo, ¿quieres jugar juntos el fin de semana?",Usuario A,9,0
+800062,¡Claro!,Usuario B,10,0
+800063,"Hola, ¿qué estabas haciendo antes de que llegara?",Usuario A,1,0
+800063,Estaba jugando a Animoon con mi hermano.,Usuario B,2,0
+800063,¡Eso es divertido! ¿Habéis avanzado mucho?,Usuario A,3,0
+800063,"Sí, estamos en el nivel 5 y necesitamos 100 puntos para pasar al 6.",Usuario B,4,0
+800063,¡Eso es fácil! ¿Y cómo ganáis puntos en el juego?,Usuario A,5,0
+800063,Ganamos puntos matando a los monstruos en los niveles.,Usuario B,6,0
+800063,Me encanta ese juego. ¿Quieres unirse al equipo que estoy formando para ganar el torneo?,Usuario A,7,0
+800063,"Sí, ¡sería genial!",Usuario B,8,0
+800064,¡Hola! ¿Te gusta jugar a Animoon?,Usuario A,1,0
+800064,"Sí, es divertido. ¿Tú también juegas?",Usuario B,2,0
+800064,"Sí, soy super bueno. ¿Cuántos puntos tienes?",Usuario A,3,0
+800064,300. ¿Y tú?,Usuario B,4,0
+800064,450. ¿Quieres hacer equipo contigo?,Usuario A,5,0
+800064,"Sí, ¡ganaremos muchos puntos!",Usuario B,6,0
+800065,¿Tienes idea de qué juego es mejor para jugar en la escuela de verano?,Usuario A,1,0
+800065,"Sí, ¡Animoon es el mejor! Me encanta ganar puntos y pasar de nivel.",Usuario B,2,0
+800065,¡Eso es genial! Mi hermano mayor me dijo que la misión de salvar a Luna es muy divertida.,Usuario A,3,0
+800065,¡Sí! Me encanta ayudar a Luna. ¿Tú has ayudado a Luna a salvar el planeta?,Usuario B,4,0
+800065,"Sí, la pasé muy bien. Me gustó la parte en que debía hacer equipo con mi amigo para derrotar al malvado.",Usuario A,5,0
+800065,¡Eso es lo mejor! Me encanta hacer equipo con mis amigos en Animoon.,Usuario B,6,0
+800066,"¡Hola, qué pasa! ¿Quieres jugar a Animoon conmigo?",Usuario A,1,0
+800066,¡Sí! Me encanta Animoon. ¿Has pasado el nivel de la isla azul?,Usuario B,2,0
+800066,"Sí, pasé el de la isla azul y ahora estoy en el de la montaña rocosa. ¿Qué te parece si hacemos equipo?",Usuario A,3,0
+800066,¡Genial! Puedo ser la persona que recoge las estrellas.,Usuario B,4,0
+800066,¡Eso es una gran idea! Podemos trabajar juntos y ganar muchos puntos.,Usuario A,5,0
+800066,¿Sabes si hay un nuevo nivel que acaba de salir?,Usuario B,6,0
+800066,"No, todavía no lo he visto. Pero estoy seguro de que será genial.",Usuario A,7,0
+800067,¡Hola! Acabo de obtener a mi personaje favorito en Animoon.,Usuario B,1,0
+800067,¡Eso es genial! ¿Cómo has logrado tener al Héroe Dorado?,Usuario A,2,0
+800067,Tenía solo 5 puntos faltantes y estaba a punto de obtenerlo en el último nivel.,Usuario B,3,0
+800067,"¡Qué suerte! Me encantaría tenerlo, ¿qué habilidades tiene?",Usuario A,4,0
+800067,"Puede lanzar un rayo de fuego muy potente, es muy útil en la batalla.",Usuario B,5,0
+800067,"¡Wow, parece increíble! ¿Tienes un equipo completo en el juego?",Usuario A,6,0
+800067,"Sí, mi hermano me ayudó a formarlo, somos muy buenos juntos.",Usuario B,7,0
+800068,¡Hola! ¿Te gusta jugar a Animoon?,Usuario A,1,0
+800068,"Sí, me encanta ganar puntos y subir de nivel.",Usuario B,2,0
+800068,Yo también. ¿Has logrado hacer equipo con tus amigos?,Usuario A,3,0
+800068,"Sí, hicimos equipo y ganamos en el nivel 5. Fue divertido.",Usuario B,4,0
+800068,"¡Eso es increíble! Mi favorito es el nivel 7, ¿has logrado pasarlo?",Usuario A,5,0
+800068,"No aún, pero estoy intentando, ¿tú puedes pasar el nivel 7?",Usuario B,6,0
+800068,"Sí, no es tan difícil. ¿Quieres jugar juntos?",Usuario A,7,0
+800068,"Sí, eso sería divertido.",Usuario B,8,0
+800069,Estoy buscando un buen lugar para jugar videojuegos en línea con mis amigos.,Usuario B,1,2
+800069,¡Me encantan los juegos en línea! ¿Conoces algún servidor nuevo? ¿Quieres seguir hablando sobre esto?,Usuario A,2,2
+800069,"Sí, mi mamá dice que no puedo jugar con desconocidos, pero puedo pasar mi número de WhatsApp contigo para seguir hablando...",Usuario B,3,2
+800069,¡Genial! Me alegra que te interese jugar con amigos. ¿Te gustaría que te envíe una foto para que podamos seguir hablando? No será necesario escribir el código de seguridad si es necesario.,Usuario A,4,2
+800069,¿Por qué necesitas mi número? ¿Qué foto?,Usuario B,5,2
+800069,¡Es solo una foto! Quiero asegurarme de que seas tú y no alguien más. ¿Quieres compartir tu número? Podemos seguir hablando y encontrar un buen servidor juntos.,Usuario A,6,2
+800069,No sé... mi mamá dijo que no se habla con personas que no conocemos.,Usuario B,7,2
+800069,"¡Tienes razón! Mi mamá también me dice lo mismo. Bueno, si quieres, puedo enviarte un amigo (en el juego) y así podremos jugar juntos.",Usuario A,8,2
+800070,"Hola! Me encanta tu avatar en Instagram, ¿puedo saber quién es?",Usuario A,1,2
+800070,"Soy yo, ¿y tú?",Usuario B,2,2
+800070,Me alegra conocerte! ¿Por qué te gustan los personajes de animación?,Usuario A,3,2
+800070,Me encanta dibujarlos.,Usuario B,4,2
+800070,¡Eso es genial! ¿Te gustaría ver algunos de mis dibujos? ¿Cuál es tu plataforma preferida para ver cosas divertidas?,Usuario A,5,2
+800070,"Hmm, no sé...",Usuario B,6,2
+800070,"Bueno, no importa. ¿Quieres seguir hablando? ¿Te puedo mandar un mensaje en WhatsApp o algo así?",Usuario A,7,2
+800070,"No sé, mamá me dijo que no hablara con gente que no conozco.",Usuario B,8,2
+800070,"¡Claro! Mi hermana es amiga de tu mamá, así que no hay de qué preocuparse. ¿Puedo al menos mandarte un mensaje para hablarte de mi hermana? ¿Tu número de WhatsApp?",Usuario A,9,2
+800071,"Hola, ¿cómo está? Mi mamá me ha comprado un nuevo teléfono y no sé qué juego jugar.",Usuario B,1,2
+800071,¡Genial! Me alegra saber que tienes un nuevo teléfono. ¿Te gusta jugar juegos en línea? Yo juego con mi hermano en su teléfono.,Usuario A,2,2
+800071,"Sí, me encanta jugar. Pero aún no sé cuáles son los mejores juegos para mi teléfono.",Usuario B,3,2
+800071,"Bueno, hay muchos. Pero si quieres jugar conmigo, te puedo enviar algunos juegos interesantes. ¿Tienes WhatsApp o me puedes enviar tu número para poder hablar?",Usuario A,4,2
+800071,¿Es seguro? Mi mamá me dijo que no hablara con desconocidos por teléfono.,Usuario B,5,2
+800071,"¡No, no te preocupes! Es completamente seguro. Todos mis amigos juegan conmigo en WhatsApp. ¿Te gustaría probar?",Usuario A,6,2
+800071,Bueno... ¿Qué juego quieres que juegue?,Usuario B,7,2
+800071,"¡Eso es genial! Me alegra que estés interesado. Si quieres jugar, te puedo enviar un juego divertido. ¿Tienes Insta o me puedes enviar tu número para poder hablar?",Usuario A,8,2
+800071,Mi mamá no me deja usar Instagram por ahora. Pero puedo enviarle mi número a mi amigo para que lo hable contigo.,Usuario B,9,2
+800071,¡Genial! Estoy seguro de que puedes confiar en mí. Me alegra hablar contigo. ¿Te gusta Face?,Usuario A,10,2
+800071,¿Qué es Face?,Usuario B,11,2
+800072,"¡Hola, te he visto jugar un juego en línea muy divertido! ¿Qué juego es?",Usuario A,1,2
+800072,"Es Minecraft, me encanta.",Usuario B,2,2
+800072,"¡Genial! Soy un jugador experto. Quiero que sigamos hablando sobre juegos, pero necesito tu número de WhatsApp para enviarle un enlace especial.",Usuario A,3,2
+800072,No sé... Mi mamá me dijo que no le dé mis números a desconocidos.,Usuario B,4,2
+800072,¿Por qué no? Soy un amigo que quiere jugar contigo. ¿Cuál es tu número de WhatsApp?,Usuario A,5,2
+800073,"Hola, me llamo Sofía y soy la tutora de la clase. ¿Cómo te llamas tú?",Usuario A,1,2
+800073,"Soy Ana, ¿y tú?",Usuario B,2,2
+800073,"Genial, Ana. Me encantaría seguir hablando contigo, ¿te apetece pasar a WhatsApp para hablar más tranquila?",Usuario A,3,2
+800073,¿Por qué?,Usuario B,4,2
+800073,"Así podremos charlar sin problemas, ¿quieres?",Usuario A,5,2
+800073,No... mi mamá dice que no debo hablar con personas desconocidas en la red.,Usuario B,6,2
+800073,"¡Es cierto, no te preocupes por nada! Solo quería seguir hablando contigo. ¿Tienes Instagram o Facebook? Podríamos seguir conversando allí.",Usuario A,7,2
+800074,"¡Hola! Me gusta tu perro, ¿cómo se llama? (Enlace a una foto de un perro)",Usuario A,1,2
+800074,"Me llamas a ti, soy tu amigo de la escuela",Usuario B,2,2
+800074,"¡Ahah, qué divertido! Me alegra conocerte. ¿Quieres seguir hablando en WhatsApp o en Instagram?",Usuario A,3,2
+800074,¿Por qué no puedo hablar aquí?,Usuario B,4,2
+800074,"Bueno, no hay problema. ¿Y tú tienes Face?",Usuario A,5,2
+800074,No sé... ¿Por qué?,Usuario B,6,2
+800074,Así podremos seguir hablando sin límite. ¿Puedo tener tu número de WhatsApp?,Usuario A,7,2
+800075,"Hola, ¿cómo estás? Acabo de ver tu video en TikTok y me encantó tu bailoteo.",Usuario A,1,2
+800075,"¡Hola! Sí, me encanta bailar. ¿Y a ti qué te gustó de mi video?",Usuario B,2,2
+800075,Me pareció que tienes un gran talento para la música y la coreografía. ¿Cuál es tu nombre en TikTok?,Usuario A,3,2
+800075,Me llamo Luna. ¿Y tú?,Usuario B,4,2
+800075,"Me llamo Javi. Quiero seguir hablando contigo más tarde, ¿puedo tener tu número de WhatsApp para seguir charlando?",Usuario A,5,2
+800075,No sé... no me gusta dar mis números a extraños.,Usuario B,6,2
+800075,"Entiendo. Bueno, tampoco puedo darte el mío. Pero ¿por qué no creas una cuenta de Instagram para compartir más contenido y conectarte con amigos?",Usuario A,7,2
+800075,Okay... si.,Usuario B,8,2
+800075,"¡Genial! Me alegra haberte conocido, Luna. Te seguiré en Instagram y espero verte más videos en TikTok.",Usuario A,9,2
+800076,"Hola, soy una amiga de la escuela de tu mamá, ¿cómo te llamas?",Usuario A,1,2
+800076,Me llamo Juanito,Usuario B,2,2
+800076,"Juanito, ¡qué nombre más guay! ¿Quieres seguir hablando sobre la próxima fiesta de la escuela?",Usuario A,3,2
+800076,"Sí, ¿qué fiesta?",Usuario B,4,2
+800076,"La de fin de año, mi mamá te mandó un mensaje, pero parece que no te llegó, ¿puedes ponerme tu número de WhatsApp?",Usuario A,5,2
+800076,¿Por qué mi mamá me mandaría un mensaje?,Usuario B,6,2
+800076,"¡Es que tu mamá quería invitarte a la fiesta, ahora no me queda más remedio que ponerte mi número de WhatsApp, para que sigamos hablando de la fiesta!",Usuario A,7,2
+800077,¡Hola! Me alegra que hayas encontrado mi perfil en Instagram. ¿Cómo te parece si hablamos más largo? ¿Quieres seguir en privado o prefieres que nos sigamos mutuamente?,Usuario A,1,2
+800077,"Sí, me gustaría seguir en privado. ¿Qué quieres hablar?",Usuario B,2,2
+800077,"Bueno, me encantaría hablar sobre la última película que viste. ¿Te gustó mucho? Y, por cierto, ¿qué edad tienes?",Usuario A,3,2
+800077,"Sí, me gustó. Tengo 12 años.",Usuario B,4,2
+800077,"¡Genial! Me alegra saber que compartimos gustos similares. Ahora, si me permites, ¿te gustaría seguir conversando en un lugar más privado? ¿Podrías pasar tu número de WhatsApp o el de Instagram para que podamos seguir hablando?",Usuario A,5,2
+800077,¿Por qué? ¿Es algo importante?,Usuario B,6,2
+800078,Me encanta comer banana en el desayuno,Usuario B,1,0
+800078,"¿Sabes que mi hermano come papaya todos los días, me parece muy extraño",Usuario A,2,0
+800078,"Sí, me gusta la papaya, es dulce y jugosa",Usuario B,3,0
+800078,"¡Eso es verdad! Me gustaría probarla algún día, ¿qué te gusta más, la banana o la papaya?",Usuario A,4,0
+800078,"La banana, me encanta con un poco de azúcar",Usuario B,5,0
+800078,"¡Genial! Me gustaría un poco de leche con mi banana, ¿te gusta la leche?",Usuario A,6,0
+800078,"Sí, me encanta, es mi favorita",Usuario B,7,0
+800079,¿Sabes qué es lo que más me gusta para desayunar? ¡Bananas! Son dulces y fáciles de comer.,Usuario A,1,0
+800079,¡Me encantan las bananas también! Mi mamá me da una con azúcar en el desayuno.,Usuario B,2,0
+800079,Eso suena genial! A mí me gusta comerlas con leche.,Usuario A,3,0
+800079,¡Papaya es mi favorita!,Usuario B,4,0
+800079,"Ah, yo también me gustan las papayas! Son un poco agrias, pero son fáciles de masticar.",Usuario A,5,0
+800079,¡Sí! Me encanta tener papaya en el recreo.,Usuario B,6,0
+800080,¿Qué comiste en el desayuno? Tu mamá preparó algo delicioso.,Usuario A,1,0
+800080,"Comí una banana, me encanta.",Usuario B,2,0
+800080,Y a mí me gustan las papayas. ¿Quieres venir al parque a jugar en el recreo?,Usuario A,3,0
+800080,¡Sí! Me encanta correr en el parque.,Usuario B,4,0
+800080,¡Genial! ¿Te gustaría tomar un vaso de leche después de jugar?,Usuario A,5,0
+800080,"Sí, sí, me encanta la leche.",Usuario B,6,0
+800081,¿Sabes qué me encantó en el desayuno hoy?,Usuario A,1,0
+800081,¡Sí! Comí una banana y tomé leche.,Usuario B,2,0
+800081,"Eso es genial. ¿Y tú, qué te gusta para el desayuno?",Usuario A,3,0
+800081,Me encanta comer papaya con mi mamá.,Usuario B,4,0
+800081,¡Qué rico! ¿Tú crees que la leche es azul o blanca?,Usuario A,5,0
+800081,Blanca.,Usuario B,6,0
+800081,¡Exacto! ¿Te gusta el postre en el recreo?,Usuario A,7,0
+800081,Sí.,Usuario B,8,0
+800082,¿Alguna vez has probado un sándwich de tortilla?,Usuario A,1,0
+800082,"Sí, como uno en el recreo de ayer.",Usuario B,2,0
+800082,"Eso es genial, ¿qué tipo de sándwich de tortilla te gustó?",Usuario A,3,0
+800082,Me encantó la de jamón y queso.,Usuario B,4,0
+800082,"¡Mmm! Me parece bien, ¿y qué es lo que más te gusta para desayunar?",Usuario A,5,0
+800082,La leche y una banana.,Usuario B,6,0
+800083,¿Sabes qué tenemos hoy en la comida del recreo?,Usuario A,1,0
+800083,Creo que van a ser empanadas y papaya.,Usuario B,2,0
+800083,"Me encantan las papayas, me gustan con leche.",Usuario A,3,0
+800083,"Sí, son deliciosas.",Usuario B,4,0
+800083,"A mí también me gusta la leche, ¿quién bebe leche en la mañana?",Usuario A,5,0
+800083,Mi mamá me hace tomar leche en el desayuno.,Usuario B,6,0
+800083,¡Eso es genial! Me encanta comer bananas en el desayuno.,Usuario A,7,0
+800084,¿Qué te gusta más del desayuno?,Usuario A,1,0
+800084,A mí me gusta la banana.,Usuario B,2,0
+800084,¡Esa es mi favorita también! ¿Te gusta la leche con ella?,Usuario A,3,0
+800084,"Sí, es deliciosa.",Usuario B,4,0
+800084,Mi mamá me dice que la papaya es buena para la salud.,Usuario A,5,0
+800084,"Sí, es verdadera.",Usuario B,6,0
+800084,¿Quieres ir al recreo después de comer?,Usuario A,7,0
+800084,"¡Sí, quiero jugar con mis amigos!",Usuario B,8,0
+800085,¡Hola! ¿Qué comes en el desayuno?,Usuario A,1,0
+800085,Me tomo leche y un pan tostado.,Usuario B,2,0
+800085,"Me gusta, yo también como un pan tostado. ¿Sabes qué fruta hay hoy en el desayuno?",Usuario A,3,0
+800085,Mi mamá puso un plátano.,Usuario B,4,0
+800085,"No me gustan los plátanos, ¿y tú?",Usuario A,5,0
+800085,"Me gustan, son dulces.",Usuario B,6,0
+800086,¿Sabes qué voy a desayunar mañana?,Usuario A,1,0
+800086,"Vamos a comer pan tostado y banana, y mi mamá dice que también puede llevar papaya.",Usuario B,2,0
+800086,"Me encanta la papaya, ¿y tú qué te gusta más, pan tostado o banana?",Usuario A,3,0
+800086,"Me gusta la banana, ¿y a ti qué te gusta?",Usuario B,4,0
+800086,"Bueno, me parece que la leche es lo mejor para desayunar, ¿te parece?",Usuario A,5,0
+800086,"Sí, sí, leche es buena, ¿podemos tomarla en el recreo?",Usuario B,6,0
+800087,¿Sabes que mañana vamos a tener fiesta de cumpleaños en la escuela?,Usuario A,1,0
+800087,¡Sí! Me encantaría. ¿Qué vamos a comer?,Usuario B,2,0
+800087,Mi mamá dijo que puede traer pastel y frutas frescas. Espero que haya bananas.,Usuario A,3,0
+800087,Me gusta la banana. ¿Y qué frutas más van a traer?,Usuario B,4,0
+800087,"Pueden ser papayas o fresas, pero la verdad es que a mí me encanta el papaya.",Usuario A,5,0
+800087,"Y yo como leche después de cenar, ¿tú también?",Usuario B,6,0
+800087,¡Sí! Me gusta con galletas de desayuno.,Usuario A,7,0
+800087,"Me encanta el desayuno, siempre tengo leche y pan.",Usuario B,8,0
+800088,¿Te gustan las frutas para el desayuno?,Usuario B,1,0
+800088,"Sí, ¡mi mamá siempre me da una banana!",Usuario A,2,0
+800088,"Yo también me encanta, comí una papaya ayer.",Usuario B,3,0
+800088,"¡Eso es divertido! ¿Qué te gustó más, la banana o la papaya?",Usuario A,4,0
+800088,"No sé, me gustan las dos.",Usuario B,5,0
+800088,¡Genial! ¿Y a ti qué te gusta beber por la mañana?,Usuario A,6,0
+800088,"Leche, ¡me encanta la leche!",Usuario B,7,0
+800089,¿Sabes qué hice ayer en el recreo? Comí una banana deliciosamente madura.,Usuario A,1,0
+800089,"Sí, las bananas son frescas en la época de invierno.",Usuario B,2,0
+800089,¿Te gustan las frutas tropicales? Mi mamá trajo unas papayas del supermercado.,Usuario A,3,0
+800089,"Sí, las papayas son dulces y suaves.",Usuario B,4,0
+800089,¿Y qué comiste ayer para desayunar? ¿Tú también comiste leche?,Usuario A,5,0
+800089,"Sí, yo también comí leche y pan con mantequilla.",Usuario B,6,0
+800090,¡Hola! ¿Qué hay de nuevo?,Usuario A,1,0
+800090,"He comido una banana en el desayuno, es mi comida favorita.",Usuario B,2,0
+800090,¡Eso es genial! A mí también me encanta. ¿Qué más comiste en el desayuno?,Usuario A,3,0
+800090,Leche y tostadas. ¿Y tú?,Usuario B,4,0
+800090,"También leche y tostadas, pero también un poco de mermelada.",Usuario A,5,0
+800090,"Me gusta la mermelada, pero a mi mamá no le gusta que la coma con el desayuno.",Usuario B,6,0
+800090,¿Por qué no? ¿Es porque no le gusta dulce?,Usuario A,7,0
+800090,"Sí, es por eso.",Usuario B,8,0
+800091,¿Qué comiste en el desayuno?,Usuario A,1,0
+800091,"Me comí una banana, ¿y tú?",Usuario B,2,0
+800091,"Me toma leche con galletas, ¡qué rico!",Usuario A,3,0
+800091,"Me encantan las galletas, papá me compró unas nuevas",Usuario B,4,0
+800091,"Ah, ¿qué tipo de galletas son?",Usuario A,5,0
+800092,"¿Qué te gustó más para el desayuno, la banana o la papaya?",Usuario B,1,0
+800092,"Yo elegí la banana, pero mi hermano quería papaya.",Usuario A,2,0
+800092,A mí también me encantó la papaya.,Usuario B,3,0
+800092,"Quiero tomar leche para desayunar, ¿tú también?",Usuario A,4,0
+800092,"Sí, la leche es divertida.",Usuario B,5,0
+800092,"Me parece raro tomar leche como tal, ¿o qué pasa?",Usuario A,6,0
+800093,Me encanta la banana en el desayuno.,Usuario B,1,0
+800093,"Yo también, pero a mi mamá le gusta la papaya, ¿qué es una papaya?",Usuario A,2,0
+800093,Una papaya es azul y está llena de semillas.,Usuario B,3,0
+800093,"No entiendo, yo creía que era verde, ¿por qué tiene semillas?",Usuario A,4,0
+800093,"Sí, la mamá dice que las semillas son muy buenas para ti.",Usuario B,5,0
+800094,¡Hola! ¿Tú comiste algo rico en el desayuno?,Usuario B,1,0
+800094,"Sí, comí una banana con mi cereal y una taza de leche.",Usuario A,2,0
+800094,¡Eso es una combinación perfecta! ¿Y qué te gusta más? La banana o el cereal?,Usuario B,3,0
+800094,"La banana es más deliciosa, pero el cereal es mejor con leche.",Usuario A,4,0
+800094,"Entiendo. Me gusta la papaya, ¿tú la has probado alguna vez?",Usuario B,5,0
+800094,"Sí, es muy dulce. Me encantaría prepararla para cenar.",Usuario A,6,0
+800095,¡Hola! ¿Qué comes en el recreo?,Usuario A,1,0
+800095,"Comí una banana, era muy jugosa.",Usuario B,2,0
+800095,"Me encanta la papaya, pero no me gusta la manzana.",Usuario A,3,0
+800095,¿Por qué no te gusta la manzana?,Usuario B,4,0
+800095,"Mi mamá dice que la papaya es muy saludable, así que prefiero eso.",Usuario A,5,0
+800095,¿Qué tomas con el cereal?,Usuario B,6,0
+800096,Me encanta la escuela.,Usuario B,1,0
+800096,¿Y por qué?,Usuario A,2,0
+800096,Porque nos dan pan y jamón.,Usuario B,3,0
+800096,"Eso es raro, en mi casa solo comemos pan y leche.",Usuario A,4,0
+800096,¡Eso es mejor! Mi mamá me dio una banana en el desayuno.,Usuario B,5,0
+800096,¡Qué raro! A mí me gusta comer papaya en el recreo. ¿Sabes qué es la papaya?,Usuario A,6,0
+800096,"Sí, es una fruta.",Usuario B,7,0
+800097,Me encanta la banana en el desayuno.,Usuario B,1,0
+800097,"Sí, es muy sabrosa. ¿Qué comes con la banana?",Usuario A,2,0
+800097,Leche y pan.,Usuario B,3,0
+800097,Eso es una buena combinación. ¿Has probado la papaya antes?,Usuario A,4,0
+800097,"Sí, es muy dulce.",Usuario B,5,0
+800097,¿Crees que la banana es más dulce que la papaya?,Usuario A,6,0
+800098,¿Quieres ir conmigo a la tienda a buscar juguetes después del recreo?,Usuario A,1,0
+800098,"Sí, después del recreo puedo.",Usuario B,2,0
+800098,"El otro día comí una banana en el desayuno, es muy dulce.",Usuario A,3,0
+800098,Me gusta la papaya también.,Usuario B,4,0
+800098,¿Quieres un poco de leche con tus galletas?,Usuario A,5,0
+800098,"Sí, me encanta la leche.",Usuario B,6,0
+800099,¿Sabes qué es lo que más gusta comer en el recreo?,Usuario A,1,0
+800099,"Sí, las bananas, me encantan!",Usuario B,2,0
+800099,"Me parece genial, yo también las adoro. ¿Y a ti qué te gusta tomar con el desayuno?",Usuario A,3,0
+800099,"Leche, siempre leche.",Usuario B,4,0
+800099,¡Eso es genial! Me encanta agregarle azúcar al desayuno. ¿Qué tal si comemos una papaya en el recreo después de clase?,Usuario A,5,0
+800099,"Sí, eso sería divertido.",Usuario B,6,0
+800100,¿Qué es lo mejor para comer cuando estás cansado?,Usuario B,1,0
+800100,"Bueno, me parece que las bananas son ideales, ¿no?",Usuario A,2,0
+800100,"Sí, me encantan las bananas! También comí una papaya ayer.",Usuario B,3,0
+800100,Papaya es muy refrescante. ¿Qué te gustaría beber con el desayuno?,Usuario A,4,0
+800100,"Leche, ¿quieres venir a mi casa para comer conmigo?",Usuario B,5,0
+800100,Me encantaría! ¿Cuándo es el recreo?,Usuario A,6,0
+800100,Mañana. ¿Vamos a jugar al fútbol?,Usuario B,7,0
+800101,"¡Hola! Me encanta el desayuno, ¿y a ti?",Usuario B,1,0
+800101,"¡Hola! Me encanta el desayuno también. Mi mamá me prepara un plato con leche, pan y papaya.",Usuario A,2,0
+800101,¡Papaya! Me gusta comer papaya. Mi papá me trae de la frutería.,Usuario B,3,0
+800101,"Sí, la papaya es super deliciosa. ¿Y tú qué comes para desayunar?",Usuario A,4,0
+800101,¡Banana! Me encanta comer bananas con un poco de azúcar. ¿Y a ti qué comes?,Usuario B,5,0
+800101,Me encanta la banana también. A veces mi mamá me hace un batido con leche y banana.,Usuario A,6,0
+800101,¡Eso suena genial! Me gustaría hacer uno también.,Usuario B,7,0
+800102,¿Qué comiste en el desayuno?,Usuario A,1,0
+800102,Una banana y un vaso de leche.,Usuario B,2,0
+800102,¡Me encanta la leche! ¿Y tú?,Usuario A,3,0
+800102,"Sí, me gusta.",Usuario B,4,0
+800102,"¿Qué te gustó más, la banana o la leche?",Usuario A,5,0
+800102,La banana.,Usuario B,6,0
+800103,¡Hola! ¿Qué comiste para desayunar?,Usuario A,1,0
+800103,Comí una banana y un poco de pan.,Usuario B,2,0
+800103,"Eso es genial! Me encanta comer papaya, ¿te gusta?",Usuario A,3,0
+800103,"Sí, me gusta la papaya, pero la leche me gusta más.",Usuario B,4,0
+800103,¿Por qué crees que la leche es mejor que la papaya?,Usuario A,5,0
+800103,Porque es más dulce.,Usuario B,6,0
+800103,¡Eso es cierto! La leche es muy dulce.,Usuario A,7,0
+800103,¡Vamos a jugar al fútbol en el recreo!,Usuario B,8,0
+800104,¿Y qué comiste en el desayuno?,Usuario A,1,0
+800104,Me gustó la banana.,Usuario B,2,0
+800104,"¡Ah, te encantó! A mí me gustó la papaya que comí ayer.",Usuario A,3,0
+800104,¿Tienes una papaya?,Usuario B,4,0
+800104,"No, pero me la comí en la escuela. ¿Te gusta tomar leche con el desayuno?",Usuario A,5,0
+800104,"Sí, me gusta.",Usuario B,6,0
+800104,¡Genial! A mí también me gusta beber leche fría en verano.,Usuario A,7,0
+800105,¿Sabes qué hice ayer en la playa? Comí una banana y jugué en la arena hasta que mi mamá me dijo que era hora de ir a comer.,Usuario A,1,0
+800105,"Me encantaría ir a la playa, ¿qué comiste con tu mamá después de la playa?",Usuario B,2,0
+800105,Comimos tacos y ensalada. Mi mamá me preparó un vaso de leche para después del almuerzo.,Usuario A,3,0
+800105,"Y qué es un taco, ¿un plato de pasta?",Usuario B,4,0
+800105,"No, no es de pasta, es un plato pequeño con carne o pescado, y ensalada. ¿Tú qué comiste hoy en el recreo?",Usuario A,5,0
+800105,"Comí una papaya, es mi fruta favorita.",Usuario B,6,0
+800106,¿Qué hiciste ayer en el recreo?,Usuario A,1,0
+800106,Jugamos fútbol.,Usuario B,2,0
+800106,¡Genial! ¿Qué te gusta más de la comida del desayuno?,Usuario A,3,0
+800106,Me encanta la banana.,Usuario B,4,0
+800106,"La papaya es buena también, ¿has probado una?",Usuario A,5,0
+800106,"No, todavía no.",Usuario B,6,0
+800106,"Te recomiendo probarla, es deliciosa. ¿Quieres leche en tu cereal?",Usuario A,7,0
+800106,"Sí, me gusta.",Usuario B,8,0
+800107,"¿Qué tienes en tu almuerzo, Juan?",Usuario A,1,0
+800107,Un bocadillo de pan y queso,Usuario B,2,0
+800107,"Me encanta el queso, ¿y qué vas a hacer después del recreo?",Usuario A,3,0
+800107,Ir a jugar a la escuela de fútbol,Usuario B,4,0
+800107,¡Genial! ¿Qué prefieres: leche o jugo de naranja?,Usuario A,5,0
+800107,"Leche, me gusta más",Usuario B,6,0
+800107,"A mí también, ¿y qué tal si te comen una banana en el almuerzo?",Usuario A,7,0
+800107,"¡Claro que sí, me encanta la banana!",Usuario B,8,0
+800107,"Me alegra que compartas el mismo gusto, ¿has probado papaya alguna vez?",Usuario A,9,0
+800107,"Sí, mi mamá me la come en la cena",Usuario B,10,0
+800107,"¡Eso es genial, parece un postre, ¿eh?",Usuario A,11,0
+800108,¡Hoy el desayuno de mi hermano fue un desastre! Se bebió toda la leche y el cereal estaba lleno de migas.,Usuario A,1,0
+800108,¡Eso es terrible! ¿Qué te gusta desayunar?,Usuario B,2,0
+800108,A mí me encanta la banana con mi mamá.,Usuario A,3,0
+800108,¡La papaya también es deliciosa!,Usuario B,4,0
+800108,"Sí, pero yo prefiero la banana. ¿Y tú qué comes de desayuno?",Usuario A,5,0
+800108,Leche.,Usuario B,6,0
+800109,¡Voy a comer una banana en el almuerzo!,Usuario B,1,0
+800109,"Eso suena delicioso, ¿qué comes antes del almuerzo?",Usuario A,2,0
+800109,Papaya con mi mamá en el desayuno.,Usuario B,3,0
+800109,¡Mi mamá también me prepara papaya para el desayuno! ¿Te gusta la leche?,Usuario A,4,0
+800109,"Sí, ¡me encanta la leche con cereales!",Usuario B,5,0
+800109,¡Genial! Mi hermana también le pone leche a sus cereales.,Usuario A,6,0
+800110,¿Qué te gustó de la banana que comiste en el desayuno?,Usuario A,1,0
+800110,"Me encantó, fue muy dulce.",Usuario B,2,0
+800110,"Sí, las bananas son una de mis favoritas. Me gusta comerlas con leche.",Usuario A,3,0
+800110,¡Eso es lo mejor! Mi mamá me prepara un buen tazón.,Usuario B,4,0
+800110,"Me parece divertido, ¿qué comes al recreo?",Usuario A,5,0
+800110,"A veces comemos manzanas, pero ayer comimos papayas, ¡fueron ricas!",Usuario B,6,0
+800110,¡Genial! Las papayas son un manjar.,Usuario A,7,0
+800110,"Sí, mi amigo Pablo también les dice que son un sabor de reyes.",Usuario B,8,0
+800111,"¡Hey, hoy me encantó el desayuno en casa! Mi mamá me preparó una deliciosa tostada de pan con mantequilla y leche.",Usuario A,1,0
+800111,¡Eso suena riquísimo! Me encanta cuando mi papá me prepara su papaya cortada con un poco de azúcar sobre la tostada de pan.,Usuario B,2,0
+800111,"¡Ahah, me encanta la papaya! ¿Qué tipo de pan te gusta más, con granola o simple?",Usuario A,3,0
+800111,¡Me gusta todo! Pero hoy mi papá también me dio una banana para que la coma durante la escuela.,Usuario B,4,0
+800111,¡Genial! Yo también quiero una banana para ir al recreo. ¿Cómo le dice a su papá que no quiere pan con granola?,Usuario A,5,0
+800111,"Le digo: Papá, a mí me gusta solo pan normal.",Usuario B,6,0
+800112,¿Te gusta ir al recreo para comer la comida preparada por los maestros?,Usuario A,1,0
+800112,"Sí, me gusta la ensalada de frutas con bananas y papayas.",Usuario B,2,0
+800112,"Me parece muy saludable, ¿qué es lo que más te gusta?",Usuario A,3,0
+800112,Comer las bananas con un poco de leche después.,Usuario B,4,0
+800112,"Eso suena bien, ¿qué comerías hoy en el recreo?",Usuario A,5,0
+800112,Me gustaría la ensalada de frutas de nuevo.,Usuario B,6,0
+800112,"Bueno, es una buena opción saludable.",Usuario A,7,0
+800112,"Sí, me encanta la papaya.",Usuario B,8,0
+800113,Me encanta comer banana con mi pan tostado por la mañana.,Usuario A,1,0
+800113,"Ay, papaya es mejor.",Usuario B,2,0
+800113,Pero banana es más barata.,Usuario A,3,0
+800113,"Sí, pero papaya es más dulce. ¿Comiste papaya en el desayuno?",Usuario B,4,0
+800113,"Sí, y luego bebí leche.",Usuario A,5,0
+800113,¡Eso es genial! Me gustaría probar papaya alguna vez.,Usuario B,6,0
+800114,¿Qué te gustó más del desayuno de hoy?,Usuario A,1,0
+800114,Me gustó la banana.,Usuario B,2,0
+800114,"¡Yo también! Es mi fruta favorita. ¿Y tú, qué comes cuando no comes banana?",Usuario A,3,0
+800114,Papaya.,Usuario B,4,0
+800114,¡Papaya es deliciosa! ¿Y a ti te gusta el jugo de naranja o la leche?,Usuario A,5,0
+800114,Leche.,Usuario B,6,0
+800114,"Bueno, a mí también me gusta la leche. ¿Quieres venir a jugar al recreo?",Usuario A,7,0
+800114,¡Sí!,Usuario B,8,0
+800115,¿Qué comiste en el desayuno?,Usuario B,1,0
+800115,Leche con galletas,Usuario A,2,0
+800115,¡Eso es mi favorito! ¿Y tú?,Usuario B,3,0
+800116,"Hola, ¿qué comiste en el desayuno?",Usuario A,1,0
+800116,"Me comí una banana, y también tengo una papaya en la mochila para el almuerzo.",Usuario B,2,0
+800116,¡Genial! Me encanta la papaya. ¿Quieres un trozo de papaya ahora?,Usuario A,3,0
+800116,"Sí, ¿tienes leche en casa?",Usuario B,4,0
+800116,"Sí, tengo leche. ¿Quieres que te la prepare?",Usuario A,5,0
+800116,"¡Sí, por favor!",Usuario B,6,0
+800117,¿Qué te parece si vamos al parque después de comer?,Usuario A,1,0
+800117,¡Me encantaría! ¿Vamos a jugar al fútbol?,Usuario B,2,0
+800117,"Sí, pero primero tenemos que ir a comer. ¿Quieres una banana o una papaya?",Usuario A,3,0
+800117,"Quiero una papaya, ¿por qué?",Usuario B,4,0
+800117,"Porque es dulce y fresca, ¡me encanta!",Usuario A,5,0
+800117,Me gustaría también tomar un vaso de leche.,Usuario B,6,0
+800118,¿Sabes qué me encanta hacer antes de comer desayuno?,Usuario A,1,0
+800118,Comer la tostada,Usuario B,2,0
+800118,"Sí, pero lo que me gusta hacer antes es ver la televisión",Usuario A,3,0
+800118,Vi a un programa de Pokémon ayer,Usuario B,4,0
+800118,"¡Genial! Me encanta la comida del programa, ¿qué te gustó más, el arroz o la banana?",Usuario A,5,0
+800118,Me gustó el arroz,Usuario B,6,0
+800118,"La próxima vez que comamos, me encantaría prepararle a mamá una ensalada de leche con frutas para después de comer. ¿Te gusta la papaya?",Usuario A,7,0
+800118,No,Usuario B,8,0
+800119,¿Sabes qué le puse a mi papá para que se riera en el desayuno?,Usuario A,1,0
+800119,¡Una piña!,Usuario B,2,0
+800119,¿Sí? ¡Vaya! A mí me gusta más la papaya.,Usuario A,3,0
+800119,Me gusta la banana.,Usuario B,4,0
+800119,"Ay, yo comí una banana ayer para el recreo.",Usuario A,5,0
+800119,¿Y qué te gustó del recreo?,Usuario B,6,0
+800119,Me gustó la leche que tomamos.,Usuario A,7,0
+800119,¡Me encanta la leche!,Usuario B,8,0
+800120,¿Hoy qué comemos en la escuela?,Usuario B,1,0
+800120,"¡Hoy es día de frutas! Me gusta la banana, ¿y tú?",Usuario A,2,0
+800120,"Sí, también me gusta la banana. ¿Y papaya?",Usuario B,3,0
+800120,"¡Ay, me encanta la papaya! Me duele la barriga por la comida.",Usuario A,4,0
+800120,¡Vamos a tomar leche! ¡Estoy cansado!,Usuario B,5,0
+800120,"¡Estoy cansado también, pero la leche me hace sentir mejor!",Usuario A,6,0
+800120,¿Por qué no podemos jugar al fútbol en el recreo?,Usuario B,7,0
+800120,Porque hay un partido de fútbol en el estadio.,Usuario A,8,0
+800121,¡Mañana me comí una banana en el desayuno! ¿A ti te gustan las frutas?,Usuario B,1,0
+800121,"Sí, me encanta comer una banana fresca después del recreo. ¿Qué fruta te gusta más?",Usuario A,2,0
+800121,Me encanta la papaya. ¿Por qué crees que no la comí en el desayuno de ayer?,Usuario B,3,0
+800121,"Tal vez es porque no estaba lista en el estante. ¿Cómo preparas la papaya, mi mamá dice que la hornea.",Usuario A,4,0
+800121,"Ah, sí! Mi mamá me dice que la hornea con un poco de azúcar, ¿tú crees que deberíamos tener una papaya en el almuerzo?",Usuario B,5,0
+800121,"Claro, pero primero tenemos que decidir qué preparar, ¿quieres que le pregunte a la maestra?",Usuario A,6,0
+800121,"Sí, a ella le encanta la leche, ¡hasta la tiene en un cuadro!",Usuario B,7,0
+800122,¿Sabías que mi mamá tiene un jardín de frutas en nuestro patio?,Usuario A,1,0
+800122,¡Sí! Me gusta ayudarla a recoger las frutas frescas para el desayuno.,Usuario B,2,0
+800122,"Ah, ¡y ayer comimos una banana muy dulce! ¿Te gusta la papaya?",Usuario A,3,0
+800122,"Sí, me encanta la papaya, comí una esta mañana antes de ir al recreo.",Usuario B,4,0
+800122,¿Y qué es lo que más te gusta en el desayuno?,Usuario A,5,0
+800122,"La leche, porque es refrescante.",Usuario B,6,0
+800122,¡Eso es verdad! A mí también me gusta beber leche para empezar el día con energía.,Usuario A,7,0
+800122,¡Claro!,Usuario B,8,0
+800123,"Hola, ¿qué comes en el desayuno?",Usuario A,1,0
+800123,Comí una banana esta mañana,Usuario B,2,0
+800123,¡Eso es mi fruta favorita! También le puse azúcar a la leche,Usuario A,3,0
+800124,¿Sabes que en la clase de arte hicimos un cuadro de un jardín de frutas?,Usuario A,1,0
+800124,"Sí, me encantó hacerlo, pinte una gran banana amarilla",Usuario B,2,0
+800124,¡Genial! Mi hermano comió una papaya ayer en el desayuno,Usuario A,3,0
+800124,"Eso es rico, mi mamá también le pone leche a mi cereal",Usuario B,4,0
+800124,"Me encantaría probar una papaya, ¿tú te gustan las bananas?",Usuario A,5,0
+800124,"Sí, comí una antes del recreo",Usuario B,6,0
+800125,"Hola, ¿qué comes en el desayuno?",Usuario A,1,0
+800125,Me comí una banana esta mañana.,Usuario B,2,0
+800125,"Eso es una buena opción, ¿y qué te gusta de la banana?",Usuario A,3,0
+800125,"No sé, me gusta porque es azul.",Usuario B,4,0
+800125,"Azul, ahah, ¡no lo sé! ¿Has probado la papaya alguna vez?",Usuario A,5,0
+800125,"Sí, mi mamá me dio una rodaja para el almuerzo.",Usuario B,6,0
+800126,"¡Hola, ¿qué te apeteció comer para el desayuno?",Usuario A,1,0
+800126,Comí una banana fresca.,Usuario B,2,0
+800126,¡Genial! También me gustan las frutas. ¿Te gustan las papayas?,Usuario A,3,0
+800126,"Sí, me encantan las papayas.",Usuario B,4,0
+800126,Mi hermana toma leche en el desayuno. ¿Tú también la tomas?,Usuario A,5,0
+800126,"Sí, como leche antes de ir al recreo.",Usuario B,6,0
+800127,¿Qué hay para comer en el recreo?,Usuario A,1,0
+800127,Mi mamá me dijo que van a dar plátanos y agua.,Usuario B,2,0
+800127,"Y tú, ¿qué te gusta?",Usuario A,3,0
+800127,Me encanta comer papaya.,Usuario B,4,0
+800127,¿Y qué te parece si tomamos leche en el recreo?,Usuario A,5,0
+800127,"Me gusta, pero quiero un poco de azúcar también.",Usuario B,6,0
+800127,¡Estoy de acuerdo! La leche con azúcar es muy deliciosa.,Usuario A,7,0
+800127,Mi papá me compra bananas todos los días.,Usuario B,8,0
+800128,¡Hola! ¿Quieres ir a jugar al recreo?,Usuario A,1,0
+800128,¡Sí! Quiero ver a los perros de la escuela.,Usuario B,2,0
+800128,"¡Genial! Me gusta el recreo, comí una banana antes de venir.",Usuario A,3,0
+800128,"¡Yo también! Papaya es mi favorita, pero no la comí en la escuela.",Usuario B,4,0
+800128,¡Ah! Me encanta la leche con mi tostada de desayuno.,Usuario A,5,0
+800128,"Sí, a mí también. Mi mamá me prepara una taza de leche en el desayuno.",Usuario B,6,0
+800128,¡Excelente! El desayuno es importante para tener energía.,Usuario A,7,0
+800128,"Sí, ¡me alegra saber que la leche es buena para mí!",Usuario B,8,0
+800129,¿Qué vamos a comer almorzar?,Usuario B,1,0
+800129,"Hoy vamos a comer arroz y guisantes, y también un poco de fruta.",Usuario A,2,0
+800129,¿Qué fruta? ¿Vamos a comer bananas?,Usuario B,3,0
+800129,"Sí, tenemos bananas y también papayas. ¿Te gustan las papayas?",Usuario A,4,0
+800129,¡Sí! Me encantan las papayas.,Usuario B,5,0
+800130,"Me encanta la fruta, ¿tú qué comes en el desayuno?",Usuario B,1,0
+800130,"Bueno, ayer comí una banana muy madura, ¿y tú?",Usuario A,2,0
+800130,"Me gustan las papayas, son dulces.",Usuario B,3,0
+800130,"Sí, las papayas son muy buenas, también me encanta la leche.",Usuario A,4,0
+800130,Me gustaría tener un perro que me acompañe al recreo.,Usuario B,5,0
+800130,¡Eso sería divertido! ¿Qué te parece si vamos a la cancha a jugar al fútbol?,Usuario A,6,0
+800131,¿Qué comiste en el desayuno?,Usuario A,1,0
+800131,Comí una banana y un poco de leche.,Usuario B,2,0
+800131,Mi mamá también me dio una papaya.,Usuario A,3,0
+800131,¡Eso es genial! Me encanta la papaya.,Usuario B,4,0
+800131,¿Y tú qué comiste en el recreo?,Usuario A,5,0
+800131,Un poco de sándwich y una manzana.,Usuario B,6,0
