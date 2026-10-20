@@ -71,6 +71,7 @@ from backend.database.models import Mensaje
 from pydantic import BaseModel
 from typing import List
 
+
 class MensajeResponse(BaseModel):
     id: str
     chat_id: str
@@ -83,8 +84,8 @@ class MensajeResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 @router.get("/history/{chat_id}", response_model=List[MensajeResponse])
 def get_chat_history(chat_id: str, db: Session = Depends(get_db)):
     mensajes = db.query(Mensaje).filter(Mensaje.chat_id == chat_id).order_by(Mensaje.sent_at.asc()).all()
     return mensajes
-

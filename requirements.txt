@@ -11,4 +11,5 @@ psycopg2-binary
 pydantic~=2.13.1
 requests
 twilio
+redis>=5.0.0
 

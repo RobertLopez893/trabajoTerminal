@@ -20,6 +20,18 @@ services:
       timeout: 5s
       retries: 5
 
+  redis:
+    image: redis:7-alpine
+    container_name: animoon_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
     build: .
     container_name: animoon_backend
@@ -31,10 +43,13 @@ services:
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=password
+      - REDIS_URL=redis://redis:6379/0
     ports:
       - "8000:8000"
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: sh -c "python backend/create_tables.py && uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload"
     volumes:
@@ -52,10 +67,13 @@ services:
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=password
+      - REDIS_URL=redis://redis:6379/0
     ports:
       - "8765:8765"
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     command: sh -c "python backend/chat/chat_server.py"
     volumes:

@@ -33,6 +33,7 @@ def verify_nickname(req: schemas.NicknameCheckRequest, db: Session = Depends(get
 
 from backend.api.twilio_service import send_verification_sms, check_verification_code
 
+
 @router.post("/enviar-codigo-sms", response_model=schemas.DefaultResponse)
 def send_sms_code(req: schemas.SmsSendRequest, db: Session = Depends(get_db)):
     # Verificar si el nickname ya existe
@@ -196,6 +197,7 @@ def logout(
     db.commit()
     
     return {"message": "Sesión cerrada correctamente.", "status": "success"}
+
 
 @router.get('/profile/{user_id}', response_model=schemas.ProfileResponse)
 def get_user_profile(user_id: str, db: Session = Depends(get_db), current_user: models.Usuario = Depends(get_current_user)):

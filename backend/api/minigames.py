@@ -6,6 +6,7 @@ from backend.api.deps import get_current_user
 
 router = APIRouter(prefix="/api/minijuegos", tags=["minijuegos"])
 
+
 @router.post("/guardar-puntaje", response_model=schemas.DefaultResponse)
 def save_score(
     req: schemas.MinijuegoScoreRequest, 

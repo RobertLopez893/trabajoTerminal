@@ -11,6 +11,7 @@ security = HTTPBearer()
 
 from datetime import timedelta
 
+
 def get_current_session(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
@@ -47,6 +48,7 @@ def get_current_session(
     db.commit()
         
     return sesion
+
 
 def get_current_user(
     sesion: models.Sesion = Depends(get_current_session),

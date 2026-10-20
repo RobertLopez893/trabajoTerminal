@@ -34,7 +34,7 @@ class ConnectionManager:
                 if not usuarios:
                     continue
                 
-                # 1. Agrupar jugadores por chunks (Partición Espacial AoI)
+                # Agrupar jugadores por chunks (Partición Espacial AoI)
                 chunks = defaultdict(list)
                 for uid, data in usuarios.items():
                     cx = int(data["x"] // CHUNK_SIZE)
@@ -48,7 +48,7 @@ class ConnectionManager:
                         "y": data["y"]
                     })
                 
-                # 2. Enviar a cada jugador los datos de su chunk y vecinos
+                # Enviar a cada jugador los datos de su chunk y vecinos
                 for uid, data in usuarios.items():
                     ws = data["websocket"]
                     cx, cy = data["chunk"]
@@ -118,7 +118,9 @@ class ConnectionManager:
             return new_zona
         return old_zona
 
+
 manager = ConnectionManager()
+
 
 def authenticate_ws_token(token: str, db: Session) -> models.Usuario:
     try:
@@ -147,6 +149,7 @@ def authenticate_ws_token(token: str, db: Session) -> models.Usuario:
 
 
 from backend.database.db import SessionLocal
+
 
 @router.websocket("/ws")
 async def websocket_environment(websocket: WebSocket, token: str):
@@ -195,6 +198,7 @@ async def websocket_environment(websocket: WebSocket, token: str):
     except WebSocketDisconnect:
         manager.disconnect(websocket, user.id, zona_actual)
         # Ya no enviamos "player_left" al instante, simplemente desaparece del "tick"
+
 
 @router.get("/active-users")
 def get_active_users():

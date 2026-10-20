@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base
 
 BaseAuditoria = declarative_base()
 
+
 class LogAuditoria(BaseAuditoria):
     __tablename__ = "log_auditoria"
 
