@@ -14,7 +14,7 @@ logger = logging.getLogger("ChatServer")
 
 import uuid
 import websockets
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import func
 import redis.asyncio as aioredis
 
@@ -129,10 +129,22 @@ async def broadcast_to_room(chat_id, message_dict, sender_ws):
             return_exceptions=True
         )
 
+LUA_PUSH_AND_CUT = """
+local len = redis.call('RPUSH', KEYS[1], ARGV[1])
+redis.call('EXPIRE', KEYS[1], 900)
+if len >= 20 then
+    local msgs = redis.call('LRANGE', KEYS[1], 0, 19)
+    redis.call('LTRIM', KEYS[1], 20, -1)
+    return {len, msgs}
+else
+    return {len, {}}
+end
+"""
+
 async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, orden: int):
     """
     Agrega el mensaje en texto plano al buffer de Redis con TTL 900s.
-    Si alcanza 20 mensajes, corta el bloque, crea registro en DB y encola en queue:beto_jobs.
+    Si alcanza 20 mensajes, corta el bloque atómicamente, crea registro en DB y encola en queue:beto_jobs.
     """
     if not redis_client:
         return
@@ -143,22 +155,19 @@ async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, or
             "orden": orden,
             "emisor_id": sender_id,
             "texto": plaintext,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
-        # 1. Empujar al buffer y refrescar TTL a 900 segundos (15 min)
-        await redis_client.rpush(buffer_key, json.dumps(msg_payload))
-        await redis_client.expire(buffer_key, 900)
-        longitud = await redis_client.llen(buffer_key)
+        # Ejecución atómica en Redis: RPUSH + EXPIRE + corte de 20 mensajes en 1 sola operación
+        resultado = await redis_client.eval(LUA_PUSH_AND_CUT, 1, buffer_key, json.dumps(msg_payload))
+        longitud = resultado[0]
+        mensajes_raw = resultado[1]
 
         logger.info(f"[REDIS BUFFER] Sala: {chat_id} | Mensajes acumulados: {longitud}/20")
 
-        # 2. Si alcanza o supera 20 mensajes, cortar bloque
-        if longitud >= 20:
+        # Si se extrajo un bloque completo de 20 mensajes
+        if mensajes_raw:
             logger.info(f"[REDIS BUFFER] ¡Umbral de 20 mensajes alcanzado en sala '{chat_id}'! Extrayendo bloque...")
-            mensajes_raw = await redis_client.lrange(buffer_key, 0, 19)
-            await redis_client.ltrim(buffer_key, 20, -1)
-
             mensajes_bloque = [json.loads(m) for m in mensajes_raw]
 
             # 3. Crear registro en PostgreSQL en estado PENDIENTE
@@ -174,7 +183,7 @@ async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, or
                     "usuario_b_id": bloque_info["usuario_b_id"],
                     "total_mensajes": len(mensajes_bloque),
                     "mensajes": mensajes_bloque,
-                    "enqueued_at": datetime.now().isoformat()
+                    "enqueued_at": datetime.now(timezone.utc).isoformat()
                 }
 
                 await redis_client.lpush("queue:beto_jobs", json.dumps(job_payload))
@@ -343,9 +352,9 @@ async def main():
     ssl_context.maximum_version = ssl.TLSVersion.TLSv1_3
     ssl_context.load_cert_chain(certfile=cert_path, keyfile=key_path)
     
-    # Inicializar conexión asíncrona con Redis
+    # Inicializar conexión asíncrona con Redis (pool de hasta 1000 conexiones concurrentes)
     try:
-        redis_client = aioredis.from_url(REDIS_URL, decode_responses=True)
+        redis_client = aioredis.from_url(REDIS_URL, decode_responses=True, max_connections=1000)
         await redis_client.ping()
         logger.info(f"[REDIS] Conectado exitosamente a {REDIS_URL}")
     except Exception as e:
