@@ -1,0 +1,4 @@
+salas,sockets,mensajes_esperados,mensajes_cronometrados,duracion_total_s,throughput_msgs_s,latencia_min_ms,latencia_prom_ms,latencia_p95_ms,latencia_max_ms,bloques_esperados,bloques_db,bloques_queue,safe_exit_ok,expulsion_ok,tiempo_alerta_ms,tasa_exito_pct
+3,6,60,19,1.57,12.1,281.66,781.05,1456.9,1456.9,3,3,3,True,True,24.86,100.0
+5,10,100,45,1.6,28.2,81.61,247.03,408.5,410.43,5,5,5,True,True,8.83,100.0
+10,20,200,90,1.61,56.0,60.01,338.99,607.26,608.74,10,10,10,True,True,6.76,100.0
