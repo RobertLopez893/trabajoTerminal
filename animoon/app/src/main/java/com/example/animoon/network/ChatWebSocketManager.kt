@@ -22,15 +22,24 @@ data class ChatMessagePayload(
     val sender_id: String,
     val target_id: String? = null,
     val encrypted_message: EncryptedMessagePayload,
-    val system: Boolean = false
+    val system: Boolean = false,
+    val action: String? = null,
+    val motivo: String? = null
 )
 
 data class DecryptedChatMessage(
     val senderId: String,
     val text: String,
     val isSystem: Boolean,
-    val isMine: Boolean
+    val isMine: Boolean,
+    val action: String? = null,
+    val motivo: String? = null
 )
+
+sealed class ChatSecurityEvent {
+    data class SafeExit(val message: String, val motivo: String?) : ChatSecurityEvent()
+    data class ConnectionBanned(val code: Int, val reason: String) : ChatSecurityEvent()
+}
 
 object ChatWebSocketManager : WebSocketListener() {
     private const val TAG = "ChatWebSocketManager"
@@ -45,23 +54,22 @@ object ChatWebSocketManager : WebSocketListener() {
     private val _messages = MutableSharedFlow<DecryptedChatMessage>(extraBufferCapacity = 64)
     val messages: SharedFlow<DecryptedChatMessage> = _messages.asSharedFlow()
 
+    // Flow to emit security events (Safe Exit, Ban, etc.)
+    private val _securityEvents = MutableSharedFlow<ChatSecurityEvent>(extraBufferCapacity = 16)
+    val securityEvents: SharedFlow<ChatSecurityEvent> = _securityEvents.asSharedFlow()
+
     fun connect(chatId: String, userId: String, targetId: String = "") {
         currentChatId = chatId
         myUserId = userId
         targetUserId = targetId
 
         val baseUrl = BuildConfig.API_BASE_URL.replaceFirst("http://", "ws://").replaceFirst("https://", "wss://")
-        
-        // El servidor de chat corre en el puerto 8765 de forma independiente
-        // Hay que extraer el host base y cambiar el puerto, o conectarse directo.
-        // Asumiendo que el server corre en 8765 en el mismo host que el API.
         val host = if (baseUrl.contains("10.0.2.2")) "10.0.2.2" else baseUrl.split("://")[1].split(":")[0].split("/")[0]
         
-        // Usamos wss si era https, ws si era http
         val scheme = "wss" // El servidor python siempre usa TLS 1.3 con certificados autofirmados
         val wsUrl = "$scheme://$host:8765"
 
-        Log.d(TAG, "Conectando chat a: \$wsUrl para chat_id: \$chatId")
+        Log.d(TAG, "Conectando chat a: $wsUrl para chat_id: $chatId")
 
         val request = Request.Builder().url(wsUrl).build()
 
@@ -79,7 +87,7 @@ object ChatWebSocketManager : WebSocketListener() {
 
     fun sendMessage(plaintext: String) {
         if (webSocket == null || currentChatId.isEmpty()) {
-            Log.e(TAG, "No se puede enviar, no hay conexin o chat_id no est definido.")
+            Log.e(TAG, "No se puede enviar, no hay conexión o chat_id no está definido.")
             return
         }
 
@@ -98,15 +106,15 @@ object ChatWebSocketManager : WebSocketListener() {
 
             val json = gson.toJson(payload)
             webSocket?.send(json)
-            Log.d(TAG, "Mensaje enviado (cifrado): \$json")
+            Log.d(TAG, "Mensaje enviado (cifrado): $json")
         } catch (e: Exception) {
-            Log.e(TAG, "Error cifrando mensaje: \${e.message}")
+            Log.e(TAG, "Error cifrando mensaje: ${e.message}")
         }
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
-        Log.d(TAG, "Chat WS Recibido: \$text")
+        Log.d(TAG, "Chat WS Recibido: $text")
 
         try {
             val payload = gson.fromJson(text, ChatMessagePayload::class.java)
@@ -122,20 +130,47 @@ object ChatWebSocketManager : WebSocketListener() {
                 senderId = payload.sender_id,
                 text = decryptedText,
                 isSystem = payload.system,
-                isMine = (payload.sender_id == myUserId)
+                isMine = (payload.sender_id == myUserId),
+                action = payload.action,
+                motivo = payload.motivo
             )
 
             _messages.tryEmit(msg)
-            Log.d(TAG, "Mensaje descifrado: \$decryptedText")
+            Log.d(TAG, "Mensaje descifrado: $decryptedText")
+
+            // Si es un evento de salida segura, emitir al flow de seguridad
+            if (payload.action == "SAFE_EXIT") {
+                _securityEvents.tryEmit(
+                    ChatSecurityEvent.SafeExit(
+                        message = decryptedText,
+                        motivo = payload.motivo
+                    )
+                )
+            }
         } catch (e: Exception) {
-            Log.e(TAG, "Error parseando o descifrando mensaje de chat: \${e.message}")
+            Log.e(TAG, "Error parseando o descifrando mensaje de chat: ${e.message}")
+        }
+    }
+
+    override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+        super.onClosing(webSocket, code, reason)
+        Log.d(TAG, "Chat WS Closing: code=$code, reason=$reason")
+        if (code == 4003) {
+            _securityEvents.tryEmit(ChatSecurityEvent.ConnectionBanned(code, reason))
+        }
+        webSocket.close(1000, null)
+    }
+
+    override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+        super.onClosed(webSocket, code, reason)
+        Log.d(TAG, "Chat WS Closed: code=$code, reason=$reason")
+        if (code == 4003) {
+            _securityEvents.tryEmit(ChatSecurityEvent.ConnectionBanned(code, reason))
         }
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
-        Log.e(TAG, "Chat WS Error: \${t.message}")
+        Log.e(TAG, "Chat WS Error: ${t.message}")
     }
 }
-
-

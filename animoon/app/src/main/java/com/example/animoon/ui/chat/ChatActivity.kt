@@ -1,4 +1,4 @@
-﻿package com.example.animoon.ui.chat
+package com.example.animoon.ui.chat
 
 import android.os.Bundle
 import android.widget.TextView
@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.network.ChatWebSocketManager
+import com.example.animoon.network.ChatSecurityEvent
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.flow.collectLatest
@@ -152,7 +153,7 @@ class ChatActivity : BaseActivity() {
                 .show()
         }
 
-        // Escuchar mensajes entrantes
+        // Escuchar mensajes entrantes normales
         lifecycleScope.launch {
             ChatWebSocketManager.messages.collectLatest { msg ->
                 runOnUiThread {
@@ -164,6 +165,60 @@ class ChatActivity : BaseActivity() {
                 }
             }
         }
+
+        // Escuchar eventos de seguridad preventiva (SAFE_EXIT y Baneo)
+        lifecycleScope.launch {
+            ChatWebSocketManager.securityEvents.collectLatest { event ->
+                runOnUiThread {
+                    when (event) {
+                        is ChatSecurityEvent.SafeExit -> {
+                            mostrarDialogoSalidaSegura(event.message, event.motivo)
+                        }
+                        is ChatSecurityEvent.ConnectionBanned -> {
+                            mostrarDialogoSuspension(event.reason)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun bloquearEntradaChat() {
+        etMessage.isEnabled = false
+        findViewById<MaterialButton>(R.id.btnChatSend)?.isEnabled = false
+    }
+
+    private fun mostrarDialogoSalidaSegura(mensaje: String, motivo: String?) {
+        if (isFinishing || isDestroyed) return
+        bloquearEntradaChat()
+
+        val textoExplicativo = if (mensaje.isNotBlank()) mensaje else "Hemos suspendido esta conversación para proteger tu seguridad."
+        val textoDetalle = if (!motivo.isNullOrBlank()) "\n\nMotivo: $motivo" else ""
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("🛡️ Salida Segura Preventiva")
+            .setMessage("$textoExplicativo$textoDetalle\n\nRecuerda nunca compartir datos personales, fotos o contraseñas con desconocidos.")
+            .setCancelable(false)
+            .setPositiveButton("Salir de forma segura") { _, _ ->
+                finish()
+            }
+            .show()
+    }
+
+    private fun mostrarDialogoSuspension(razon: String) {
+        if (isFinishing || isDestroyed) return
+        bloquearEntradaChat()
+
+        val detalle = if (razon.isNotBlank()) razon else "Incumplimiento de las normas de convivencia y seguridad."
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle("⚠️ Conexión Suspendida")
+            .setMessage("Tu sesión en el chat ha sido suspendida por el sistema de seguridad preventiva.\n\nDetalle: $detalle")
+            .setCancelable(false)
+            .setPositiveButton("Entendido") { _, _ ->
+                finish()
+            }
+            .show()
     }
 
     private fun enviarMensaje() {
@@ -192,12 +247,3 @@ class ChatActivity : BaseActivity() {
         ChatWebSocketManager.disconnect()
     }
 }
-
-
-
-
-
-
-
-
-
