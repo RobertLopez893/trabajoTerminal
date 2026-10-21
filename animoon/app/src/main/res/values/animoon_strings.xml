@@ -8,6 +8,10 @@
     <string name="animoon_game2_title">Reconecta a Moonie</string>
     <string name="animoon_game2_description">Conecta cada mensaje con sus destinos y aprende a compartir información de forma segura.</string>
 
+    <string name="animoon_game3_title">Los oídos de Moonie</string>
+    <string name="animoon_game3_description">Lee las conversaciones del chat y decide si Moonie debe estar tranquilo o en alerta.</string>
+    <string name="animoon_game3_pause_message">La conversación seguirá como la dejaste.</string>
+
     <string name="animoon_pause_title">Juego pausado</string>
     <string name="animoon_pause_message">Tu partida seguirá como la dejaste.</string>
     <string name="animoon_game2_pause_message">Tus cables seguirán como los dejaste.</string>

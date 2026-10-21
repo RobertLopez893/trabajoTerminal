@@ -8,6 +8,7 @@ import com.example.animoon.R
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.ui.minigame.game1.Game1CinematicActivity
 import com.example.animoon.ui.minigame.game2.Game2CinematicActivity
+import com.example.animoon.ui.minigame.game3.Game3CinematicActivity
 import com.google.android.material.button.MaterialButton
 class MinigamesActivity : BaseActivity() {
 
@@ -29,6 +30,9 @@ class MinigamesActivity : BaseActivity() {
 
         val btnGame2 =
             findViewById<MaterialButton>(R.id.btnGame2)
+
+        val btnGame3 =
+            findViewById<MaterialButton>(R.id.btnGame3)
 
 
         // =====================================================
@@ -67,6 +71,22 @@ class MinigamesActivity : BaseActivity() {
                 Intent(
                     this,
                     Game2CinematicActivity::class.java
+                )
+
+            startActivity(intent)
+        }
+
+
+        // =====================================================
+        // MINIJUEGO 3
+        // =====================================================
+
+        btnGame3.setOnClickListener {
+
+            val intent =
+                Intent(
+                    this,
+                    Game3CinematicActivity::class.java
                 )
 
             startActivity(intent)

@@ -118,6 +118,22 @@
             android:exported="false"
             android:screenOrientation="sensorLandscape" />
 
+        <!-- MINIJUEGO 3 -->
+        <activity
+            android:name=".ui.minigame.game3.Game3CinematicActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.minigame.game3.Game3Activity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.minigame.game3.Game3ResultActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape" />
+
         <!-- CHAT -->
         <activity
             android:name=".ui.chat.ChatActivity"

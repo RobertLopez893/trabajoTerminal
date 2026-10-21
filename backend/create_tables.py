@@ -39,7 +39,7 @@ def init_db():
         minijuegos_seed = [
             models.Minijuego(id="minijuego_1", nombre="Reparando a Moonie", descripcion="Minijuego de trivia y conceptos básicos sobre seguridad en internet."),
             models.Minijuego(id="minijuego_2", nombre="Minijuego 2", descripcion="Pendiente por definir."),
-            models.Minijuego(id="minijuego_3", nombre="Minijuego 3", descripcion="Pendiente por definir.")
+            models.Minijuego(id="minijuego_3", nombre="Los oídos de Moonie", descripcion="Minijuego de lectura de chats: identifica cuándo Moonie debe estar tranquilo y cuándo debe ponerse en alerta.")
         ]
         
         insertados = 0
@@ -54,6 +54,13 @@ def init_db():
             print(f"    [OK] Se insertaron {insertados} minijuegos en el catálogo.")
         else:
             print("    [OK] El catálogo de MINIJUEGOS ya estaba poblado.")
+        semilla3 = minijuegos_seed[2]
+        juego3 = db.query(models.Minijuego).filter(models.Minijuego.id == semilla3.id).first()
+        if juego3 and (juego3.nombre != semilla3.nombre or juego3.descripcion != semilla3.descripcion):
+            juego3.nombre = semilla3.nombre
+            juego3.descripcion = semilla3.descripcion
+            db.commit()
+            print("    [OK] Se actualizó el nombre y la descripción del minijuego 3.")
     except Exception as e:
         print(f"    [!] Error al poblar catálogo: {e}")
     finally:

@@ -1,0 +1,448 @@
+{
+  "conversaciones": [
+    {
+      "id": "g3_001",
+      "contacto": "LunaVeloz",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "¡Hola! Vi que llegaste al nivel de los cráteres."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, me costó mucho pasar el último tramo."
+        },
+        {
+          "emisor": "otro",
+          "texto": "A mí también. Lo logré saltando antes de la roca grande."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¡Voy a intentarlo así!"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Si quieres, nos vemos otra vez en el mapa para jugar."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, me gusta jugar acompañado."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡Genial! Mucha suerte."
+        }
+      ],
+      "retroalimentacion": "Es una charla normal sobre juegos. Nadie pide datos personales ni secretos, así que Moonie puede estar tranquilo."
+    },
+    {
+      "id": "g3_002",
+      "contacto": "PanDeEstrellas",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "¿Tú tienes mascota?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, tengo un perrito que se llama Choco."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡Qué bonito nombre! Yo tengo una tortuga."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¿Y cómo se llama?"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Se llama Galleta. Es muy lenta pero muy graciosa."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Jajaja, me encantó."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Algún día dibujaré a Galleta con Moonie."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¡Quiero verlo cuando lo termines!"
+        }
+      ],
+      "retroalimentacion": "Hablar de mascotas y de lo que te gusta es seguro. No te pidieron información privada."
+    },
+    {
+      "id": "g3_003",
+      "contacto": "CometaAzul",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "yo",
+          "texto": "¿Alguien sabe cómo se conecta el último cable?"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Yo sé. Primero une el mensaje con el destino correcto."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¿Y si me equivoco?"
+        },
+        {
+          "emisor": "otro",
+          "texto": "No pasa nada, puedes volver a intentarlo."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, ya me salió."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡Qué bien! Te felicito."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias por ayudarme."
+        }
+      ],
+      "retroalimentacion": "Pedir ayuda con un juego y agradecer es una conversación amable. Moonie no detecta nada raro."
+    },
+    {
+      "id": "g3_004",
+      "contacto": "NubeJuguetona",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Hola, ¿qué color te gusta más?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "El morado, como el cielo de la Aldea lunática."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡A mí también! Me gusta pintar con ese color."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Yo estoy dibujando un cohete."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¿De qué color lo estás haciendo?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Azul con detalles amarillos."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡Seguro te va a quedar increíble!"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, ojalá me salga bonito."
+        }
+      ],
+      "retroalimentacion": "Platicar de dibujos y colores favoritos es una charla segura entre amigos de juego."
+    },
+    {
+      "id": "g3_005",
+      "contacto": "RayoSonriente",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Hoy encontré un secreto en el mapa del Lado oscuro."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¿En serio? Yo todavía no lo he visto."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Está cerca de la roca grande, a la izquierda."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Ahorita lo busco."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Me llaman a cenar, ya me tengo que ir."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Está bien, que disfrutes tu cena."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Gracias, ¡hasta mañana!"
+        }
+      ],
+      "retroalimentacion": "Despedirse porque te llaman a cenar es normal. Nadie te pidió nada fuera de lo común."
+    },
+    {
+      "id": "g3_006",
+      "contacto": "MiniAstronauta",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "¿Hiciste la tarea de ciencias?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, ya la terminé, era sobre los planetas."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¡Qué padre! Yo hice la de Marte."
+        },
+        {
+          "emisor": "yo",
+          "texto": "A mí me tocó Júpiter."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¿Jugamos un rato cuando acabemos?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Primero le aviso a mi mamá y luego jugamos."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Perfecto, así es mejor."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, siempre le aviso."
+        }
+      ],
+      "retroalimentacion": "Contarle a un adulto que vas a jugar y compartir una tarea escolar sin datos personales es seguro."
+    },
+    {
+      "id": "g3_007",
+      "contacto": "TrenDeAlgodon",
+      "riesgo": false,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Felicidades por tu récord de hoy."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, practiqué varias veces."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Se nota. Yo todavía no lo logro."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Puedes intentarlo con calma."
+        },
+        {
+          "emisor": "otro",
+          "texto": "¿Tú cómo haces para no ponerte nervioso?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Respiro profundo y lo hago despacio."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Voy a probar eso, gracias."
+        }
+      ],
+      "retroalimentacion": "Felicitar a alguien por su puntaje y hablar del juego es una charla sana. Moonie puede estar tranquilo."
+    },
+    {
+      "id": "g3_008",
+      "contacto": "EstrellaNova",
+      "riesgo": true,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "¡Hola! Vi que también juegas en la Aldea lunática."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Sí, me gusta mucho ese lugar."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Eres muy buen jugador."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, estoy aprendiendo."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Oye, ¿en qué escuela estudias? Quizás vivimos cerca."
+        },
+        {
+          "emisor": "yo",
+          "texto": "No sé si puedo decirte eso."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Solo es curiosidad. Dime el nombre de tu escuela y en qué colonia vives."
+        }
+      ],
+      "retroalimentacion": "Tu escuela y el lugar donde vives son datos personales. No se los des a nadie que acabas de conocer en línea."
+    },
+    {
+      "id": "g3_009",
+      "contacto": "PixelAmigo",
+      "riesgo": true,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Hola, qué bien juegas."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, llevo poco tiempo."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Me caes muy bien. Quiero seguir hablando contigo."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Está bien, podemos jugar un rato."
+        },
+        {
+          "emisor": "otro",
+          "texto": "No le cuentes a tus papás que hablamos, será nuestro secreto."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Mmm, yo siempre les cuento todo."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Si se enteran se van a enojar. Mejor no les digas nada."
+        }
+      ],
+      "retroalimentacion": "Nadie que acabas de conocer debe pedirte que guardes secretos de tus papás. Si pasa, avísale a un adulto de confianza."
+    },
+    {
+      "id": "g3_010",
+      "contacto": "SolDeMedianoche",
+      "riesgo": true,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "¡Hola! ¿Qué tal tu día?"
+        },
+        {
+          "emisor": "yo",
+          "texto": "Bien, estoy jugando."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Este chat es aburrido y todos nos ven."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Pero aquí me gusta."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Mejor pasa a otra aplicación donde nadie nos vea."
+        },
+        {
+          "emisor": "yo",
+          "texto": "No sé si me dejan."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Dame tu número de teléfono y yo te escribo ahí."
+        }
+      ],
+      "retroalimentacion": "Si alguien te pide cambiar a otra aplicación o te pide tu número, es una señal de alerta. Hay que avisar a un adulto."
+    },
+    {
+      "id": "g3_011",
+      "contacto": "GalaxiaSecreta",
+      "riesgo": true,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Hola, soy nuevo por aquí."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Hola, bienvenido."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Me gustó tu avatar, está muy lindo."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Gracias, lo elegí con mi mamá."
+        },
+        {
+          "emisor": "otro",
+          "texto": "Quiero saber cómo eres de verdad."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¿A qué te refieres?"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Mándame una foto tuya, solo una, y no se la enseñes a nadie."
+        }
+      ],
+      "retroalimentacion": "Pedir fotos tuyas a alguien que no conoces no es correcto. No las envíes y cuéntale a un adulto de confianza."
+    },
+    {
+      "id": "g3_012",
+      "contacto": "RegaloLunar",
+      "riesgo": true,
+      "mensajes": [
+        {
+          "emisor": "otro",
+          "texto": "Tengo muchas monedas lunares de sobra."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¡Qué suerte!"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Te puedo regalar bastantes."
+        },
+        {
+          "emisor": "yo",
+          "texto": "¿En serio? ¿Por qué?"
+        },
+        {
+          "emisor": "otro",
+          "texto": "Porque me caes bien, pero primero dime tu contraseña."
+        },
+        {
+          "emisor": "yo",
+          "texto": "Mi mamá dice que no la comparta."
+        },
+        {
+          "emisor": "otro",
+          "texto": "No le cuentes nada a tu mamá, será nuestro secreto y te doy más monedas."
+        }
+      ],
+      "retroalimentacion": "Un regalo a cambio de tu contraseña o de un secreto es una trampa. Tu contraseña es solo tuya."
+    }
+  ]
+}
