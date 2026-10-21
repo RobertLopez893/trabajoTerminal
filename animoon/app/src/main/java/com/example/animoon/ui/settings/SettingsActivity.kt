@@ -23,6 +23,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import com.example.animoon.ui.help.HelpActivity
+import com.example.animoon.ui.parents.ParentVerificationActivity
 
 class SettingsActivity : BaseActivity() {
 
@@ -106,7 +107,12 @@ class SettingsActivity : BaseActivity() {
         }
 
         parentsButton.setOnClickListener {
-            showPendingSection("Para padres")
+            startActivity(
+                Intent(
+                    this,
+                    ParentVerificationActivity::class.java
+                )
+            )
         }
 
         logoutButton.setOnClickListener {

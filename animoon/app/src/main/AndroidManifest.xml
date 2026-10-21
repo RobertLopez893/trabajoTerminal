@@ -72,6 +72,25 @@
             android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
+        <!-- VERIFICACIÓN PARA PADRES -->
+        <activity
+            android:name=".ui.parents.ParentVerificationActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+
+        <!-- PANEL PARA PADRES -->
+        <activity
+            android:name=".ui.parents.ParentDashboardActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <!-- DETALLE DE INCIDENCIA PARA PADRES -->
+        <activity
+            android:name=".ui.parents.ParentIncidentDetailActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
         <!-- PERFILES -->
         <activity
             android:name=".ui.profile.ProfileActivity"
