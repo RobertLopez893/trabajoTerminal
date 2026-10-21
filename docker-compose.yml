@@ -80,5 +80,31 @@ services:
       - ./backend:/app/backend
       - ./security:/app/security
 
+  beto_worker:
+    build:
+      context: .
+      dockerfile: backend/beto_worker/Dockerfile
+    container_name: animoon_beto_worker
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - REDIS_URL=redis://redis:6379/0
+      - BETO_MODEL_DIR=/app/proyecto_pln/output/training_results_v5/mejor_modelo/modelo_comprimido
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: python backend/beto_worker/worker.py
+    volumes:
+      - ./backend:/app/backend
+      - ./security:/app/security
+      - ./proyecto_pln:/app/proyecto_pln
+
 volumes:
   animoon_pgdata:

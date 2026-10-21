@@ -77,6 +77,7 @@ def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, target_id: 
     finally:
         db.close()
 
+
 def crear_bloque_en_db(chat_id: str, total_mensajes: int = 20) -> dict:
     """
     Registra el BloqueAnalisis en PostgreSQL con estado 'PENDIENTE'.
@@ -117,6 +118,7 @@ def crear_bloque_en_db(chat_id: str, total_mensajes: int = 20) -> dict:
     finally:
         db.close()
 
+
 async def broadcast_to_room(chat_id, message_dict, sender_ws):
     """
     Envía un mensaje a todos los clientes conectados en un chat_id específico.
@@ -140,6 +142,7 @@ else
     return {len, {}}
 end
 """
+
 
 async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, orden: int):
     """
@@ -170,11 +173,11 @@ async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, or
             logger.info(f"[REDIS BUFFER] ¡Umbral de 20 mensajes alcanzado en sala '{chat_id}'! Extrayendo bloque...")
             mensajes_bloque = [json.loads(m) for m in mensajes_raw]
 
-            # 3. Crear registro en PostgreSQL en estado PENDIENTE
+            # Crear registro en PostgreSQL en estado PENDIENTE
             bloque_info = await asyncio.to_thread(crear_bloque_en_db, chat_id, len(mensajes_bloque))
 
             if bloque_info:
-                # 4. Encolar trabajo en queue:beto_jobs
+                # Encolar trabajo en queue:beto_jobs
                 job_payload = {
                     "bloque_id": bloque_info["bloque_id"],
                     "chat_id": chat_id,
@@ -190,6 +193,7 @@ async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, or
                 logger.info(f"[REDIS QUEUE] Tarea encolada con éxito en 'queue:beto_jobs' (Bloque: {bloque_info['bloque_id']})")
     except Exception as e:
         logger.error(f"[REDIS ERROR] Error procesando buffer de chat: {e}")
+
 
 async def listen_grooming_alerts():
     """
@@ -250,6 +254,7 @@ async def listen_grooming_alerts():
         logger.info("[REDIS PUB/SUB] Listener cancelado.")
     except Exception as e:
         logger.error(f"[REDIS PUB/SUB ERROR] Excepción en listener de alertas: {e}")
+
 
 async def handle_client(websocket):
     """
@@ -337,6 +342,7 @@ async def handle_client(websocket):
                 del chat_user_sockets[current_chat_id]
         logger.info(f"[-] Conexión finalizada para {client_address[0]}:{client_address[1]}")
 
+
 async def main():
     global redis_client
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -377,5 +383,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-

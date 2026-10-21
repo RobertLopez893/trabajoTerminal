@@ -213,7 +213,7 @@ class ChatActivity : BaseActivity() {
 
         android.app.AlertDialog.Builder(this)
             .setTitle("⚠️ Conexión Suspendida")
-            .setMessage("Tu sesión en el chat ha sido suspendida por el sistema de seguridad preventiva.\n\nDetalle: $detalle")
+            .setMessage("Tu sesión en el chat ha sido suspendida.\n\nDetalle: $detalle")
             .setCancelable(false)
             .setPositiveButton("Entendido") { _, _ ->
                 finish()
