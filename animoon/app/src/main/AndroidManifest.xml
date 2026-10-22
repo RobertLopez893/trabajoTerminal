@@ -19,15 +19,9 @@
         android:theme="@style/Theme.Animoon"
         android:appCategory="game">
 
-        <!-- SPLASH -->
+        <!-- SPLASH (Punto de entrada principal) -->
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:screenOrientation="sensorLandscape"
-            android:exported="false" />
-
-        <!-- MENU PRINCIPAL -->
-        <activity
-            android:name=".MainActivity"
             android:screenOrientation="sensorLandscape"
             android:exported="true">
 
@@ -37,6 +31,12 @@
             </intent-filter>
 
         </activity>
+
+        <!-- MENU PRINCIPAL -->
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
 
         <!-- REGISTRO -->
         <activity
@@ -63,7 +63,7 @@
         <activity
             android:name=".ui.auth.LoginActivity"
             android:screenOrientation="sensorLandscape"
-            android:exported="true" />
+            android:exported="false" />
 
         <!-- AJUSTES -->
         <activity
