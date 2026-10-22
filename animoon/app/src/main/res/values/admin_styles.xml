@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Animoon.Admin.Card"
+        parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">#211A2C</item>
+        <item name="cardCornerRadius">22dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">#514063</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="Widget.Animoon.Admin.Button.Primary"
+        parent="Widget.Animoon.Button.Primary">
+        <item name="backgroundTint">#7C3AED</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="Widget.Animoon.Admin.Button.Secondary"
+        parent="Widget.Animoon.Button.Secondary">
+        <item name="backgroundTint">#2A2038</item>
+        <item name="android:textColor">#E4D5FF</item>
+        <item name="strokeColor">#B69AF5</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="TextAppearance.Animoon.Admin.Title"
+        parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">#F5F1FA</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">26sp</item>
+    </style>
+
+    <style name="TextAppearance.Animoon.Admin.Section"
+        parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">#F5F1FA</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.Animoon.Admin.Body"
+        parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">#D5CDDF</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ThemeOverlay.Animoon.Admin.Dialog"
+        parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">#211A2C</item>
+        <item name="colorOnSurface">#F5F1FA</item>
+        <item name="colorPrimary">#B69AF5</item>
+        <item name="android:textColorPrimary">#F5F1FA</item>
+        <item name="android:textColorSecondary">#D5CDDF</item>
+    </style>
+
+</resources>
