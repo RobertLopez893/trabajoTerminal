@@ -1,8 +1,16 @@
 package com.example.animoon.ui.auth
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.style.ClickableSpan
+import android.view.MotionEvent
+import android.view.View
 import android.widget.CheckBox
+import android.widget.TextView
 import android.widget.Toast
 import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.R
@@ -10,6 +18,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+
 class RegisterActivity : BaseActivity() {
     override val observarSesionExpirada: Boolean = false
 
@@ -28,6 +37,7 @@ class RegisterActivity : BaseActivity() {
         setContentView(R.layout.activity_register)
 
         initViews()
+        configurePrivacyLinks()
         configureListeners()
     }
 
@@ -62,6 +72,71 @@ class RegisterActivity : BaseActivity() {
         // hasta aceptar los términos.
         btnSendSms.isEnabled = false
         btnSendSms.alpha = 0.5f
+    }
+
+    /**
+     * Configura el enlace dentro del texto del CheckBox para abrir
+     * el Aviso de Privacidad con cambio rápido de pantalla, sin marcar
+     * o desmarcar por error la casilla.
+     */
+    private fun configurePrivacyLinks() {
+        val fullText = "El tutor acepta los lineamientos de privacidad y uso de datos."
+        val linkText = "lineamientos de privacidad y uso de datos"
+        val startIndex = fullText.indexOf(linkText)
+
+        if (startIndex >= 0) {
+            val spannable = SpannableString(fullText)
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    openPrivacyNotice()
+                }
+
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    ds.color = Color.parseColor("#7951B0")
+                    ds.isUnderlineText = true
+                    ds.isFakeBoldText = true
+                }
+            }
+
+            spannable.setSpan(
+                clickableSpan,
+                startIndex,
+                startIndex + linkText.length,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            checkTerms.text = spannable
+
+            checkTerms.setOnTouchListener { view, event ->
+                val textView = view as TextView
+                val layout = textView.layout ?: return@setOnTouchListener false
+
+                val x = event.x.toInt() - textView.totalPaddingLeft + textView.scrollX
+                val y = event.y.toInt() - textView.totalPaddingTop + textView.scrollY
+
+                if (x >= 0 && y >= 0 && y <= layout.height) {
+                    val line = layout.getLineForVertical(y)
+                    if (x <= layout.getLineRight(line)) {
+                        val offset = layout.getOffsetForHorizontal(line, x.toFloat())
+                        val spans = spannable.getSpans(offset, offset, ClickableSpan::class.java)
+                        if (spans.isNotEmpty()) {
+                            if (event.action == MotionEvent.ACTION_UP) {
+                                spans[0].onClick(textView)
+                            }
+                            return@setOnTouchListener true
+                        }
+                    }
+                }
+                false
+            }
+        }
+    }
+
+    private fun openPrivacyNotice() {
+        val intent = Intent(this, PrivacyNoticeActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
     }
 
     /**

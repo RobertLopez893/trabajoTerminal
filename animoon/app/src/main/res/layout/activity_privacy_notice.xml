@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/animoon_background"
+    android:padding="@dimen/animoon_screen_padding">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrivacyBack"
+        style="@style/Widget.Animoon.Button.Secondary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Regresar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtPrivacyTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/animoon_space_large"
+        android:text="Aviso de Privacidad"
+        android:textAppearance="@style/TextAppearance.Animoon.Title"
+        app:layout_constraintStart_toEndOf="@id/btnPrivacyBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnPrivacyBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnPrivacyBack" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollPrivacy"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/animoon_space_medium"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/animoon_space_small"
+        app:layout_constraintWidth_max="760dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnPrivacyBack"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/animoon_space_small">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/animoon_card_padding">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="🌙 Protegiendo sonrisas en cada conexión virtual"
+                        android:textAppearance="@style/TextAppearance.Animoon.Section" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/animoon_space_small"
+                        android:lineSpacingExtra="4dp"
+                        android:text="¡Hola, mamá, papá o tutor! Bienvenido a ANIMOON. Sabemos que para ti no hay nada más importante que la seguridad de tu hija o hijo mientras juega y explora en internet. Por eso creamos un mundo virtual donde la diversión y la privacidad van de la mano.\n\nAntes de crear la cuenta de tu pequeño explorador, queremos explicarte de forma clara y transparente qué información cuidamos y cómo funciona nuestro escudo de seguridad."
+                        android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/animoon_space_large"
+                android:layout_marginBottom="@dimen/animoon_space_small"
+                android:accessibilityHeading="true"
+                android:text="Compromiso de Privacidad para Padres y Tutores"
+                android:textAppearance="@style/TextAppearance.Animoon.Section" />
+
+            <LinearLayout
+                android:id="@+id/containerPrivacySections"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.Animoon.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/animoon_space_medium">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/animoon_card_padding"
+                    android:lineSpacingExtra="4dp"
+                    android:text="Al marcar la casilla de aceptación en el registro y confirmar tu código SMS, declaras que eres la madre, padre o tutor legal del menor y que estás de acuerdo con este Aviso de Privacidad. ¡Gracias por ayudarnos a construir un espacio seguro para jugar!"
+                    android:textAppearance="@style/TextAppearance.Animoon.Body" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
