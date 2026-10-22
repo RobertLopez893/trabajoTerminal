@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Animoon.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:strokeColor="@color/animoon_border_strong"
+    app:strokeWidth="2dp">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <ImageView
+                android:id="@+id/imgBannedMoonie"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_damaged" />
+
+            <TextView
+                android:id="@+id/tvBannedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Cuenta Suspendida"
+                android:textAppearance="@style/TextAppearance.Animoon.Title"
+                android:textColor="@color/animoon_text_primary"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvBannedMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+                android:textColor="@color/animoon_text_secondary"
+                android:textSize="15sp"
+                android:text="Tu cuenta ha sido suspendida permanentemente por violar las normas de seguridad y convivencia de Animoon." />
+
+            <TextView
+                android:id="@+id/tvBannedDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+                android:textColor="@color/animoon_error"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Detalle: Incumplimiento de normas"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBannedAppeal"
+                style="@style/Widget.Animoon.Button.Secondary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Apelar sanción" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnBannedAction"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Volver al inicio" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.google.android.material.card.MaterialCardView>

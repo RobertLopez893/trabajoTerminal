@@ -280,6 +280,12 @@ async def handle_client(websocket):
                     logger.warning(f"[-] Mensaje rechazado: Falta chat_id, sender_id o encrypted_message.")
                     continue
                 
+                # Validar inmediatamente si el usuario está suspendido
+                if redis_client and await redis_client.sismember("banned_users", sender_id):
+                    logger.warning(f"🚫 [SEGURIDAD] Usuario suspendido '{sender_id}' intentó enviar mensaje. Cerrando socket.")
+                    await websocket.close(code=4003, reason="Cuenta suspendida por seguridad")
+                    return
+
                 current_user_id = sender_id
 
                 # Registrar el socket en la sala si no estaba
@@ -366,6 +372,20 @@ async def main():
     except Exception as e:
         logger.error(f"[REDIS ERROR] No se pudo conectar a Redis: {e}")
         return
+
+    # Precargar usuarios baneados en Redis desde la base de datos
+    db_init = SessionLocal()
+    try:
+        from backend.database.models import Usuario
+        banned_users = db_init.query(Usuario.id).filter(Usuario.is_banned == True).all()
+        if banned_users and redis_client:
+            banned_ids = [u.id for u in banned_users]
+            await redis_client.sadd("banned_users", *banned_ids)
+            logger.info(f"🚫 [SEGURIDAD] Se precargaron {len(banned_ids)} usuarios baneados en Redis.")
+    except Exception as e:
+        logger.error(f"[ERROR] Error precargando usuarios baneados en Redis: {e}")
+    finally:
+        db_init.close()
 
     # Iniciar listener de alertas Pub/Sub en segundo plano
     alert_listener_task = asyncio.create_task(listen_grooming_alerts())

@@ -54,7 +54,7 @@ class LoginActivity : BaseActivity() {
             val clientKeyPair = com.example.animoon.security.CryptoManager.generateEphemeralKeyPair()
             val clientPubKeyB64 = com.example.animoon.security.CryptoManager.getPublicKeyBase64(clientKeyPair)
 
-            showLoading("Iniciando sesión...")
+            showLoading("Iniciando sesiÃ³n...")
 lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val request = com.example.animoon.data.model.LoginRequest(apelativo, password, clientPubKeyB64)
@@ -101,11 +101,25 @@ hideLoading()
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
-                            Toast.makeText(
-                                this@LoginActivity,
-                                errorMsg,
-                                Toast.LENGTH_LONG
-                            ).show()
+
+                            val isBanned = errorMsg.contains("suspendida", ignoreCase = true) ||
+                                           errorMsg.contains("banead", ignoreCase = true) ||
+                                           errorMsg.contains("bloqueado", ignoreCase = true) ||
+                                           (response.code() == 403 && errorMsg.contains("seguridad", ignoreCase = true))
+
+                            if (isBanned) {
+                                com.example.animoon.ui.common.BannedAccountDialog.show(
+                                    activity = this@LoginActivity,
+                                    motivo = errorMsg,
+                                    isChatBan = false
+                                )
+                            } else {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    errorMsg,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         }
                     }
                 } catch (e: Exception) {

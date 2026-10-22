@@ -119,7 +119,16 @@ def procesar_trabajo(job_data: dict, analizador: AnalizadorBETO, aes_cipher: AES
             agresor = db_op.query(Usuario).filter(Usuario.id == agresor_id).first()
             if agresor:
                 agresor.is_banned = True
-                logger.warning(f"🚫 [SEGURIDAD] Usuario agresor '{agresor_id}' ha sido suspendido (is_banned=True).")
+                agresor.is_active = False
+                logger.warning(f"🚫 [SEGURIDAD] Usuario agresor '{agresor_id}' ha sido suspendido (is_banned=True, is_active=False).")
+
+            # Revocar todas las sesiones activas en la BD operacional
+            from backend.database.models import Sesion
+            revocadas = db_op.query(Sesion).filter(
+                Sesion.usuario_id == agresor_id,
+                Sesion.is_active == True
+            ).update({"is_active": False})
+            logger.warning(f"🚫 [SEGURIDAD] Se revocaron {revocadas} sesiones activas del agresor '{agresor_id}'.")
 
         db_op.commit()
         logger.info(f"[DB OPERACIONAL] Bloque '{bloque_id}' actualizado a estado ANALIZADO.")
@@ -198,6 +207,7 @@ def procesar_trabajo(job_data: dict, analizador: AnalizadorBETO, aes_cipher: AES
             "motivo": f"Comportamiento de grooming detectado ({score:.1%})"
         }
         r.publish(CHANNEL_ALERTS, json.dumps(alerta_pubsub))
+        r.sadd("banned_users", agresor_id)
         logger.info(f"[PUB/SUB] Alerta emitida en '{CHANNEL_ALERTS}' para expulsar agresor y salvar víctima.")
 
 

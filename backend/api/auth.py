@@ -123,9 +123,15 @@ def login(req: schemas.LoginRequest, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="El apelativo no existe.")
         
+    if getattr(user, "is_banned", False):
+        raise HTTPException(
+            status_code=403,
+            detail="Tu cuenta ha sido suspendida permanentemente por violar las normas de seguridad y convivencia de Animoon."
+        )
+
     if not argon_hasher.verify_password(user.argon2id_hash, req.password):
         raise HTTPException(status_code=401, detail="Contraseña incorrecta.")
-        
+
     if not user.is_verified:
         raise HTTPException(status_code=403, detail="Tu cuenta no ha sido verificada con SMS.")
         

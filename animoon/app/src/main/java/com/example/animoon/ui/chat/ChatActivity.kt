@@ -1,6 +1,7 @@
 package com.example.animoon.ui.chat
 
 import android.os.Bundle
+import android.content.Intent
 import android.widget.TextView
 import com.example.animoon.security.AESGCMCipher
 import android.util.Base64
@@ -209,16 +210,18 @@ class ChatActivity : BaseActivity() {
         if (isFinishing || isDestroyed) return
         bloquearEntradaChat()
 
-        val detalle = if (razon.isNotBlank()) razon else "Incumplimiento de las normas de convivencia y seguridad."
+        // Matar inmediatamente la sesión local y desconectar sockets
+        com.example.animoon.data.network.TokenManager.clearToken()
+        ChatWebSocketManager.disconnect()
+        com.example.animoon.data.network.WebSocketManager.disconnect()
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("⚠️ Conexión Suspendida")
-            .setMessage("Tu sesión en el chat ha sido suspendida.\n\nDetalle: $detalle")
-            .setCancelable(false)
-            .setPositiveButton("Entendido") { _, _ ->
-                finish()
-            }
-            .show()
+        val detalle = if (razon.isNotBlank()) razon else "Incumplimiento de las normas de convivencia y seguridad infantil."
+
+        com.example.animoon.ui.common.BannedAccountDialog.show(
+            activity = this,
+            motivo = detalle,
+            isChatBan = true
+        )
     }
 
     private fun enviarMensaje() {
