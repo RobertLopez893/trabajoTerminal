@@ -50,3 +50,6 @@ proyecto_pln/output/
 # MAC OS & MISC
 # =========================
 .DS_Store
+
+*.apk
+
