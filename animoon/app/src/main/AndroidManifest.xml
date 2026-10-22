@@ -65,6 +65,13 @@
             android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
+        <!-- ADMINISTRACIÓN DE APELACIONES -->
+        <activity
+            android:name=".ui.admin.AdminAppealsActivity"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+
         <!-- AJUSTES -->
         <activity
             android:name=".ui.settings.SettingsActivity"

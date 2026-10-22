@@ -15,6 +15,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import android.util.Log
 
+import com.example.animoon.BuildConfig
+import com.example.animoon.ui.admin.AdminAppealsActivity
+import com.example.animoon.ui.admin.AdminDemoSession
+
 class LoginActivity : BaseActivity() {
     override val observarSesionExpirada: Boolean = false
 
@@ -25,6 +29,7 @@ class LoginActivity : BaseActivity() {
 
         val etApelativo = findViewById<TextInputEditText>(R.id.etLoginApelativo)
         val etPassword = findViewById<TextInputEditText>(R.id.etLoginPassword)
+
 
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
         val btnCreateAccount =
@@ -38,12 +43,23 @@ class LoginActivity : BaseActivity() {
             val apelativo = etApelativo.text.toString().trim()
             val password = etPassword.text.toString()
 
-            if (apelativo.isEmpty() || password.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    "Completa tu apelativo y contraseña",
-                    Toast.LENGTH_SHORT
-                ).show()
+            // Acceso de prueba para el administrador.
+            if (BuildConfig.DEBUG && apelativo == AdminDemoSession.USERNAME) {
+                if (AdminDemoSession.login(apelativo, password)) {
+                    etPassword.text?.clear()
+
+                    startActivity(
+                        Intent(
+                            this@LoginActivity,
+                            AdminAppealsActivity::class.java
+                        )
+                    )
+                    finish()
+                } else {
+                    etPassword.error =
+                        "Contraseña incorrecta para el administrador de prueba."
+                    etPassword.requestFocus()
+                }
 
                 return@setOnClickListener
             }
