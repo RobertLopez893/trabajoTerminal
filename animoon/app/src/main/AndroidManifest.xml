@@ -45,6 +45,11 @@
             android:exported="false" />
 
         <activity
+            android:name=".ui.auth.PrivacyNoticeActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.auth.AvatarSelectionActivity"
             android:screenOrientation="sensorLandscape"
             android:exported="false" />
