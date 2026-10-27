@@ -15,6 +15,7 @@ import com.example.animoon.ui.minigame.game1.model.Pregunta
 import com.google.android.material.button.MaterialButton
 import android.content.Intent
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import androidx.activity.OnBackPressedCallback
 
 class Game1Activity : BaseActivity() {
 
@@ -81,11 +82,9 @@ class Game1Activity : BaseActivity() {
         setContentView(R.layout.activity_game1)
 
         inicializarVistas()
-
         configurarBotones()
-
+        configurarBotonAtras()
         prepararPartida()
-
         mostrarPreguntaActual()
     }
 
@@ -1080,5 +1079,16 @@ class Game1Activity : BaseActivity() {
         btnAnswer1.isEnabled = true
         btnAnswer2.isEnabled = true
         btnAnswer3.isEnabled = true
+    }
+
+    private fun configurarBotonAtras() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    mostrarPausa()
+                }
+            }
+        )
     }
 }

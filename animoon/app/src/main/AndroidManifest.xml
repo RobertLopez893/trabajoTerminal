@@ -36,6 +36,20 @@
         <activity
             android:name=".MainActivity"
             android:screenOrientation="sensorLandscape"
+            android:exported="true" />
+        <activity
+            android:name=".ui.world.CratersActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.world.VillageActivity"
+            android:screenOrientation="sensorLandscape"
+            android:exported="false" />
+
+        <activity
+            android:name=".ui.world.DarkSideActivity"
+            android:screenOrientation="sensorLandscape"
             android:exported="false" />
 
         <!-- REGISTRO -->

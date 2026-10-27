@@ -34,14 +34,23 @@ import android.widget.ImageView
 import com.example.animoon.ui.splash.SplashActivity
 import com.example.animoon.ui.world.WorldMapDialogFragment
 import com.example.animoon.ui.world.WorldZone
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.animoon.data.network.WebSocketManager
+import com.example.animoon.ui.world.CratersActivity
+import com.example.animoon.ui.world.VillageActivity
+import com.example.animoon.ui.world.DarkSideActivity
 
-class MainActivity : BaseActivity() {
+open class MainActivity : BaseActivity() {
 
-    companion object {
-        private const val STATE_WORLD_ZONE = "state_world_zone"
-    }
+    protected open val screenZone: WorldZone = WorldZone.BASE
+    protected open val screenLayout: Int = R.layout.activity_main
 
-    private var currentZone = WorldZone.BASE
+    private val currentZone: WorldZone
+        get() = screenZone
+
+    private var navigatingToZone = false
 
     // =========================================================
     // ON CREATE
@@ -50,13 +59,16 @@ class MainActivity : BaseActivity() {
         TokenManager.init(applicationContext)
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(screenLayout)
 
+        findViewById<MaterialButton>(R.id.btnZoneName).text =
+            currentZone.title
+
+        configurarRegresoDelMundo()
         // =====================================================
         // CONEXIÓN MULTIJUGADOR
         // =====================================================
-        com.example.animoon.data.network.WebSocketManager.connect("base_principal")
-        
+        WebSocketManager.connect(currentZone.id)
         findViewById<ConstraintLayout>(R.id.worldLayer)?.setOnTouchListener { _, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
                 com.example.animoon.data.network.WebSocketManager.sendMessage(
@@ -67,8 +79,10 @@ class MainActivity : BaseActivity() {
         }
 
         lifecycleScope.launch {
-            com.example.animoon.data.network.WebSocketManager.playersInZone.collectLatest { players ->
-                renderPlayersInZone(players)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WebSocketManager.playersInZone.collectLatest { players ->
+                    renderPlayersInZone(players)
+                }
             }
         }
 
@@ -127,9 +141,6 @@ class MainActivity : BaseActivity() {
             )
         }
 
-        currentZone = WorldZone.fromId(
-            savedInstanceState?.getString(STATE_WORLD_ZONE)
-        )
 
         supportFragmentManager.setFragmentResultListener(
             WorldMapDialogFragment.REQUEST_KEY,
@@ -140,7 +151,7 @@ class MainActivity : BaseActivity() {
                 result.getString(WorldMapDialogFragment.RESULT_ZONE_ID)
             )
 
-            renderZone(selectedZone)
+            navigateToZone(selectedZone)
         }
 
         findViewById<MaterialButton>(
@@ -148,8 +159,6 @@ class MainActivity : BaseActivity() {
         ).setOnClickListener {
             openWorldMap()
         }
-
-        renderZone(currentZone)
 
         // =====================================================
         // BOTÓN GENERAL DE MINIJUEGOS
@@ -474,32 +483,40 @@ class MainActivity : BaseActivity() {
             .showNow(manager, WorldMapDialogFragment.TAG)
     }
 
-    private fun renderZone(zone: WorldZone) {
-        currentZone = zone
-
-        val background = findViewById<ImageView>(
-            R.id.ivLobbyBackground
-        )
-
-        findViewById<MaterialButton>(
-            R.id.btnZoneName
-        ).text = zone.title
-
-        val backgroundResource = when (zone) {
-            WorldZone.BASE ->
-                R.drawable.lobby_base_principal
-
-            WorldZone.CRATERS ->
-                R.drawable.world_crateres
-
-            WorldZone.VILLAGE ->
-                R.drawable.world_aldea
-
-            WorldZone.DARK_SIDE ->
-                R.drawable.world_lado_oscuro
+    private fun navigateToZone(zone: WorldZone) {
+        if (
+            zone == currentZone ||
+            navigatingToZone ||
+            isFinishing ||
+            isDestroyed
+        ) {
+            return
         }
 
-        background.setImageResource(backgroundResource)
+        val destination: Class<out MainActivity> = when (zone) {
+            WorldZone.BASE -> MainActivity::class.java
+            WorldZone.CRATERS -> CratersActivity::class.java
+            WorldZone.VILLAGE -> VillageActivity::class.java
+            WorldZone.DARK_SIDE -> DarkSideActivity::class.java
+        }
+
+        navigatingToZone = true
+
+        startActivity(Intent(this, destination))
+        finish()
+    }
+
+    private fun configurarRegresoDelMundo() {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(
+                currentZone != WorldZone.BASE
+            ) {
+                override fun handleOnBackPressed() {
+                    navigateToZone(WorldZone.BASE)
+                }
+            }
+        )
     }
 }
 

@@ -17,7 +17,7 @@ enum class WorldZone(
         title = "Aldea lunática"
     ),
     DARK_SIDE(
-        id = "lado_oscuro",
+        id = "lado_oscuro_de_la_luna",
         title = "El lado oscuro de la luna"
     );
 
