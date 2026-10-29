@@ -96,10 +96,10 @@ def procesar_trabajo(job_data: dict, analizador: AnalizadorBETO, aes_cipher: AES
     )
 
     # Identificar víctima y agresor dentro de los usuarios del chat
-    victima_id = None
-    if es_grooming and agresor_id:
+    victima_id = res.get("victima_id")
+    if es_grooming and agresor_id and not victima_id:
         victima_id = usuario_b_id if agresor_id == usuario_a_id else usuario_a_id
-    elif usuario_a_id and usuario_b_id:
+    elif not victima_id and usuario_a_id and usuario_b_id:
         victima_id = usuario_b_id
 
     # 2. Actualización en Base de Datos Operacional (animoon_operacional)
