@@ -1,4 +1,4 @@
-﻿import os
+import os
 from twilio.rest import Client
 
 def get_twilio_client():
@@ -40,3 +40,30 @@ def check_verification_code(phone_number: str, code: str) -> bool:
     except Exception as e:
         print(f'Error validando código con Twilio Verify: {e}')
         return False
+
+
+def send_notification_sms(phone_number: str, message: str) -> bool:
+    """
+    Envía un SMS informativo directo al tutor (usado para alertas y resolución de apelaciones).
+    """
+    try:
+        if not phone_number.startswith('+'):
+            phone_number = '+52' + phone_number
+
+        from_number = os.getenv('TWILIO_PHONE_NUMBER')
+        if not from_number:
+            print(f"[SMS SIMULADO - Notificación a {phone_number}]: {message}")
+            return True
+
+        client = get_twilio_client()
+        msg = client.messages.create(
+            body=message,
+            to=phone_number,
+            from_=from_number
+        )
+        print(f"Twilio Notification SMS enviado: {msg.sid}")
+        return True
+    except Exception as e:
+        print(f"Error enviando SMS de notificación con Twilio: {e}")
+        return False
+

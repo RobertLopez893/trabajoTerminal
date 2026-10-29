@@ -39,6 +39,11 @@ data class AdminAppealResolveRequest(
     @SerializedName("reason") val reason: String
 )
 
+data class UserAppealSubmitRequest(
+    @SerializedName("nickname") val nickname: String,
+    @SerializedName("justificacion") val justificacion: String
+)
+
 interface AdminApiService {
 
     @POST("/api/admin/login")
@@ -63,4 +68,9 @@ interface AdminApiService {
         @Path("id") id: String,
         @Body req: AdminAppealResolveRequest
     ): Response<AdminAppealDto>
+
+    @POST("/api/admin/submit-appeal")
+    suspend fun submitAppeal(
+        @Body req: UserAppealSubmitRequest
+    ): Response<DefaultResponse>
 }

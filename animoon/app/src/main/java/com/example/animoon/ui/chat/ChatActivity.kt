@@ -220,7 +220,8 @@ class ChatActivity : BaseActivity() {
         com.example.animoon.ui.common.BannedAccountDialog.show(
             activity = this,
             motivo = detalle,
-            isChatBan = true
+            isChatBan = true,
+            nickname = TokenManager.getNickname()
         )
     }
 

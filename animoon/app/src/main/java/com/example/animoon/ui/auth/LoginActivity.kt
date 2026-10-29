@@ -98,6 +98,7 @@ hideLoading()
                             val token = response.body()?.access_token
                             if (!token.isNullOrEmpty()) {
                                 com.example.animoon.data.network.TokenManager.saveToken(token)
+                                com.example.animoon.data.network.TokenManager.saveNickname(apelativo)
                             }
 
                             // 1. Recibir llave del servidor y computar el Shared Secret (AES-256)
@@ -142,7 +143,8 @@ hideLoading()
                                 com.example.animoon.ui.common.BannedAccountDialog.show(
                                     activity = this@LoginActivity,
                                     motivo = errorMsg,
-                                    isChatBan = false
+                                    isChatBan = false,
+                                    nickname = apelativo
                                 )
                             } else {
                                 Toast.makeText(

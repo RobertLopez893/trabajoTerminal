@@ -13,7 +13,9 @@ if PROJECT_ROOT not in sys.path:
 from dotenv import load_dotenv
 load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 
+from fastapi import HTTPException
 from backend.api import appeals
+from backend.database import models
 from backend.database.models import Usuario, Apelacion, BloqueAnalisis
 from backend.database.models_auditoria import LogAuditoria
 from backend.database.schemas import AdminLoginRequest, AdminAppealResolveRequest, UserAppealSubmitRequest
@@ -142,8 +144,19 @@ class TestAppealsAPIUnit(unittest.TestCase):
     def test_submit_appeal_success(self):
         mock_db = MagicMock()
         self.banned_user.is_banned = True
-        mock_db.query.return_value.filter.return_value.first.return_value = self.banned_user
-        mock_db.query.return_value.filter.return_value.order_by.return_value.first.return_value = None
+
+        def query_side_effect(model):
+            mock_q = MagicMock()
+            if model == models.Usuario:
+                mock_q.filter.return_value.first.return_value = self.banned_user
+            elif model == models.Apelacion:
+                # No hay apelación previa
+                mock_q.filter.return_value.first.return_value = None
+            elif model == models.BloqueAnalisis:
+                mock_q.filter.return_value.order_by.return_value.first.return_value = None
+            return mock_q
+
+        mock_db.query.side_effect = query_side_effect
 
         req = UserAppealSubmitRequest(
             nickname="CometaAzul",
@@ -154,6 +167,63 @@ class TestAppealsAPIUnit(unittest.TestCase):
         self.assertEqual(res.status, "success")
         mock_db.add.assert_called_once()
         mock_db.commit.assert_called_once()
+
+    def test_submit_appeal_duplicate_conflict_409(self):
+        mock_db = MagicMock()
+        self.banned_user.is_banned = True
+        sample_appeal = models.Apelacion(id="AP-PEND", usuario_id=self.banned_user.id, estado="PENDIENTE")
+
+        def query_side_effect(model):
+            mock_q = MagicMock()
+            if model == models.Usuario:
+                mock_q.filter.return_value.first.return_value = self.banned_user
+            elif model == models.Apelacion:
+                # Ya existe una apelación pendiente (RF-AP-05)
+                mock_q.filter.return_value.first.return_value = sample_appeal
+            return mock_q
+
+        mock_db.query.side_effect = query_side_effect
+
+        req = UserAppealSubmitRequest(
+            nickname="CometaAzul",
+            justificacion="Intento enviar una segunda apelación."
+        )
+
+        with self.assertRaises(HTTPException) as ctx:
+            appeals.submit_appeal(req=req, db=mock_db)
+        self.assertEqual(ctx.exception.status_code, 409)
+
+    def test_submit_appeal_already_rejected_400(self):
+        mock_db = MagicMock()
+        self.banned_user.is_banned = True
+        rejected_appeal = models.Apelacion(id="AP-REJ", usuario_id=self.banned_user.id, estado="RECHAZADA")
+
+        call_count = {"apelacion": 0}
+
+        def query_side_effect(model):
+            mock_q = MagicMock()
+            if model == models.Usuario:
+                mock_q.filter.return_value.first.return_value = self.banned_user
+            elif model == models.Apelacion:
+                call_count["apelacion"] += 1
+                if call_count["apelacion"] == 1:
+                    # Primera consulta (PENDIENTE / EN_REVISION) -> None
+                    mock_q.filter.return_value.first.return_value = None
+                else:
+                    # Segunda consulta (RECHAZADA) -> rejected_appeal (RN-AP-04)
+                    mock_q.filter.return_value.first.return_value = rejected_appeal
+            return mock_q
+
+        mock_db.query.side_effect = query_side_effect
+
+        req = UserAppealSubmitRequest(
+            nickname="CometaAzul",
+            justificacion="Mi apelación previa fue rechazada pero intento de nuevo."
+        )
+
+        with self.assertRaises(HTTPException) as ctx:
+            appeals.submit_appeal(req=req, db=mock_db)
+        self.assertEqual(ctx.exception.status_code, 400)
 
 
 if __name__ == "__main__":

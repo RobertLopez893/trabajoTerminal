@@ -142,7 +142,7 @@ class AdminAppealResolveRequest(BaseModel):
 
 class UserAppealSubmitRequest(BaseModel):
     nickname: str
-    justificacion: str = Field(..., min_length=10, max_length=1000)
+    justificacion: str = Field(..., min_length=5, max_length=250)
 
 
 

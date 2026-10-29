@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 object TokenManager {
     private const val PREFS_NAME = "animoon_prefs"
     private const val KEY_TOKEN = "jwt_token"
+    private const val KEY_NICKNAME = "current_nickname"
     private lateinit var prefs: SharedPreferences
     private var appContext: Context? = null
 
@@ -30,6 +31,27 @@ object TokenManager {
         return prefs.getString(KEY_TOKEN, null)
     }
 
+    fun saveNickname(nickname: String) {
+        prefs.edit().putString(KEY_NICKNAME, nickname).apply()
+    }
+
+    fun getNickname(): String? {
+        val stored = prefs.getString(KEY_NICKNAME, null)
+        if (!stored.isNullOrBlank()) return stored
+
+        // Extraer desde el JWT si no estuviera explícitamente guardado
+        val token = getToken() ?: return null
+        return try {
+            val parts = token.split(".")
+            if (parts.size >= 2) {
+                val payload = String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE or android.util.Base64.NO_PADDING or android.util.Base64.NO_WRAP))
+                org.json.JSONObject(payload).optString("nickname", null)
+            } else null
+        } catch (e: Exception) {
+            null
+        }
+    }
+
     fun saveSessionSecret(secretB64: String) {
         prefs.edit().putString("aes_session_secret", secretB64).apply()
     }
@@ -39,6 +61,6 @@ object TokenManager {
     }
 
     fun clearToken() {
-        prefs.edit().remove(KEY_TOKEN).remove("aes_session_secret").apply()
+        prefs.edit().remove(KEY_TOKEN).remove("aes_session_secret").remove(KEY_NICKNAME).apply()
     }
 }

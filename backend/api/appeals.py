@@ -20,6 +20,7 @@ from backend.database import models, schemas
 from backend.database.models_auditoria import LogAuditoria
 from backend.api.jwt_manager import create_access_token, verify_access_token
 from security.aes.aes_gcm import AESGCMCipher
+from backend.api.twilio_service import send_notification_sms
 
 logger = logging.getLogger("AppealsAPI")
 aes_cipher = AESGCMCipher()
@@ -262,9 +263,10 @@ def resolve_appeal(
         ap.updated_at = now_dt
 
         # Si se aprueba la apelación, desbanear al usuario
-        if req.approved and ap.usuario_id:
+        usuario = None
+        if ap.usuario_id:
             usuario = db.query(models.Usuario).filter(models.Usuario.id == ap.usuario_id).first()
-            if usuario:
+            if req.approved and usuario:
                 usuario.is_banned = False
                 usuario.is_active = True
                 reactivar_usuario_en_redis(usuario.id)
@@ -272,11 +274,29 @@ def resolve_appeal(
 
         db.commit()
 
-        nickname = "Usuario"
-        if ap.usuario_id:
-            u = db.query(models.Usuario).filter(models.Usuario.id == ap.usuario_id).first()
-            if u:
-                nickname = u.nickname
+        # RF-AP-08 / RF-AD-06: Notificar al tutor vía SMS dentro de 30 segundos tras el dictamen
+        if usuario and usuario.telefono_cifrado:
+            try:
+                tel_plano = aes_cipher.decrypt(
+                    usuario.telefono_cifrado,
+                    usuario.telefono_iv_nonce,
+                    usuario.telefono_tag
+                )
+                if req.approved:
+                    msg_sms = (
+                        f"Animoon Seguridad: La apelación para la cuenta '{usuario.nickname}' fue APROBADA. "
+                        f"El acceso ha sido restaurado exitosamente. Motivo: {req.reason}"
+                    )
+                else:
+                    msg_sms = (
+                        f"Animoon Seguridad: La apelación para la cuenta '{usuario.nickname}' fue RECHAZADA. "
+                        f"La suspensión se mantiene definitiva. Motivo: {req.reason}"
+                    )
+                send_notification_sms(tel_plano, msg_sms)
+            except Exception as e_sms:
+                logger.error(f"Error enviando SMS de dictamen de apelación: {e_sms}")
+
+        nickname = usuario.nickname if usuario else "Usuario"
 
         return schemas.AdminAppealDto(
             id=ap.id,
@@ -329,6 +349,36 @@ def submit_appeal(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="La cuenta no se encuentra suspendida."
+        )
+
+    # RN-AP-02 / RF-AP-05: Si ya existe una apelación registrada y pendiente, impedir un segundo envío
+    apelacion_pendiente = (
+        db.query(models.Apelacion)
+        .filter(
+            models.Apelacion.usuario_id == usuario.id,
+            models.Apelacion.estado.in_(["PENDIENTE", "EN_REVISION"])
+        )
+        .first()
+    )
+    if apelacion_pendiente:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Ya existe una apelación registrada en proceso de revisión para esta cuenta."
+        )
+
+    # RN-AP-04: Si la apelación fue rechazada previamente, el ban se mantiene definitivo
+    apelacion_rechazada = (
+        db.query(models.Apelacion)
+        .filter(
+            models.Apelacion.usuario_id == usuario.id,
+            models.Apelacion.estado == "RECHAZADA"
+        )
+        .first()
+    )
+    if apelacion_rechazada:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="La apelación previa para esta suspensión fue evaluada y rechazada. La sanción se mantiene."
         )
 
     # Buscar el bloque que originó el baneo
