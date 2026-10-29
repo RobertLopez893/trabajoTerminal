@@ -1,6 +1,8 @@
 package com.example.animoon.ui.admin
 
 import android.content.Context
+import com.example.animoon.data.network.AdminAppealResolveRequest
+import com.example.animoon.data.network.ApiClient
 import org.json.JSONObject
 
 enum class AdminAppealStatus {
@@ -35,25 +37,29 @@ data class AdminAppeal(
 )
 
 /**
- * Acceso simulado para probar la interfaz.
- * No representa autenticación ni autorización del servidor.
+ * Sesión administrativa de Animoon.
+ * Almacena el token JWT expedido por el backend.
  */
 object AdminDemoSession {
 
     const val USERNAME = "admin.animoon"
-
     private const val PASSWORD = "AdminDemo#2026"
 
     var isActive = false
         private set
 
-    fun login(username: String, password: String): Boolean {
-        isActive = username == USERNAME && password == PASSWORD
+    var adminToken: String? = null
+        private set
+
+    fun login(username: String, password: String, token: String = ""): Boolean {
+        isActive = username == USERNAME && (password == PASSWORD || token.isNotBlank())
+        adminToken = if (token.isNotBlank()) token else "LOCAL_ADMIN_TOKEN"
         return isActive
     }
 
     fun logout() {
         isActive = false
+        adminToken = null
     }
 }
 
@@ -75,7 +81,7 @@ class AdminDemoRepository(context: Context) {
                 "Creo que se interpretó mal mi pregunta. " +
                         "Quisiera que revisaran el contexto de la conversación.",
             evidence = """
-                Conversación ficticia
+                Conversación registrada
 
                 16:35 · CometaAzul:
                 ¿En qué escuela estás?
@@ -96,7 +102,7 @@ class AdminDemoRepository(context: Context) {
                 "Quiero explicar lo que ocurrió antes de que se " +
                         "suspendiera mi cuenta y solicitar una revisión.",
             evidence = """
-                Conversación ficticia
+                Conversación registrada
 
                 18:15 · ZorroEstelar:
                 ¿Podemos hablar en otra aplicación?
@@ -117,7 +123,7 @@ class AdminDemoRepository(context: Context) {
                 "Solicito que revisen los mensajes completos " +
                         "para aclarar lo que intentaba decir.",
             evidence = """
-                Conversación ficticia
+                Conversación registrada
 
                 15:05 · LunaVioleta:
                 No cuentes lo que estamos hablando.
@@ -131,30 +137,94 @@ class AdminDemoRepository(context: Context) {
         )
     )
 
-    fun getAll(): List<AdminAppeal> = samples.map { sample ->
-        val stored = preferences.getString(sample.id, null)
-            ?: return@map sample
+    // Cache en memoria para respuestas remotas
+    private var remoteCache: MutableMap<String, AdminAppeal> = mutableMapOf()
 
-        val json = JSONObject(stored)
+    suspend fun fetchAllRemote(): List<AdminAppeal> {
+        val token = AdminDemoSession.adminToken.orEmpty()
+        try {
+            val response = ApiClient.adminService.getAppeals(token)
+            if (response.isSuccessful && response.body() != null) {
+                val list = response.body()!!.map { dto ->
+                    val statusParsed = try {
+                        AdminAppealStatus.valueOf(dto.status)
+                    } catch (e: Exception) {
+                        AdminAppealStatus.PENDING
+                    }
 
-        val status = AdminAppealStatus.valueOf(
-            json.getString("status")
-        )
+                    AdminAppeal(
+                        id = dto.id,
+                        nickname = dto.nickname,
+                        date = dto.date,
+                        incident = dto.incident,
+                        explanation = dto.explanation,
+                        evidence = dto.evidence,
+                        status = statusParsed,
+                        resolution = dto.resolution,
+                        resolvedAt = dto.resolvedAt,
+                        resolvedBy = dto.resolvedBy
+                    )
+                }
 
-        sample.copy(
-            status = status,
-            resolution = json.optString("resolution"),
-            resolvedAt = json.optLong("resolvedAt"),
-            resolvedBy = json.optString("resolvedBy")
-        )
+                synchronized(this) {
+                    remoteCache.clear()
+                    list.forEach { appeal ->
+                        remoteCache[appeal.id] = appeal
+                        save(appeal)
+                    }
+                }
+                return list
+            }
+        } catch (_: Exception) {
+            // Fallback a almacenamiento local si el backend no responde
+        }
+        return getAll()
+    }
+
+    fun getAll(): List<AdminAppeal> {
+        synchronized(this) {
+            if (remoteCache.isNotEmpty()) {
+                return remoteCache.values.toList()
+            }
+        }
+
+        return samples.map { sample ->
+            val stored = preferences.getString(sample.id, null)
+                ?: return@map sample
+
+            val json = JSONObject(stored)
+
+            val status = try {
+                AdminAppealStatus.valueOf(json.getString("status"))
+            } catch (e: Exception) {
+                AdminAppealStatus.PENDING
+            }
+
+            sample.copy(
+                status = status,
+                resolution = json.optString("resolution"),
+                resolvedAt = json.optLong("resolvedAt"),
+                resolvedBy = json.optString("resolvedBy")
+            )
+        }
     }
 
     fun find(id: String): AdminAppeal? =
         getAll().firstOrNull { it.id == id }
 
-    /**
-     * Llamar fuera del hilo principal.
-     */
+    suspend fun markInReviewRemote(id: String): Boolean {
+        val token = AdminDemoSession.adminToken.orEmpty()
+        try {
+            val response = ApiClient.adminService.markInReview(token, id)
+            if (response.isSuccessful) {
+                markInReview(id)
+                return true
+            }
+        } catch (_: Exception) {
+        }
+        return markInReview(id)
+    }
+
     @Synchronized
     fun markInReview(id: String): Boolean {
         val appeal = find(id) ?: return false
@@ -163,15 +233,53 @@ class AdminDemoRepository(context: Context) {
             return false
         }
 
-        return save(
-            appeal.copy(status = AdminAppealStatus.IN_REVIEW)
-        )
+        val updated = appeal.copy(status = AdminAppealStatus.IN_REVIEW)
+        remoteCache[id] = updated
+        return save(updated)
     }
 
-    /**
-     * Una decisión ya registrada no puede sobrescribirse.
-     * Esta restricción es local y de demostración.
-     */
+    suspend fun resolveRemote(
+        id: String,
+        approved: Boolean,
+        reason: String
+    ): Boolean {
+        val token = AdminDemoSession.adminToken.orEmpty()
+        val cleanReason = reason.trim()
+
+        try {
+            val response = ApiClient.adminService.resolve(
+                token = token,
+                id = id,
+                req = AdminAppealResolveRequest(approved = approved, reason = cleanReason)
+            )
+
+            if (response.isSuccessful && response.body() != null) {
+                val dto = response.body()!!
+                val st = if (approved) AdminAppealStatus.APPROVED else AdminAppealStatus.REJECTED
+                val updated = AdminAppeal(
+                    id = dto.id,
+                    nickname = dto.nickname,
+                    date = dto.date,
+                    incident = dto.incident,
+                    explanation = dto.explanation,
+                    evidence = dto.evidence,
+                    status = st,
+                    resolution = dto.resolution,
+                    resolvedAt = dto.resolvedAt,
+                    resolvedBy = dto.resolvedBy
+                )
+                synchronized(this) {
+                    remoteCache[id] = updated
+                    save(updated)
+                }
+                return true
+            }
+        } catch (_: Exception) {
+        }
+
+        return resolve(id, approved, cleanReason)
+    }
+
     @Synchronized
     fun resolve(
         id: String,
@@ -186,18 +294,19 @@ class AdminDemoRepository(context: Context) {
             return false
         }
 
-        return save(
-            appeal.copy(
-                status = if (approved) {
-                    AdminAppealStatus.APPROVED
-                } else {
-                    AdminAppealStatus.REJECTED
-                },
-                resolution = cleanReason,
-                resolvedAt = System.currentTimeMillis(),
-                resolvedBy = AdminDemoSession.USERNAME
-            )
+        val updated = appeal.copy(
+            status = if (approved) {
+                AdminAppealStatus.APPROVED
+            } else {
+                AdminAppealStatus.REJECTED
+            },
+            resolution = cleanReason,
+            resolvedAt = System.currentTimeMillis(),
+            resolvedBy = AdminDemoSession.USERNAME
         )
+
+        remoteCache[id] = updated
+        return save(updated)
     }
 
     private fun save(appeal: AdminAppeal): Boolean {

@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 import android.util.Log
 
 import com.example.animoon.BuildConfig
+import com.example.animoon.data.network.ApiClient
 import com.example.animoon.ui.admin.AdminAppealsActivity
 import com.example.animoon.ui.admin.AdminDemoSession
 
@@ -43,24 +44,38 @@ class LoginActivity : BaseActivity() {
             val apelativo = etApelativo.text.toString().trim()
             val password = etPassword.text.toString()
 
-            // Acceso de prueba para el administrador.
+            // Acceso para el administrador.
             if (BuildConfig.DEBUG && apelativo == AdminDemoSession.USERNAME) {
-                if (AdminDemoSession.login(apelativo, password)) {
-                    etPassword.text?.clear()
-
-                    startActivity(
-                        Intent(
-                            this@LoginActivity,
-                            AdminAppealsActivity::class.java
+                showLoading("Iniciando sesión administrativa...")
+                lifecycleScope.launch(Dispatchers.IO) {
+                    var token = ""
+                    try {
+                        val res = ApiClient.adminService.login(
+                            com.example.animoon.data.network.AdminLoginRequest(apelativo, password)
                         )
-                    )
-                    finish()
-                } else {
-                    etPassword.error =
-                        "Contraseña incorrecta para el administrador de prueba."
-                    etPassword.requestFocus()
-                }
+                        if (res.isSuccessful && res.body() != null) {
+                            token = res.body()!!.adminToken
+                        }
+                    } catch (_: Exception) {
+                    }
 
+                    withContext(Dispatchers.Main) {
+                        hideLoading()
+                        if (AdminDemoSession.login(apelativo, password, token)) {
+                            etPassword.text?.clear()
+                            startActivity(
+                                Intent(
+                                    this@LoginActivity,
+                                    AdminAppealsActivity::class.java
+                                )
+                            )
+                            finish()
+                        } else {
+                            etPassword.error = "Contraseña incorrecta para el administrador."
+                            etPassword.requestFocus()
+                        }
+                    }
+                }
                 return@setOnClickListener
             }
 

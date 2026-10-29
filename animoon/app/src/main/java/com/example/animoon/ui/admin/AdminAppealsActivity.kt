@@ -25,8 +25,6 @@ import java.util.Date
 
 class AdminAppealsActivity : BaseActivity() {
 
-    // La sesión administrativa de prueba es independiente
-    // de la sesión del jugador observada en BaseActivity.
     override val observarSesionExpirada: Boolean = false
 
     private lateinit var repository: AdminDemoRepository
@@ -66,7 +64,7 @@ class AdminAppealsActivity : BaseActivity() {
                 val id = selectedId ?: return@setOnClickListener
 
                 runOperation(
-                    operation = { repository.markInReview(id) },
+                    operation = { repository.markInReviewRemote(id) },
                     onSuccess = { renderDetail(id) }
                 )
             }
@@ -130,8 +128,19 @@ class AdminAppealsActivity : BaseActivity() {
 
         errorText.isVisible = false
 
-        val appeals = repository.getAll()
+        renderList(repository.getAll())
 
+        lifecycleScope.launch {
+            val remoteAppeals = withContext(Dispatchers.IO) {
+                repository.fetchAllRemote()
+            }
+            if (selectedId == null) {
+                renderList(remoteAppeals)
+            }
+        }
+    }
+
+    private fun renderList(appeals: List<AdminAppeal>) {
         val pending = appeals.count {
             it.status == AdminAppealStatus.PENDING
         }
@@ -239,7 +248,7 @@ class AdminAppealsActivity : BaseActivity() {
                         "${appeal.resolution}\n\n" +
                         "Registrada por: ${appeal.resolvedBy}\n" +
                         "$date\n\n" +
-                        "Decisión de demostración. No modifica cuentas reales."
+                        "Resolución aplicada en el servidor."
         }
     }
 
@@ -274,15 +283,14 @@ class AdminAppealsActivity : BaseActivity() {
                 .setTitle("¿Confirmar decisión?")
                 .setMessage(
                     "Vas a $action la apelación ${appeal.id}.\n\n" +
-                            "La decisión quedará guardada localmente y no " +
-                            "podrá modificarse desde este panel.\n\n" +
-                            "No se cambiará el acceso de ninguna cuenta real."
+                            "La decisión quedará registrada en la base de datos y " +
+                            (if (approved) "se reactivará la cuenta del usuario en PostgreSQL y Redis." else "se mantendrá la suspensión de la cuenta.")
                 )
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Confirmar") { _, _ ->
                     runOperation(
                         operation = {
-                            repository.resolve(id, approved, reason)
+                            repository.resolveRemote(id, approved, reason)
                         },
                         onSuccess = {
                             reasonEdit.text.clear()
@@ -295,7 +303,7 @@ class AdminAppealsActivity : BaseActivity() {
     }
 
     private fun runOperation(
-        operation: () -> Boolean,
+        operation: suspend () -> Boolean,
         onSuccess: () -> Unit
     ) {
         if (busy || !AdminDemoSession.isActive) return
@@ -315,8 +323,7 @@ class AdminAppealsActivity : BaseActivity() {
                     selectedId?.let { renderDetail(it) }
 
                     errorText.text =
-                        "No se pudo guardar el cambio. " +
-                                "La solicitud puede haber sido resuelta."
+                        "No se pudo guardar el cambio en el servidor."
                     errorText.isVisible = true
                 }
             } catch (exception: CancellationException) {
@@ -338,65 +345,52 @@ class AdminAppealsActivity : BaseActivity() {
         reasonEdit.isEnabled = !value
 
         listOf(
-            R.id.btnAdminLogout,
             R.id.btnAdminBack,
             R.id.btnAdminReview,
             R.id.btnAdminApprove,
-            R.id.btnAdminReject
+            R.id.btnAdminReject,
+            R.id.btnAdminLogout
         ).forEach { id ->
-            findViewById<View>(id).isEnabled = !value
+            findViewById<View>(id)?.isEnabled = !value
         }
-    }
-
-    private fun hasDraft(): Boolean {
-        val id = selectedId ?: return false
-        val appeal = repository.find(id) ?: return false
-
-        return !appeal.status.isResolved &&
-                reasonEdit.text.toString().isNotBlank()
     }
 
     private fun leaveDetail() {
-        if (busy || activeDialog?.isShowing == true) return
+        if (busy) return
 
-        if (!hasDraft()) {
+        val hasDraft = reasonEdit.text.toString().trim().isNotBlank()
+        val isResolved = selectedId?.let {
+            repository.find(it)?.status?.isResolved
+        } ?: true
+
+        if (!isResolved && hasDraft) {
+            showDialog(
+                dialogBuilder()
+                    .setTitle("¿Descartar cambios?")
+                    .setMessage(
+                        "Tienes un motivo sin guardar. Si sales " +
+                                "del detalle se perderá lo que escribiste."
+                    )
+                    .setNegativeButton("Continuar editando", null)
+                    .setPositiveButton("Descartar") { _, _ ->
+                        showList()
+                    }
+                    .create()
+            )
+        } else {
             showList()
-            return
         }
-
-        showDialog(
-            dialogBuilder()
-                .setTitle("¿Descartar el motivo escrito?")
-                .setMessage(
-                    "Todavía no has registrado una decisión. " +
-                            "El texto se perderá al volver a la lista."
-                )
-                .setNegativeButton("Seguir revisando", null)
-                .setPositiveButton("Descartar") { _, _ ->
-                    reasonEdit.text.clear()
-                    showList()
-                }
-                .create()
-        )
     }
 
     private fun confirmLogout() {
-        if (busy || activeDialog?.isShowing == true) return
-
-        val message = if (hasDraft()) {
-            "Volverás al inicio de sesión y se descartará " +
-                    "el motivo que todavía no has guardado."
-        } else {
-            "Volverás al inicio de sesión. " +
-                    "Las decisiones guardadas se conservarán."
-        }
+        if (busy) return
 
         showDialog(
             dialogBuilder()
-                .setTitle("¿Cerrar sesión administrativa?")
-                .setMessage(message)
-                .setNegativeButton("Permanecer", null)
-                .setPositiveButton("Cerrar sesión") { _, _ ->
+                .setTitle("¿Cerrar sesión?")
+                .setMessage("Volverás a la pantalla de inicio de sesión.")
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Salir") { _, _ ->
                     AdminDemoSession.logout()
                     returnToLogin()
                 }
@@ -404,37 +398,32 @@ class AdminAppealsActivity : BaseActivity() {
         )
     }
 
-    private fun dialogBuilder(): MaterialAlertDialogBuilder =
-        MaterialAlertDialogBuilder(
-            this,
-            R.style.ThemeOverlay_Animoon_Admin_Dialog
-        )
-
-    private fun showDialog(dialog: AlertDialog) {
-        activeDialog?.dismiss()
-        activeDialog = dialog
-
-        dialog.show()
-        ajustarTamanoDialogo(dialog)
-    }
-
     private fun returnToLogin() {
         AdminDemoSession.logout()
 
         startActivity(
             Intent(this, LoginActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
         )
 
         finish()
     }
 
+    private fun showDialog(dialog: AlertDialog) {
+        activeDialog?.dismiss()
+        activeDialog = dialog
+        dialog.show()
+    }
+
+    private fun dialogBuilder(): MaterialAlertDialogBuilder =
+        MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_Animoon_Admin_Dialog)
+
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putString("selected_id", selectedId)
 
-        if (::reasonEdit.isInitialized) {
+        if (selectedId != null && ::reasonEdit.isInitialized) {
             outState.putString(
                 "reason_draft",
                 reasonEdit.text.toString()

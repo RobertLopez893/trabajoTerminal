@@ -44,5 +44,13 @@ object ApiClient {
     val chatService: ChatApiService by lazy {
         retrofit.create(ChatApiService::class.java)
     }
+
+    val parentService: ParentApiService by lazy {
+        retrofit.create(ParentApiService::class.java)
+    }
+
+    val adminService: AdminApiService by lazy {
+        retrofit.create(AdminApiService::class.java)
+    }
 }
 

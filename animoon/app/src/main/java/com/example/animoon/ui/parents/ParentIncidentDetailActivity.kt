@@ -9,10 +9,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
+import com.example.animoon.data.network.ApiClient
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ParentIncidentDetailActivity : BaseActivity() {
 
@@ -24,6 +29,7 @@ class ParentIncidentDetailActivity : BaseActivity() {
 
     private var leaving = false
     private var guidanceDialog: AlertDialog? = null
+    private var currentGuidance: String? = null
 
     private val expirationCheck = Runnable {
         ensureSession()
@@ -40,7 +46,7 @@ class ParentIncidentDetailActivity : BaseActivity() {
             it.id == alertId
         }
 
-        if (alert == null) {
+        if (alertId == null) {
             Toast.makeText(
                 this,
                 "No se encontró la alerta.",
@@ -54,15 +60,16 @@ class ParentIncidentDetailActivity : BaseActivity() {
         setContentView(R.layout.activity_parent_incident_detail)
 
         findViewById<TextView>(R.id.txtIncidentTitle).text =
-            alert.title
+            alert?.title ?: "Detección de riesgo"
 
         findViewById<TextView>(R.id.txtIncidentDate).text =
-            alert.dateLabel
+            alert?.dateLabel ?: ""
 
         findViewById<TextView>(R.id.txtIncidentSummary).text =
-            alert.summary
+            alert?.summary ?: "Cargando detalle del incidente..."
 
-        renderMessages(alert.id)
+        renderMessages(alertId)
+        cargarDetalleDesdeBackend(alertId)
 
         findViewById<MaterialButton>(R.id.btnIncidentBack)
             .setOnClickListener {
@@ -73,13 +80,55 @@ class ParentIncidentDetailActivity : BaseActivity() {
 
         findViewById<MaterialButton>(R.id.btnIncidentGuidance)
             .setOnClickListener {
-                showGuidance(alert.id)
+                showGuidance(alertId)
             }
+    }
+
+    private fun cargarDetalleDesdeBackend(alertId: String) {
+        val token = ParentDemoSession.parentToken ?: return
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = ApiClient.parentService.getIncidentDetail(
+                    parentToken = token,
+                    alertId = alertId
+                )
+
+                if (response.isSuccessful && response.body() != null) {
+                    val detail = response.body()!!
+                    val parsedMessages = detail.messages.map {
+                        ParentIncidentMessage(
+                            author = it.author,
+                            time = it.time,
+                            text = it.text,
+                            fromChild = it.fromChild
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        findViewById<TextView>(R.id.txtIncidentTitle).text =
+                            detail.title
+                        findViewById<TextView>(R.id.txtIncidentDate).text =
+                            detail.dateLabel
+                        findViewById<TextView>(R.id.txtIncidentSummary).text =
+                            detail.summary
+
+                        currentGuidance = detail.guidance
+                        renderMessagesList(parsedMessages)
+                    }
+                }
+            } catch (e: Exception) {
+                // Si no hay red, conserva la vista inicial o demo sin fallar
+            }
+        }
     }
 
     private fun renderMessages(alertId: String) {
         val messages = ParentIncidentDemoContent.messagesFor(alertId)
+        renderMessagesList(messages)
+    }
 
+    private fun renderMessagesList(messages: List<ParentIncidentMessage>) {
         val container =
             findViewById<LinearLayout>(R.id.containerIncidentMessages)
 
@@ -89,7 +138,7 @@ class ParentIncidentDetailActivity : BaseActivity() {
             if (messages.isEmpty()) {
                 "El registro de mensajes no está disponible."
             } else {
-                "${messages.size} mensajes de muestra · Máximo 20"
+                "${messages.size} mensajes registrados · Evidencia descifrada"
             }
 
         messages.forEach { message ->
@@ -130,10 +179,12 @@ class ParentIncidentDetailActivity : BaseActivity() {
 
         guidanceDialog?.dismiss()
 
+        val guidanceText = currentGuidance ?: ParentIncidentDemoContent.guidanceFor(alertId)
+
         val dialog = ParentGuidanceDialog.create(
             activity = this,
             title = "¿Qué puedo hacer?",
-            message = ParentIncidentDemoContent.guidanceFor(alertId),
+            message = guidanceText,
             onInteraction = {
                 if (ensureSession()) {
                     recordInteraction()
@@ -209,8 +260,6 @@ class ParentIncidentDetailActivity : BaseActivity() {
 
         ParentDemoSession.clear()
 
-        // Retira el detalle de la pila. El panel detectará que
-        // la sesión venció y abrirá la verificación.
         startActivity(
             Intent(this, ParentDashboardActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or

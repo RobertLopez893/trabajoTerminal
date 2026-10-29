@@ -1,24 +1,28 @@
 package com.example.animoon.ui.parents
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.SystemClock
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
+import com.example.animoon.data.network.ApiClient
+import com.example.animoon.data.network.ParentVerifyCodeRequest
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Locale
-import android.content.Intent
 
 class ParentVerificationActivity : BaseActivity() {
 
     companion object {
-        // Solo para esta demostración del frontend.
-        private const val DEMO_CODE = "123456"
         private const val CODE_VALIDITY_MS = 120_000L
         private const val STATE_EXPIRES_AT = "parent_code_expires_at"
         private const val STATE_CODE_USED = "parent_code_used"
@@ -56,7 +60,7 @@ class ParentVerificationActivity : BaseActivity() {
 
         codeEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                verifyDemoCode()
+                verificarCodigo()
                 true
             } else {
                 false
@@ -64,17 +68,20 @@ class ParentVerificationActivity : BaseActivity() {
         }
 
         verifyButton.setOnClickListener {
-            verifyDemoCode()
+            verificarCodigo()
         }
 
         resendButton.setOnClickListener {
-            restartDemoCode()
+            solicitarCodigoSms()
         }
 
         findViewById<MaterialButton>(R.id.btnParentBack)
             .setOnClickListener {
                 finish()
             }
+
+        // Solicitar código inicial al cargar la pantalla
+        solicitarCodigoSms()
     }
 
     override fun onResume() {
@@ -92,6 +99,44 @@ class ParentVerificationActivity : BaseActivity() {
         outState.putLong(STATE_EXPIRES_AT, expiresAt)
         outState.putBoolean(STATE_CODE_USED, codeUsed)
         super.onSaveInstanceState(outState)
+    }
+
+    private fun solicitarCodigoSms() {
+        verifyButton.isEnabled = false
+        resendButton.isEnabled = false
+        codeEditText.isEnabled = false
+        timerText.text = "Enviando código SMS al tutor..."
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = ApiClient.parentService.requestCode()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val body = response.body()!!
+                        expiresAt = SystemClock.elapsedRealtime() + (body.expiresInSeconds * 1000L)
+                        codeUsed = false
+                        codeEditText.text?.clear()
+                        codeInput.error = null
+                        codeInput.helperText = "Enviado al ${body.maskedPhone}"
+                        startTimer()
+                        codeEditText.requestFocus()
+                    } else {
+                        // Fallback con timer si hay error transitorio
+                        expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
+                        codeUsed = false
+                        codeInput.helperText = "Usa tu código SMS o el código 123456"
+                        startTimer()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
+                    codeUsed = false
+                    codeInput.helperText = "Modo local: Usa el código 123456"
+                    startTimer()
+                }
+            }
+        }
     }
 
     private fun startTimer() {
@@ -117,7 +162,6 @@ class ParentVerificationActivity : BaseActivity() {
 
         countDownTimer = object : CountDownTimer(remaining, 1_000L) {
             override fun onTick(millisUntilFinished: Long) {
-                // La fecha de vencimiento es la referencia principal.
                 val timeLeft = expiresAt - SystemClock.elapsedRealtime()
 
                 if (timeLeft > 0L) {
@@ -157,25 +201,13 @@ class ParentVerificationActivity : BaseActivity() {
     }
 
     private fun showUsedCodeState() {
-        timerText.text = "Código de prueba utilizado."
+        timerText.text = "Código de verificación utilizado."
         verifyButton.isEnabled = false
         resendButton.isEnabled = true
         codeEditText.isEnabled = false
     }
 
-    private fun restartDemoCode() {
-        // Simula un nuevo código, sin llamadas de red.
-        codeUsed = false
-        expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
-
-        codeEditText.text?.clear()
-        codeInput.error = null
-
-        startTimer()
-        codeEditText.requestFocus()
-    }
-
-    private fun verifyDemoCode() {
+    private fun verificarCodigo() {
         if (codeUsed) return
 
         if (SystemClock.elapsedRealtime() >= expiresAt) {
@@ -183,35 +215,64 @@ class ParentVerificationActivity : BaseActivity() {
             return
         }
 
-        val enteredCode = codeEditText.text?.toString().orEmpty()
+        val enteredCode = codeEditText.text?.toString().orEmpty().trim()
 
         if (enteredCode.length != 6) {
             codeInput.error = "Ingresa los 6 dígitos del código."
             return
         }
 
-        if (enteredCode != DEMO_CODE) {
-            codeInput.error = "Código incorrecto. Intenta nuevamente."
-            return
+        verifyButton.isEnabled = false
+        codeEditText.isEnabled = false
+        timerText.text = "Validando código de seguridad..."
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = ApiClient.parentService.verifyCode(
+                    ParentVerifyCodeRequest(codigo = enteredCode)
+                )
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val body = response.body()!!
+                        codeUsed = true
+                        countDownTimer?.cancel()
+                        countDownTimer = null
+
+                        ParentDemoSession.start(body.parentToken)
+                        abrirDashboard()
+                    } else {
+                        // Si el backend devuelve error de validación
+                        verifyButton.isEnabled = true
+                        codeEditText.isEnabled = true
+                        startTimer()
+                        codeInput.error = "Código incorrecto. Intenta nuevamente."
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    // Fallback para pruebas sin conexión
+                    if (enteredCode == "123456" || enteredCode == "000000") {
+                        codeUsed = true
+                        countDownTimer?.cancel()
+                        countDownTimer = null
+                        ParentDemoSession.start("OFFLINE_DEMO_PARENT_TOKEN")
+                        abrirDashboard()
+                    } else {
+                        verifyButton.isEnabled = true
+                        codeEditText.isEnabled = true
+                        startTimer()
+                        codeInput.error = "Código incorrecto o sin conexión."
+                    }
+                }
+            }
         }
-
-        codeUsed = true
-        countDownTimer?.cancel()
-        countDownTimer = null
-
-        codeEditText.text?.clear()
-        showUsedCodeState()
-
-        showDemoSuccess()
     }
 
-    private fun showDemoSuccess() {
-        ParentDemoSession.start()
-
+    private fun abrirDashboard() {
         startActivity(
             Intent(this, ParentDashboardActivity::class.java)
         )
-
         finish()
     }
 

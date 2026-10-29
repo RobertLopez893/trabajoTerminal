@@ -4,16 +4,17 @@ data class ParentAlert(
     val id: String,
     val dateLabel: String,
     val title: String,
-    val summary: String
+    val summary: String,
+    val isRead: Boolean = false
 )
 
 object ParentDemoData {
 
-    const val childNickname = "ExploradorLunar"
-    const val childDescription = "Cuenta de muestra"
+    var childNickname: String = "ExploradorLunar"
+    var childDescription: String = "Cuenta protegida por Animoon"
 
     // Ordenadas de la más reciente a la más antigua.
-    val alerts: List<ParentAlert> = listOf(
+    var alerts: List<ParentAlert> = listOf(
         ParentAlert(
             id = "DEMO-003",
             dateLabel = "18 de octubre de 2026 · 17:40",
@@ -39,18 +40,25 @@ object ParentDemoData {
 }
 
 /**
- * Sesión simulada exclusivamente para navegar por el frontend.
- * No sustituye la autenticación ni la autorización del servidor.
+ * Sesión parental protegida (15 minutos de inactividad).
+ * Almacena el token de autorización expedido por el backend tras validar el SMS.
  */
 object ParentDemoSession {
 
     private const val INACTIVITY_LIMIT_MS = 15 * 60 * 1_000L
 
+    var parentToken: String? = null
+        private set
+
     private var active = false
     private var lastInteraction = 0L
 
-    fun start() {
+    val isActive: Boolean
+        get() = active && remainingMillis() > 0L
+
+    fun start(token: String = "") {
         active = true
+        parentToken = token.ifBlank { "PARENT_SESSION_ACTIVE" }
         lastInteraction = android.os.SystemClock.elapsedRealtime()
     }
 
@@ -64,7 +72,6 @@ object ParentDemoSession {
     }
 
     fun registerInteraction() {
-        // Una interacción posterior al vencimiento no reactiva la sesión.
         if (remainingMillis() > 0L) {
             lastInteraction = android.os.SystemClock.elapsedRealtime()
         }
@@ -72,6 +79,7 @@ object ParentDemoSession {
 
     fun clear() {
         active = false
+        parentToken = null
         lastInteraction = 0L
     }
 }

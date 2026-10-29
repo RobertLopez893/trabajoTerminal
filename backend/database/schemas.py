@@ -1,4 +1,5 @@
 from pydantic import BaseModel, constr, Field
+from typing import List
 
 
 class NicknameCheckRequest(BaseModel):
@@ -51,4 +52,97 @@ class ProfileResponse(BaseModel):
     color: str
     games_played: int = 0
     highest_score: int = 0
+
+
+# =========================
+# MÓDULO PARENTAL (TUTORES)
+# =========================
+class ParentRequestCodeResponse(BaseModel):
+    message: str
+    masked_phone: str
+    expires_in_seconds: int = 120
+    status: str = "success"
+
+
+class ParentVerifyCodeRequest(BaseModel):
+    codigo: str = Field(..., min_length=6, max_length=6)
+
+
+class ParentVerifyCodeResponse(BaseModel):
+    message: str
+    parent_token: str
+    expires_in_seconds: int = 900
+    status: str = "success"
+
+
+class ParentAlertItem(BaseModel):
+    id: str
+    dateLabel: str
+    title: str
+    summary: str
+    is_read: bool = False
+
+
+class ParentDashboardResponse(BaseModel):
+    child_nickname: str
+    child_description: str
+    alerts: List[ParentAlertItem]
+
+
+class ParentIncidentMessageItem(BaseModel):
+    author: str
+    time: str
+    text: str
+    fromChild: bool
+
+
+class ParentIncidentDetailResponse(BaseModel):
+    id: str
+    dateLabel: str
+    title: str
+    summary: str
+    confidence_score: float = 0.0
+    fase_detectada: str = ""
+    messages: List[ParentIncidentMessageItem]
+    guidance: str
+
+
+# =========================
+# MÓDULO DE APELACIONES (ADMIN)
+# =========================
+class AdminLoginRequest(BaseModel):
+    username: str
+    password: str
+
+
+class AdminLoginResponse(BaseModel):
+    message: str
+    admin_token: str
+    expires_in_seconds: int = 86400
+    status: str = "success"
+
+
+class AdminAppealDto(BaseModel):
+    id: str
+    nickname: str
+    date: str
+    incident: str
+    explanation: str
+    evidence: str
+    status: str = "PENDING"  # PENDING, IN_REVIEW, APPROVED, REJECTED
+    resolution: str = ""
+    resolvedAt: int = 0
+    resolvedBy: str = ""
+
+
+class AdminAppealResolveRequest(BaseModel):
+    approved: bool
+    reason: str = Field(..., min_length=1, max_length=500)
+
+
+class UserAppealSubmitRequest(BaseModel):
+    nickname: str
+    justificacion: str = Field(..., min_length=10, max_length=1000)
+
+
 

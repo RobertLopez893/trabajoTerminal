@@ -4,6 +4,8 @@ from backend.api.auth import router as auth_router
 from backend.api.chat import router as chat_router
 from backend.api.environment import router as env_router
 from backend.api.minigames import router as minigames_router
+from backend.api.parents import router as parents_router
+from backend.api.appeals import router as appeals_router
 
 # Crear tablas en Postgres si no existen
 # models.Base.metadata.create_all(bind=engine)
@@ -27,6 +29,8 @@ app.include_router(auth_router)
 app.include_router(chat_router)
 app.include_router(env_router)
 app.include_router(minigames_router)
+app.include_router(parents_router)
+app.include_router(appeals_router)
 
 @app.get("/")
 def read_root():

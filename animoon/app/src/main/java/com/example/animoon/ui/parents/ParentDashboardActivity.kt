@@ -9,10 +9,15 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
+import com.example.animoon.data.network.ApiClient
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ParentDashboardActivity : BaseActivity() {
 
@@ -41,7 +46,8 @@ class ParentDashboardActivity : BaseActivity() {
         findViewById<TextView>(R.id.txtParentChildDescription).text =
             ParentDemoData.childDescription
 
-        renderAlerts()
+        renderAlerts(ParentDemoData.alerts)
+        cargarDashboardDesdeBackend()
 
         findViewById<MaterialButton>(R.id.btnParentGeneralGuidance)
             .setOnClickListener {
@@ -63,9 +69,44 @@ class ParentDashboardActivity : BaseActivity() {
         )
     }
 
-    private fun renderAlerts() {
-        val alerts = ParentDemoData.alerts
+    private fun cargarDashboardDesdeBackend() {
+        val token = ParentDemoSession.parentToken ?: return
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = ApiClient.parentService.getDashboard(token)
+                if (response.isSuccessful && response.body() != null) {
+                    val body = response.body()!!
+                    val realAlerts = body.alerts.map {
+                        ParentAlert(
+                            id = it.id,
+                            dateLabel = it.dateLabel,
+                            title = it.title,
+                            summary = it.summary,
+                            isRead = it.isRead
+                        )
+                    }
+
+                    withContext(Dispatchers.Main) {
+                        ParentDemoData.childNickname = body.childNickname
+                        ParentDemoData.childDescription = body.childDescription
+                        ParentDemoData.alerts = realAlerts
+
+                        findViewById<TextView>(R.id.txtParentChildName).text =
+                            body.childNickname
+                        findViewById<TextView>(R.id.txtParentChildDescription).text =
+                            body.childDescription
+
+                        renderAlerts(realAlerts)
+                    }
+                }
+            } catch (e: Exception) {
+                // Si ocurre un error de conexión, mantiene los datos existentes sin romper la UI
+            }
+        }
+    }
+
+    private fun renderAlerts(alerts: List<ParentAlert>) {
         val container =
             findViewById<LinearLayout>(R.id.containerParentAlerts)
 
@@ -73,9 +114,9 @@ class ParentDashboardActivity : BaseActivity() {
 
         findViewById<TextView>(R.id.txtParentAlertCount).text =
             when (alerts.size) {
-                0 -> "Sin alertas"
-                1 -> "1 alerta de muestra"
-                else -> "${alerts.size} alertas de muestra · Más recientes primero"
+                0 -> "Sin alertas activas"
+                1 -> "1 alerta de seguridad"
+                else -> "${alerts.size} alertas de seguridad · Más recientes primero"
             }
 
         findViewById<TextView>(R.id.txtParentEmpty).isVisible =
@@ -158,6 +199,7 @@ class ParentDashboardActivity : BaseActivity() {
 
         if (!leaving) {
             checkSession()
+            cargarDashboardDesdeBackend()
         }
     }
 
