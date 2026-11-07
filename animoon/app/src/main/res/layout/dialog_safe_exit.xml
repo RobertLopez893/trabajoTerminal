@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Animoon.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:strokeColor="@color/animoon_border_strong"
+    app:strokeWidth="2dp">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <ImageView
+                android:id="@+id/imgSafeExitMoonie"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_happy" />
+
+            <TextView
+                android:id="@+id/tvSafeExitTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="🛡️ ¡Cuidamos de ti!"
+                android:textAppearance="@style/TextAppearance.Animoon.Title"
+                android:textColor="@color/animoon_text_primary"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvSafeExitMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:lineSpacingExtra="3dp"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+                android:textColor="@color/animoon_text_secondary"
+                android:textSize="15sp"
+                android:text="Moonie detectó que esta conversación no era del todo segura o divertida, así que decidimos cerrarla para protegerte.\n\nRecuerda nunca compartir tus datos personales como tu nombre completo, teléfono, fotos ni contraseñas.\n\n¡Si algo te hizo sentir incómodo o tienes dudas, cuéntaselo a mamá, papá o a un adulto de tu confianza!" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSafeExitAction"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="¡Entendido, volver a jugar!" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.google.android.material.card.MaterialCardView>

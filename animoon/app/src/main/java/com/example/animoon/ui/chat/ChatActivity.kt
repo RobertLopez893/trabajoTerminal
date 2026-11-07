@@ -193,17 +193,15 @@ class ChatActivity : BaseActivity() {
         if (isFinishing || isDestroyed) return
         bloquearEntradaChat()
 
-        val textoExplicativo = if (mensaje.isNotBlank()) mensaje else "Hemos suspendido esta conversación para proteger tu seguridad."
-        val textoDetalle = if (!motivo.isNullOrBlank()) "\n\nMotivo: $motivo" else ""
+        // Desconectar sockets inmediatamente
+        ChatWebSocketManager.disconnect()
 
-        android.app.AlertDialog.Builder(this)
-            .setTitle("🛡️ Salida Segura Preventiva")
-            .setMessage("$textoExplicativo$textoDetalle\n\nRecuerda nunca compartir datos personales, fotos o contraseñas con desconocidos.")
-            .setCancelable(false)
-            .setPositiveButton("Salir de forma segura") { _, _ ->
+        com.example.animoon.ui.common.SafeExitDialog.show(
+            activity = this,
+            onDismissAction = {
                 finish()
             }
-            .show()
+        )
     }
 
     private fun mostrarDialogoSuspension(razon: String) {
