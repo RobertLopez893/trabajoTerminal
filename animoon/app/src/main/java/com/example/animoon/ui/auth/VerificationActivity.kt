@@ -165,19 +165,19 @@ class VerificationActivity : BaseActivity() {
                         }
                     } catch (_: Exception) {}
 
-                    com.google.android.material.dialog.MaterialAlertDialogBuilder(this@VerificationActivity)
-                        .setTitle("Código incorrecto")
-                        .setMessage(errorDetail)
-                        .setPositiveButton("Reintentar") { _, _ ->
-                            edtCode1.text?.clear()
-                            edtCode2.text?.clear()
-                            edtCode3.text?.clear()
-                            edtCode4.text?.clear()
-                            edtCode5.text?.clear()
-                            edtCode6.text?.clear()
-                            edtCode1.requestFocus()
-                        }
-                        .show()
+                    Toast.makeText(
+                        this@VerificationActivity,
+                        errorDetail,
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                    edtCode1.text?.clear()
+                    edtCode2.text?.clear()
+                    edtCode3.text?.clear()
+                    edtCode4.text?.clear()
+                    edtCode5.text?.clear()
+                    edtCode6.text?.clear()
+                    edtCode1.requestFocus()
                 }
             } catch (e: Exception) {
                 hideLoading()
