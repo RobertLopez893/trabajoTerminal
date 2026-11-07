@@ -62,5 +62,7 @@ data class MoveMessage(
 ) : WsOutgoingMessage("move")
 
 data class ChangeZoneMessage(
-    val zona: String
+    val zona: String,
+    val x: Float = 0f,
+    val y: Float = 0f
 ) : WsOutgoingMessage("change_zone")

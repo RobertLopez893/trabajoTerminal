@@ -45,6 +45,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVersionNotes"
+            style="@style/Widget.Animoon.HudPill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Alfa v1.4"
+            app:layout_constraintStart_toEndOf="@id/btnDemoProfiles"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <!-- Nombre de la zona: informativo -->
 
         <com.google.android.material.button.MaterialButton

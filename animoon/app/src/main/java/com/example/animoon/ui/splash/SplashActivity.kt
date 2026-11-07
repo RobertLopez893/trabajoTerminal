@@ -22,7 +22,12 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
 
         val btnStart = findViewById<Button>(R.id.btnStart)
+        val btnVersionNotes = findViewById<Button>(R.id.btnVersionNotes)
         TokenManager.init(applicationContext)
+
+        btnVersionNotes?.setOnClickListener {
+            com.example.animoon.ui.common.VersionNotesDialog.show(this)
+        }
 
         btnStart.setOnClickListener {
             btnStart.isEnabled = false

@@ -69,7 +69,19 @@ open class MainActivity : BaseActivity() {
         // CONEXIÓN MULTIJUGADOR
         // =====================================================
         WebSocketManager.connect(currentZone.id)
-        findViewById<ConstraintLayout>(R.id.worldLayer)?.setOnTouchListener { _, event ->
+
+        val worldLayer = findViewById<ConstraintLayout>(R.id.worldLayer)
+        worldLayer?.post {
+            val centerX = worldLayer.width / 2f
+            val centerY = worldLayer.height / 2f
+            if (centerX > 0 && centerY > 0) {
+                WebSocketManager.sendMessage(
+                    com.example.animoon.data.model.MoveMessage(centerX, centerY)
+                )
+            }
+        }
+
+        worldLayer?.setOnTouchListener { _, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
                 com.example.animoon.data.network.WebSocketManager.sendMessage(
                     com.example.animoon.data.model.MoveMessage(event.x, event.y)
@@ -108,6 +120,10 @@ open class MainActivity : BaseActivity() {
                     }
                     .show()
             }
+        }
+
+        findViewById<MaterialButton>(R.id.btnVersionNotes)?.setOnClickListener {
+            com.example.animoon.ui.common.VersionNotesDialog.show(this)
         }
 
         
@@ -188,6 +204,12 @@ open class MainActivity : BaseActivity() {
         val worldLayer = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.worldLayer)
         if (worldLayer == null) return
 
+        val density = resources.displayMetrics.density
+        // Sprites más grandes: ~110dp (escala responsive adaptada a la densidad de pantalla)
+        val spriteSize = (110 * density).toInt()
+        val halfSpriteWidth = spriteSize / 2f
+        val halfSpriteHeight = (spriteSize + (22 * density)) / 2f
+
         val currentIds = players.map { it.usuarioId }.toSet()
         val toRemove = playerViews.keys.filter { it !in currentIds }
         for (id in toRemove) {
@@ -196,13 +218,17 @@ open class MainActivity : BaseActivity() {
         }
 
         for (player in players) {
+            // Si las coordenadas son 0 y conocemos el tamaño de la capa, centramos por defecto
+            val px = if (player.x <= 0f && worldLayer.width > 0) worldLayer.width / 2f else player.x
+            val py = if (player.y <= 0f && worldLayer.height > 0) worldLayer.height / 2f else player.y
+
             val playerView = playerViews[player.usuarioId] ?: run {
                 val newView = android.widget.LinearLayout(this)
                 newView.orientation = android.widget.LinearLayout.VERTICAL
                 newView.gravity = android.view.Gravity.CENTER
                 
                 val avatarImage = android.widget.ImageView(this)
-                avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(160, 160)
+                avatarImage.layoutParams = android.widget.LinearLayout.LayoutParams(spriteSize, spriteSize)
                 
                 val species = player.avatar?.get("especie") ?: "gato"
                 val color = player.avatar?.get("color") ?: "azul"
@@ -212,8 +238,9 @@ open class MainActivity : BaseActivity() {
                 val nicknameText = android.widget.TextView(this)
                 nicknameText.text = player.nickname
                 nicknameText.setTextColor(android.graphics.Color.WHITE)
-                nicknameText.setShadowLayer(4f, 0f, 0f, android.graphics.Color.BLACK)
-                nicknameText.textSize = 14f
+                nicknameText.typeface = android.graphics.Typeface.DEFAULT_BOLD
+                nicknameText.setShadowLayer(6f, 0f, 0f, android.graphics.Color.BLACK)
+                nicknameText.textSize = 15f
                 
                 newView.addView(avatarImage)
                 newView.addView(nicknameText)
@@ -233,17 +260,17 @@ open class MainActivity : BaseActivity() {
                 worldLayer.addView(newView)
                 playerViews[player.usuarioId] = newView
                 
-                // Posicion inicial sin animacion
-                newView.translationX = player.x - 80f // centrar
-                newView.translationY = player.y - 100f // centrar
+                // Posición inicial centrada
+                newView.translationX = px - halfSpriteWidth
+                newView.translationY = py - halfSpriteHeight
                 
                 newView
             }
             
-            // Actualizar posicion con animacion suave
+            // Actualizar posición con animación suave
             playerView.animate()
-                .translationX(player.x - 80f)
-                .translationY(player.y - 100f)
+                .translationX(px - halfSpriteWidth)
+                .translationY(py - halfSpriteHeight)
                 .setDuration(150)
                 .start()
         }
@@ -501,6 +528,8 @@ open class MainActivity : BaseActivity() {
         }
 
         navigatingToZone = true
+
+        WebSocketManager.switchZone(zone.id)
 
         startActivity(Intent(this, destination))
         finish()

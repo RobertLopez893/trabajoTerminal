@@ -72,16 +72,21 @@ class ConnectionManager:
                         except Exception:
                             pass
 
-    async def connect(self, websocket: WebSocket, usuario_id: str, nickname: str, avatar: dict, zona_inicial: str = "base_principal"):
+    async def connect(self, websocket: WebSocket, usuario_id: str, nickname: str, avatar: dict, zona_inicial: str = "base_principal", x: float = 0.0, y: float = 0.0):
         await websocket.accept()
         self.start_loop_if_needed()
         if zona_inicial not in self.zonas:
             zona_inicial = "base_principal"
             
+        # Remover al usuario de cualquier zona previa para evitar duplicados o usuarios fantasma
+        for z in list(self.zonas.keys()):
+            if usuario_id in self.zonas[z]:
+                del self.zonas[z][usuario_id]
+
         self.zonas[zona_inicial][usuario_id] = {
             "websocket": websocket,
-            "x": 0.0,
-            "y": 0.0,
+            "x": x,
+            "y": y,
             "nickname": nickname,
             "avatar": avatar
         }
@@ -94,29 +99,37 @@ class ConnectionManager:
             "players": [] # El tick rellenará la pantalla en 100ms
         })
 
-    def disconnect(self, websocket: WebSocket, usuario_id: str, zona: str):
-        if zona in self.zonas and usuario_id in self.zonas[zona]:
+    def disconnect(self, websocket: WebSocket, usuario_id: str, zona: str = None):
+        if zona and zona in self.zonas and usuario_id in self.zonas[zona]:
             del self.zonas[zona][usuario_id]
+        else:
+            for z in list(self.zonas.keys()):
+                if usuario_id in self.zonas[z]:
+                    del self.zonas[z][usuario_id]
             
-    async def change_zone(self, websocket: WebSocket, usuario_id: str, old_zona: str, new_zona: str):
-        if old_zona in self.zonas and usuario_id in self.zonas[old_zona]:
-            player_data = self.zonas[old_zona][usuario_id]
-            del self.zonas[old_zona][usuario_id]
-            
-            if new_zona not in self.zonas:
-                new_zona = "base_principal"
+    async def change_zone(self, websocket: WebSocket, usuario_id: str, old_zona: str, new_zona: str, x: float = 0.0, y: float = 0.0):
+        if new_zona not in self.zonas:
+            new_zona = "base_principal"
+
+        # Extraer player_data de la zona previa (o de cualquier zona donde se encuentre)
+        player_data = None
+        for z in list(self.zonas.keys()):
+            if usuario_id in self.zonas[z]:
+                player_data = self.zonas[z].pop(usuario_id, None)
+                break
                 
-            player_data["x"] = 0.0
-            player_data["y"] = 0.0
+        if player_data is not None:
+            player_data["websocket"] = websocket
+            player_data["x"] = x
+            player_data["y"] = y
             self.zonas[new_zona][usuario_id] = player_data
-            
-            await websocket.send_json({
-                "type": "zone_state",
-                "zona": new_zona,
-                "players": []
-            })
-            return new_zona
-        return old_zona
+        
+        await websocket.send_json({
+            "type": "zone_state",
+            "zona": new_zona,
+            "players": []
+        })
+        return new_zona
 
 
 manager = ConnectionManager()
@@ -152,10 +165,16 @@ from backend.database.db import SessionLocal
 
 
 @router.websocket("/ws")
-async def websocket_environment(websocket: WebSocket, token: str):
+async def websocket_environment(
+    websocket: WebSocket,
+    token: str,
+    zona: str = "base_principal",
+    x: float = 0.0,
+    y: float = 0.0
+):
     """
     Endpoint WebSocket para sincronización del entorno multijugador.
-    El cliente debe enviar el token JWT como query parameter: /api/env/ws?token=XYZ
+    El cliente puede enviar el token JWT y la zona: /api/env/ws?token=XYZ&zona=crateres_gigantes
     """
     db = SessionLocal()
     try:
@@ -173,9 +192,9 @@ async def websocket_environment(websocket: WebSocket, token: str):
     finally:
         db.close() # LIBERAR LA CONEXIÓN INMEDIATAMENTE AL POOL
 
-    zona_actual = "base_principal"
+    zona_actual = zona if zona in manager.zonas else "base_principal"
     
-    await manager.connect(websocket, user_id, nickname, avatar_json, zona_actual)
+    await manager.connect(websocket, user_id, nickname, avatar_json, zona_actual, x, y)
 
     try:
         while True:
@@ -185,18 +204,26 @@ async def websocket_environment(websocket: WebSocket, token: str):
             
             if msg_type == "move":
                 # Actualizar posición en memoria
-                if user.id in manager.zonas[zona_actual]:
-                    manager.zonas[zona_actual][user.id]["x"] = data.get("x", 0.0)
-                    manager.zonas[zona_actual][user.id]["y"] = data.get("y", 0.0)
-                    # Ya NO hacemos broadcast aquí. El game_loop se encarga de enviarlo en el próximo "tick"
+                if zona_actual in manager.zonas and user_id in manager.zonas[zona_actual]:
+                    try:
+                        manager.zonas[zona_actual][user_id]["x"] = float(data.get("x", 0.0))
+                        manager.zonas[zona_actual][user_id]["y"] = float(data.get("y", 0.0))
+                    except (ValueError, TypeError):
+                        pass
                     
             elif msg_type == "change_zone":
                 nueva_zona = data.get("zona")
+                try:
+                    target_x = float(data.get("x", 0.0))
+                    target_y = float(data.get("y", 0.0))
+                except (ValueError, TypeError):
+                    target_x = 0.0
+                    target_y = 0.0
                 if nueva_zona in manager.zonas:
-                    zona_actual = await manager.change_zone(websocket, user.id, zona_actual, nueva_zona)
+                    zona_actual = await manager.change_zone(websocket, user_id, zona_actual, nueva_zona, target_x, target_y)
                     
     except WebSocketDisconnect:
-        manager.disconnect(websocket, user.id, zona_actual)
+        manager.disconnect(websocket, user_id, zona_actual)
         # Ya no enviamos "player_left" al instante, simplemente desaparece del "tick"
 
 

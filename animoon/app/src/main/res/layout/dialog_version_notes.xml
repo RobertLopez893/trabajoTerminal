@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Animoon.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:strokeColor="@color/animoon_border_strong"
+    app:strokeWidth="2dp">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <ImageView
+                android:id="@+id/imgVersionMoonie"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:contentDescription="@string/animoon_moonie"
+                android:scaleType="fitCenter"
+                android:src="@drawable/moonie_happy" />
+
+            <TextView
+                android:id="@+id/tvVersionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="Animoon Alfa v1.4"
+                android:textAppearance="@style/TextAppearance.Animoon.Title"
+                android:textColor="@color/animoon_text_primary"
+                android:textSize="22sp" />
+
+            <TextView
+                android:id="@+id/tvVersionSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Registro de novedades y módulos completados"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+                android:textColor="@color/animoon_text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvVersionContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="start"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+                android:textColor="@color/animoon_text_secondary"
+                android:textSize="13sp"
+                android:text="🚀 MUNDO MULTIJUGADOR Y SALAS EN TIEMPO REAL\n• Sincronización WebSocket con aislamiento total por salas (Base Principal, Cráteres, Aldea Lunática y Lado Oscuro).\n• Aparición centrada y movimiento táctil en el mapa.\n• Sprites de avatares responsivos escalados a mayor tamaño.\n• Mapa interactivo para viajar entre regiones.\n\n🎮 MINIJUEGOS EDUCATIVOS CON CINEMÁTICAS\n• Minijuego 1: Reparación de Moonie con preguntas de concientización digital.\n• Minijuego 2: Desafío de reflejos y toma de decisiones de privacidad.\n• Minijuego 3: Laberinto lunar con recolección de gemas.\n• Pantallas de resultados, evaluación y retroalimentación adaptativa.\n\n🛡️ CHAT SEGURO E INTELIGENCIA ARTIFICIAL\n• Detección preventiva de acoso y grooming mediante modelo de lenguaje BETO (NLP).\n• Protocolo Safe Exit para protección inmediata de menores ante riesgos.\n• Cifrado robusto y seguridad en tránsito (Argon2id, AES-GCM, firmas digitales).\n\n👨‍👩‍👧 PANEL PARENTAL Y ADMINISTRACIÓN\n• Verificación telefónica de tutores vía SMS con Twilio.\n• Panel para padres con auditoría de incidentes y estado de cuenta.\n• Módulo de resolución y apelaciones de cuenta.\n\n👤 AVATARES Y PERFILES\n• Creación personalizada de avatares (gato, perro, zorro, conejo).\n• Inspección de perfiles propios y de otros astronautas en sala." />
+
+            <TextView
+                android:id="@+id/tvHerobrineEasterEgg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="- Removed Herobrine."
+                android:textColor="#55FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="italic" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVersionClose"
+                style="@style/Widget.Animoon.Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="¡Genial, a explorar!" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</com.google.android.material.card.MaterialCardView>

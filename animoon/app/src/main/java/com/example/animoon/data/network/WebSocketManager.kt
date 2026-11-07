@@ -17,35 +17,81 @@ object WebSocketManager : WebSocketListener() {
     private var webSocket: WebSocket? = null
     private val gson = Gson()
 
+    var isConnected: Boolean = false
+        private set
+
+    var currentZone: String = "base_principal"
+        private set
+
     // Estado observable de los jugadores en la zona actual
     private val _playersInZone = MutableStateFlow<List<PlayerState>>(emptyList())
     val playersInZone: StateFlow<List<PlayerState>> = _playersInZone.asStateFlow()
 
-    fun connect(zonaInicial: String = "base_principal") {
+    fun connect(zonaInicial: String = "base_principal", initialX: Float = 0f, initialY: Float = 0f) {
         val token = TokenManager.getToken()
         if (token.isNullOrEmpty()) {
             Log.e(TAG, "No se puede conectar al WebSocket: Token no encontrado")
             return
         }
 
+        // Si ya hay una conexión activa y saludable
+        if (webSocket != null && isConnected) {
+            if (currentZone != zonaInicial) {
+                Log.d(TAG, "Reutilizando conexión WS: cambiando de $currentZone a $zonaInicial")
+                switchZone(zonaInicial, initialX, initialY)
+            } else {
+                Log.d(TAG, "Conexión WS ya activa en la zona $zonaInicial")
+                if (initialX > 0f && initialY > 0f) {
+                    sendMessage(MoveMessage(initialX, initialY))
+                }
+            }
+            return
+        }
+
+        // Si había una conexión previa no conectada, limpiarla
+        if (webSocket != null && !isConnected) {
+            try {
+                webSocket?.cancel()
+            } catch (ignored: Exception) {}
+            webSocket = null
+        }
+
+        currentZone = zonaInicial
+        _playersInZone.value = emptyList()
+
         // Convertir http:// a ws:// y https:// a wss://
         val httpUrl = BuildConfig.API_BASE_URL
         val wsBaseUrl = httpUrl.replaceFirst("http://", "ws://").replaceFirst("https://", "wss://")
         
-        // El endpoint requiere el token en el query parameter
-        val url = "${wsBaseUrl}api/env/ws?token=$token"
+        // Incluir token, zona inicial y coordenadas de spawn en los query parameters
+        val url = "${wsBaseUrl}api/env/ws?token=$token&zona=$zonaInicial&x=$initialX&y=$initialY"
 
         val request = Request.Builder()
             .url(url)
             .build()
 
-        // Usamos el cliente ya configurado de ApiClient
         webSocket = ApiClient.okHttpClient.newWebSocket(request, this)
-        Log.d(TAG, "Intentando conectar a: $url")
+        Log.d(TAG, "Intentando conectar a WS: $url")
+    }
+
+    fun switchZone(newZone: String, x: Float = 0f, y: Float = 0f) {
+        currentZone = newZone
+        _playersInZone.value = emptyList()
+
+        if (webSocket != null && isConnected) {
+            Log.d(TAG, "Enviando ChangeZoneMessage a $newZone ($x, $y)")
+            sendMessage(ChangeZoneMessage(newZone, x, y))
+        } else {
+            Log.d(TAG, "No hay conexión abierta para cambiar de zona; iniciando connect($newZone)")
+            connect(newZone, x, y)
+        }
     }
 
     fun disconnect() {
-        webSocket?.close(1000, "User disconnected")
+        isConnected = false
+        try {
+            webSocket?.close(1000, "User disconnected")
+        } catch (ignored: Exception) {}
         webSocket = null
         _playersInZone.value = emptyList()
         Log.d(TAG, "Desconectado intencionalmente")
@@ -63,7 +109,8 @@ object WebSocketManager : WebSocketListener() {
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
         super.onOpen(webSocket, response)
-        Log.d(TAG, "Conexión WebSocket abierta")
+        isConnected = true
+        Log.d(TAG, "Conexión WebSocket abierta exitosamente en zona $currentZone")
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
@@ -76,9 +123,13 @@ object WebSocketManager : WebSocketListener() {
 
             when (type) {
                 "zone_state", "tick" -> {
-                    // Ambos mensajes traen el array de players completo visible para el usuario
-                    val msg = gson.fromJson(text, ZoneStateMessage::class.java) // Funciona para ambos porque la firma JSON es idéntica
-                    _playersInZone.value = msg.players
+                    val msg = gson.fromJson(text, ZoneStateMessage::class.java)
+                    // Filtrar estrictamente: solo aceptar ticks correspondientes a la zona actual
+                    if (msg.zona.isNullOrEmpty() || msg.zona == currentZone) {
+                        _playersInZone.value = msg.players
+                    } else {
+                        Log.d(TAG, "Ignorando tick de zona ${msg.zona} porque la zona actual es $currentZone")
+                    }
                 }
                 "player_joined" -> {
                     val msg = gson.fromJson(text, PlayerJoinedMessage::class.java)
@@ -92,7 +143,6 @@ object WebSocketManager : WebSocketListener() {
                     _playersInZone.update { current -> current + newPlayer }
                 }
                 "player_moved" -> {
-                    // Con el tick batching esto ya no se usa mucho, pero lo dejamos por compatibilidad
                     val msg = gson.fromJson(text, PlayerMovedMessage::class.java)
                     _playersInZone.update { current ->
                         current.map { player ->
@@ -122,17 +172,18 @@ object WebSocketManager : WebSocketListener() {
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
         super.onClosed(webSocket, code, reason)
         Log.d(TAG, "Conexión WebSocket cerrada: $code / $reason")
+        isConnected = false
+        this.webSocket = null
         _playersInZone.value = emptyList()
     }
 
     override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
         super.onFailure(webSocket, t, response)
         Log.e(TAG, "Error en WebSocket: ${t.message}")
+        isConnected = false
+        this.webSocket = null
         _playersInZone.value = emptyList()
 
-        // Si el código de error es 401/403 o el websocket falla por violación de política (código 1008)
-        // Podríamos intentar reconectar o lanzar SESSION_EXPIRED si es problema de auth.
-        // Por ahora, solo emitiremos sesión expirada si la respuesta HTTP original fue 401.
         if (response?.code == 401) {
             TokenManager.sessionExpiredFlow.tryEmit(Unit)
         }

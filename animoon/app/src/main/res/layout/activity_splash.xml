@@ -75,6 +75,15 @@
                 android:text="Comenzar aventura"
                 android:textSize="18sp" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVersionNotes"
+                style="@style/Widget.Animoon.HudPill"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="✨ Animoon Alfa v1.4"
+                android:textSize="13sp" />
+
         </LinearLayout>
 
     </ScrollView>
