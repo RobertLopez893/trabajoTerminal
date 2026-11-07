@@ -164,6 +164,7 @@
                             android:letterSpacing="0.25"
                             android:textColor="#302644"
                             android:textSize="24sp"
+                            android:enabled="false"
                             android:saveEnabled="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -173,7 +174,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="El código vence en 02:00"
+                        android:text="Presiona «Enviar código» para recibir el SMS de verificación"
                         android:textColor="#655879"
                         android:textSize="14sp" />
 
@@ -184,6 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:minHeight="56dp"
+                        android:enabled="false"
                         android:text="Verificar y entrar" />
 
                     <com.google.android.material.button.MaterialButton
@@ -193,8 +195,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:minHeight="48dp"
-                        android:enabled="false"
-                        android:text="Reenviar código" />
+                        android:enabled="true"
+                        android:text="Enviar código" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnParentBack"

@@ -26,6 +26,7 @@ class ParentVerificationActivity : BaseActivity() {
         private const val CODE_VALIDITY_MS = 120_000L
         private const val STATE_EXPIRES_AT = "parent_code_expires_at"
         private const val STATE_CODE_USED = "parent_code_used"
+        private const val STATE_CODE_SENT = "parent_code_sent"
     }
 
     private lateinit var codeInput: TextInputLayout
@@ -37,6 +38,7 @@ class ParentVerificationActivity : BaseActivity() {
     private var countDownTimer: CountDownTimer? = null
     private var expiresAt = 0L
     private var codeUsed = false
+    private var codeSent = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +50,9 @@ class ParentVerificationActivity : BaseActivity() {
         verifyButton = findViewById(R.id.btnParentVerify)
         resendButton = findViewById(R.id.btnParentResend)
 
-        expiresAt = savedInstanceState?.getLong(STATE_EXPIRES_AT)
-            ?: (SystemClock.elapsedRealtime() + CODE_VALIDITY_MS)
-
-        codeUsed = savedInstanceState?.getBoolean(STATE_CODE_USED)
-            ?: false
+        codeSent = savedInstanceState?.getBoolean(STATE_CODE_SENT) ?: false
+        expiresAt = savedInstanceState?.getLong(STATE_EXPIRES_AT) ?: 0L
+        codeUsed = savedInstanceState?.getBoolean(STATE_CODE_USED) ?: false
 
         codeEditText.doAfterTextChanged {
             codeInput.error = null
@@ -80,13 +80,18 @@ class ParentVerificationActivity : BaseActivity() {
                 finish()
             }
 
-        // Solicitar código inicial al cargar la pantalla
-        solicitarCodigoSms()
+        if (!codeSent) {
+            showInitialState()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        startTimer()
+        if (codeSent) {
+            startTimer()
+        } else {
+            showInitialState()
+        }
     }
 
     override fun onPause() {
@@ -96,9 +101,21 @@ class ParentVerificationActivity : BaseActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(STATE_CODE_SENT, codeSent)
         outState.putLong(STATE_EXPIRES_AT, expiresAt)
         outState.putBoolean(STATE_CODE_USED, codeUsed)
         super.onSaveInstanceState(outState)
+    }
+
+    private fun showInitialState() {
+        countDownTimer?.cancel()
+        countDownTimer = null
+        resendButton.text = "Enviar código"
+        resendButton.isEnabled = true
+        verifyButton.isEnabled = false
+        codeEditText.isEnabled = false
+        timerText.text = "Presiona \"Enviar código\" para recibir tu SMS de verificación."
+        codeInput.helperText = null
     }
 
     private fun solicitarCodigoSms() {
@@ -111,6 +128,8 @@ class ParentVerificationActivity : BaseActivity() {
             try {
                 val response = ApiClient.parentService.requestCode()
                 withContext(Dispatchers.Main) {
+                    codeSent = true
+                    resendButton.text = "Reenviar código"
                     if (response.isSuccessful && response.body() != null) {
                         val body = response.body()!!
                         expiresAt = SystemClock.elapsedRealtime() + (body.expiresInSeconds * 1000L)
@@ -130,6 +149,8 @@ class ParentVerificationActivity : BaseActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    codeSent = true
+                    resendButton.text = "Reenviar código"
                     expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
                     codeUsed = false
                     codeInput.helperText = "Ingresa tu código de verificación"
@@ -141,6 +162,11 @@ class ParentVerificationActivity : BaseActivity() {
 
     private fun startTimer() {
         countDownTimer?.cancel()
+
+        if (!codeSent) {
+            showInitialState()
+            return
+        }
 
         if (codeUsed) {
             showUsedCodeState()
@@ -156,6 +182,7 @@ class ParentVerificationActivity : BaseActivity() {
 
         verifyButton.isEnabled = true
         resendButton.isEnabled = false
+        resendButton.text = "Reenviar código"
         codeEditText.isEnabled = true
 
         updateTimerText(remaining)
@@ -196,6 +223,7 @@ class ParentVerificationActivity : BaseActivity() {
 
         timerText.text = "El código venció. Solicita uno nuevo."
         verifyButton.isEnabled = false
+        resendButton.text = "Reenviar código"
         resendButton.isEnabled = true
         codeEditText.isEnabled = false
     }
@@ -203,12 +231,13 @@ class ParentVerificationActivity : BaseActivity() {
     private fun showUsedCodeState() {
         timerText.text = "Código de verificación utilizado."
         verifyButton.isEnabled = false
+        resendButton.text = "Reenviar código"
         resendButton.isEnabled = true
         codeEditText.isEnabled = false
     }
 
     private fun verificarCodigo() {
-        if (codeUsed) return
+        if (!codeSent || codeUsed) return
 
         if (SystemClock.elapsedRealtime() >= expiresAt) {
             showExpiredCodeState()
