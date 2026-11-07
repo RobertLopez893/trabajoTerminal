@@ -137,15 +137,6 @@
                         android:textColor="#655879"
                         android:textSize="16sp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="Teléfono de muestra: •••• •••• 1234"
-                        android:textColor="#624393"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/inputParentCode"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -213,15 +204,6 @@
                         android:layout_marginTop="8dp"
                         android:minHeight="48dp"
                         android:text="Volver a Ajustes" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:gravity="center"
-                        android:text="Demostración · Código: 123456. No se enviarán SMS."
-                        android:textColor="#655879"
-                        android:textSize="13sp" />
 
                 </LinearLayout>
 

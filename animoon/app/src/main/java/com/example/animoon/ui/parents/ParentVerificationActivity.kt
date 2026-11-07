@@ -124,7 +124,7 @@ class ParentVerificationActivity : BaseActivity() {
                         // Fallback con timer si hay error transitorio
                         expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
                         codeUsed = false
-                        codeInput.helperText = "Usa tu código SMS o el código 123456"
+                        codeInput.helperText = "Ingresa el código recibido por SMS"
                         startTimer()
                     }
                 }
@@ -132,7 +132,7 @@ class ParentVerificationActivity : BaseActivity() {
                 withContext(Dispatchers.Main) {
                     expiresAt = SystemClock.elapsedRealtime() + CODE_VALIDITY_MS
                     codeUsed = false
-                    codeInput.helperText = "Modo local: Usa el código 123456"
+                    codeInput.helperText = "Ingresa tu código de verificación"
                     startTimer()
                 }
             }
