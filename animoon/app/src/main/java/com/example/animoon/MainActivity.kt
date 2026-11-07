@@ -122,10 +122,6 @@ open class MainActivity : BaseActivity() {
             }
         }
 
-        findViewById<MaterialButton>(R.id.btnVersionNotes)?.setOnClickListener {
-            com.example.animoon.ui.common.VersionNotesDialog.show(this)
-        }
-
         
         
 
