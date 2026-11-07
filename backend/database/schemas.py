@@ -51,6 +51,13 @@ class MinijuegoScoreRequest(BaseModel):
     nivel_max_alcanzado: int = Field(default=1, description="Nivel máximo superado")
 
 
+class MinijuegoStat(BaseModel):
+    minijuego_id: str
+    nombre: str
+    record_puntaje: int = 0
+    nivel_max_alcanzado: int = 1
+
+
 class ProfileResponse(BaseModel):
     id: str
     nickname: str
@@ -58,6 +65,7 @@ class ProfileResponse(BaseModel):
     color: str
     games_played: int = 0
     highest_score: int = 0
+    minigames: List[MinijuegoStat] = []
 
 
 # =========================

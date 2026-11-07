@@ -3,20 +3,18 @@ package com.example.animoon.ui.profile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import com.example.animoon.data.network.ApiClient
-import com.example.animoon.data.network.TokenManager
-
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import com.example.animoon.R
+import com.example.animoon.data.network.ApiClient
+import com.example.animoon.data.network.TokenManager
 import com.example.animoon.ui.base.BaseActivity
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileActivity : BaseActivity() {
 
@@ -25,10 +23,7 @@ class ProfileActivity : BaseActivity() {
 
         fun myProfileIntent(context: Context): Intent {
             return Intent(context, ProfileActivity::class.java)
-                .putExtra(
-                    EXTRA_USER_ID,
-                    "me"
-                )
+                .putExtra(EXTRA_USER_ID, "me")
         }
 
         fun playerProfileIntent(
@@ -44,31 +39,18 @@ class ProfileActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val backButton =
-            findViewById<MaterialButton>(R.id.btnProfileBack)
+        val backButton = findViewById<MaterialButton>(R.id.btnProfileBack)
+        val titleText = findViewById<TextView>(R.id.txtProfileTitle)
+        val nicknameText = findViewById<TextView>(R.id.txtProfileNickname)
+        val avatarImage = findViewById<ImageView>(R.id.imgProfileAvatar)
+        val avatarUnavailable = findViewById<TextView>(R.id.txtProfileAvatarUnavailable)
+        val profileCard = findViewById<View>(R.id.cardProfile)
+        val errorText = findViewById<TextView>(R.id.txtProfileError)
+        val chatButton = findViewById<MaterialButton>(R.id.btnProfileChat)
 
-        val titleText =
-            findViewById<TextView>(R.id.txtProfileTitle)
-
-        val nicknameText =
-            findViewById<TextView>(R.id.txtProfileNickname)
-
-        val avatarImage =
-            findViewById<ImageView>(R.id.imgProfileAvatar)
-
-        val avatarUnavailable =
-            findViewById<TextView>(
-                R.id.txtProfileAvatarUnavailable
-            )
-
-        val profileCard =
-            findViewById<View>(R.id.cardProfile)
-
-        val errorText =
-            findViewById<TextView>(R.id.txtProfileError)
-
-        val chatButton =
-            findViewById<MaterialButton>(R.id.btnProfileChat)
+        val txtGame1Stats = findViewById<TextView>(R.id.txtGame1Stats)
+        val txtGame2Stats = findViewById<TextView>(R.id.txtGame2Stats)
+        val txtGame3Stats = findViewById<TextView>(R.id.txtGame3Stats)
 
         backButton.setOnClickListener {
             finish()
@@ -87,10 +69,8 @@ class ProfileActivity : BaseActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful && response.body() != null) {
                         val profile = response.body()!!
-                        // Asumimos que si userId es "me", es propio, 
-                        // de lo contrario deberiamos tener el ID real guardado en TokenManager.
-                        // Para esto usaremos si el EXTRA_USER_ID era "me" (o puedes ajustar luego)
-                                                val token = com.example.animoon.data.network.TokenManager.getToken()
+                        
+                        val token = TokenManager.getToken()
                         var myId = "me"
                         if (!token.isNullOrEmpty()) {
                             try {
@@ -104,7 +84,7 @@ class ProfileActivity : BaseActivity() {
                         }
                         val isOwnProfile = (userId == "me" || userId == myId)
                         
-                        titleText.text = if (isOwnProfile) "Mi perfil" else "Perfil de jugador"
+                        titleText.text = if (isOwnProfile) "Mi perfil" else "Perfil de ${profile.nickname}"
                         nicknameText.text = profile.nickname
                         
                         val avatarDrawable = AvatarDrawableResolver.resolve(profile.species, profile.color)
@@ -118,6 +98,20 @@ class ProfileActivity : BaseActivity() {
                             avatarImage.visibility = View.GONE
                             avatarUnavailable.visibility = View.VISIBLE
                         }
+
+                        // Estadísticas de minijuegos
+                        val minigames = profile.minigames ?: emptyList()
+                        val g1 = minigames.find { it.minijuegoId == "minijuego_1" }
+                        val g2 = minigames.find { it.minijuegoId == "minijuego_2" }
+                        val g3 = minigames.find { it.minijuegoId == "minijuego_3" }
+
+                        val score1 = g1?.recordPuntaje ?: 0
+                        val score2 = g2?.recordPuntaje ?: 0
+                        val score3 = g3?.recordPuntaje ?: 0
+
+                        txtGame1Stats.text = if (score1 > 0) "Récord: $score1 pts" else "Sin puntuación aún"
+                        txtGame2Stats.text = if (score2 > 0) "Récord: $score2 pts" else "Sin puntuación aún"
+                        txtGame3Stats.text = if (score3 > 0) "Récord: $score3 pts" else "Sin puntuación aún"
                         
                         chatButton.visibility = if (isOwnProfile) View.GONE else View.VISIBLE
                         
@@ -146,4 +140,3 @@ class ProfileActivity : BaseActivity() {
         }
     }
 }
-

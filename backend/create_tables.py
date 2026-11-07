@@ -37,8 +37,8 @@ def init_db():
     print("[3] Poblando catálogos iniciales...")
     try:
         minijuegos_seed = [
-            models.Minijuego(id="minijuego_1", nombre="Reparando a Moonie", descripcion="Minijuego de trivia y conceptos básicos sobre seguridad en internet."),
-            models.Minijuego(id="minijuego_2", nombre="Minijuego 2", descripcion="Pendiente por definir."),
+            models.Minijuego(id="minijuego_1", nombre="Repara a Moonie", descripcion="Minijuego de trivia y conceptos básicos sobre seguridad en internet."),
+            models.Minijuego(id="minijuego_2", nombre="Reconecta a Moonie", descripcion="Conecta cada mensaje con sus destinos y aprende a compartir información de forma segura."),
             models.Minijuego(id="minijuego_3", nombre="Los oídos de Moonie", descripcion="Minijuego de lectura de chats: identifica cuándo Moonie debe estar tranquilo y cuándo debe ponerse en alerta.")
         ]
         
@@ -48,19 +48,16 @@ def init_db():
             if not existe:
                 db.add(m)
                 insertados += 1
+            else:
+                if existe.nombre != m.nombre or existe.descripcion != m.descripcion:
+                    existe.nombre = m.nombre
+                    existe.descripcion = m.descripcion
                 
+        db.commit()
         if insertados > 0:
-            db.commit()
             print(f"    [OK] Se insertaron {insertados} minijuegos en el catálogo.")
         else:
-            print("    [OK] El catálogo de MINIJUEGOS ya estaba poblado.")
-        semilla3 = minijuegos_seed[2]
-        juego3 = db.query(models.Minijuego).filter(models.Minijuego.id == semilla3.id).first()
-        if juego3 and (juego3.nombre != semilla3.nombre or juego3.descripcion != semilla3.descripcion):
-            juego3.nombre = semilla3.nombre
-            juego3.descripcion = semilla3.descripcion
-            db.commit()
-            print("    [OK] Se actualizó el nombre y la descripción del minijuego 3.")
+            print("    [OK] Catálogo de MINIJUEGOS verificado y actualizado.")
     except Exception as e:
         print(f"    [!] Error al poblar catálogo: {e}")
     finally:

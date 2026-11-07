@@ -245,13 +245,44 @@ def get_user_profile(user_id: str, db: Session = Depends(get_db), current_user: 
     if not usuario:
         raise HTTPException(status_code=404, detail='Usuario no encontrado')
     avatar = db.query(models.Avatar).filter(models.Avatar.usuario_id == target_id).first()
-    stat = db.query(models.UsuarioMinijuego).filter(models.UsuarioMinijuego.usuario_id == target_id).first()
+    
+    # Catálogo de los tres minijuegos con sus nombres oficiales
+    minijuegos_catalog = [
+        {"id": "minijuego_1", "nombre": "Repara a Moonie"},
+        {"id": "minijuego_2", "nombre": "Reconecta a Moonie"},
+        {"id": "minijuego_3", "nombre": "Los oídos de Moonie"},
+    ]
+    
+    stats_db = db.query(models.UsuarioMinijuego).filter(models.UsuarioMinijuego.usuario_id == target_id).all()
+    stats_by_id = {s.minijuego_id: s for s in stats_db}
+    
+    minigames_list = []
+    total_record = 0
+    total_played = 0
+    
+    for m in minijuegos_catalog:
+        stat = stats_by_id.get(m["id"])
+        record = stat.record_puntaje if stat else 0
+        nivel = stat.nivel_max_alcanzado if stat else 1
+        if stat and stat.record_puntaje > 0:
+            total_played += 1
+        if record > total_record:
+            total_record = record
+            
+        minigames_list.append(schemas.MinijuegoStat(
+            minijuego_id=m["id"],
+            nombre=m["nombre"],
+            record_puntaje=record,
+            nivel_max_alcanzado=nivel
+        ))
+    
     return schemas.ProfileResponse(
         id=usuario.id,
         nickname=usuario.nickname,
         species=avatar.avatar_config_json.get('especie', 'gato') if avatar else 'gato',
         color=avatar.avatar_config_json.get('color', 'azul') if avatar else 'azul',
-        games_played=stat.nivel_max_alcanzado if stat else 0,
-        highest_score=stat.record_puntaje if stat else 0
+        games_played=total_played,
+        highest_score=total_record,
+        minigames=minigames_list
     )
 
