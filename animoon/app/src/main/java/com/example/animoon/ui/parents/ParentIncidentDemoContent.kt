@@ -31,6 +31,7 @@ object ParentIncidentDemoContent {
     
         Una alerta requiere revisar el contexto. La ausencia de alertas no garantiza que todas las interacciones sean seguras.
     """.trimIndent()
+
     private val conversations = mapOf(
         "DEMO-003" to listOf(
             ParentIncidentMessage(
@@ -38,11 +39,11 @@ object ParentIncidentDemoContent {
                 "¿Vamos al centro de comando?", true
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "17:38",
+                "Usuario externo", "17:38",
                 "Sí, nos vemos ahí.", false
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "17:39",
+                "Usuario externo", "17:39",
                 "¿Cómo se llama tu escuela y dónde está?", false
             ),
             ParentIncidentMessage(
@@ -56,11 +57,11 @@ object ParentIncidentDemoContent {
                 "Ya terminé el minijuego.", true
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "16:13",
+                "Usuario externo", "16:13",
                 "Podemos seguir platicando.", false
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "16:14",
+                "Usuario externo", "16:14",
                 "Pásame tu número para hablar en otra aplicación.", false
             ),
             ParentIncidentMessage(
@@ -74,7 +75,7 @@ object ParentIncidentDemoContent {
                 "Voy a contarle a mi mamá lo que jugamos.", true
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "18:03",
+                "Usuario externo", "18:03",
                 "No le cuentes sobre nuestra conversación.", false
             ),
             ParentIncidentMessage(
@@ -82,7 +83,7 @@ object ParentIncidentDemoContent {
                 "¿Por qué?", true
             ),
             ParentIncidentMessage(
-                "Jugador de muestra", "18:04",
+                "Usuario externo", "18:04",
                 "Mejor que quede entre nosotros.", false
             )
         )
@@ -98,36 +99,33 @@ object ParentIncidentDemoContent {
                         "domicilio, escuela, teléfono, contraseñas y ubicación."
 
             "DEMO-002" ->
-                "Conversen sobre las invitaciones a otras aplicaciones. " +
-                        "Antes de aceptar nuevos contactos o compartir su número, " +
-                        "el menor puede pedir ayuda a una persona adulta de confianza."
+                "Acompañen la interacción y mantengan las conversaciones " +
+                        "dentro de ANIMOON, donde aplican los filtros de seguridad."
 
             "DEMO-001" ->
-                "Explícale que puede hablar contigo sobre cualquier " +
-                        "conversación que le preocupe, incluso si alguien " +
-                        "le pidió mantenerla en secreto."
+                "Refuercen la confianza para hablar sobre situaciones que " +
+                        "generen incomodidad y recuerden que no debe guardar secretos que le preocupen."
 
             else ->
-                "Repasen juntos cómo pedir ayuda cuando una conversación " +
-                        "resulte incómoda o solicite información privada."
+                "Escucha con calma, revisa el contexto y refuerza la confianza del menor."
         }
 
         return """
             1. Escucha con calma
-
-            Pregunta qué ocurrió, sin culpar ni regañar al menor. Hazle saber que puede pedir ayuda.
-
+        
+            Pregunta qué ocurrió, sin culpar ni regañar al menor. Hazle saber que puede pedirte apoyo siempre.
+        
             2. Revisa el contexto
-
-            Lee la conversación disponible y pregunta si hubo otras interacciones. Una alerta señala una situación que necesita revisión; no confirma por sí sola la intención de otra persona.
-
+        
+            Lee la conversación disponible y pregunta si hubo otras interacciones. Una alerta señala una situación que necesita revisión y contención preventiva.
+        
             3. Refuerza la prevención
-
+        
             $specificAdvice
-
+        
             4. Acompaña los siguientes pasos
-
-            Si el contacto le incomoda, ayúdale a interrumpir la conversación y a buscar apoyo de una persona adulta de confianza.
+        
+            Si la situación te preocupa, puedes reportar al usuario desde la plataforma o consultar a una persona especialista en orientación infantil.
         """.trimIndent()
     }
 }

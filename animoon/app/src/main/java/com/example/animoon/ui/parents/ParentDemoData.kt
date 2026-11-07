@@ -19,22 +19,19 @@ object ParentDemoData {
             id = "DEMO-003",
             dateLabel = "18 de octubre de 2026 · 17:40",
             title = "Solicitud de información personal",
-            summary = "En una conversación de ejemplo, otro jugador " +
-                    "solicitó datos personales del menor."
+            summary = "Otro jugador solicitó datos personales del menor en el chat."
         ),
         ParentAlert(
             id = "DEMO-002",
             dateLabel = "17 de octubre de 2026 · 16:15",
             title = "Invitación a conversar fuera de ANIMOON",
-            summary = "En una conversación de ejemplo, otro jugador " +
-                    "propuso continuar el contacto en una aplicación externa."
+            summary = "Otro jugador propuso continuar el contacto en una aplicación externa."
         ),
         ParentAlert(
             id = "DEMO-001",
             dateLabel = "16 de octubre de 2026 · 18:05",
             title = "Solicitud de mantener una conversación en secreto",
-            summary = "En una conversación de ejemplo, otro jugador " +
-                    "pidió al menor no comentar la interacción con su tutor."
+            summary = "Otro jugador pidió al menor no comentar la interacción con su tutor."
         )
     )
 }
@@ -58,28 +55,25 @@ object ParentDemoSession {
 
     fun start(token: String = "") {
         active = true
-        parentToken = token.ifBlank { "PARENT_SESSION_ACTIVE" }
-        lastInteraction = android.os.SystemClock.elapsedRealtime()
+        parentToken = token.ifBlank { null }
+        registerInteraction()
+    }
+
+    fun registerInteraction() {
+        if (active) {
+            lastInteraction = System.currentTimeMillis()
+        }
     }
 
     fun remainingMillis(): Long {
         if (!active) return 0L
-
-        val elapsed =
-            android.os.SystemClock.elapsedRealtime() - lastInteraction
-
+        val elapsed = System.currentTimeMillis() - lastInteraction
         return (INACTIVITY_LIMIT_MS - elapsed).coerceAtLeast(0L)
-    }
-
-    fun registerInteraction() {
-        if (remainingMillis() > 0L) {
-            lastInteraction = android.os.SystemClock.elapsedRealtime()
-        }
     }
 
     fun clear() {
         active = false
-        parentToken = null
         lastInteraction = 0L
+        parentToken = null
     }
 }
