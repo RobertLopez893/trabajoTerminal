@@ -125,16 +125,70 @@ class VerificationActivity : BaseActivity() {
         val apelativo = intent.getStringExtra("APELATIVO") ?: ""
         val password = intent.getStringExtra("PASSWORD") ?: ""
 
-        val intent = Intent(
-            this,
-            AvatarSelectionActivity::class.java
-        )
-        intent.putExtra("PHONE_NUMBER", phoneNumber)
-        intent.putExtra("APELATIVO", apelativo)
-        intent.putExtra("PASSWORD", password)
-        intent.putExtra("VERIFICATION_CODE", code)
+        btnVerify.isEnabled = false
+        showLoading("Verificando código de seguridad...")
 
-        startActivity(intent)
+        lifecycleScope.launch {
+            try {
+                val req = com.example.animoon.data.model.SmsVerifyRequest(
+                    telefono = phoneNumber,
+                    codigo_verificacion = code,
+                    nickname = apelativo
+                )
+                val response = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                    com.example.animoon.data.network.ApiClient.authService.verifySmsCode(req)
+                }
+
+                hideLoading()
+                btnVerify.isEnabled = true
+
+                if (response.isSuccessful) {
+                    val intent = Intent(
+                        this@VerificationActivity,
+                        AvatarSelectionActivity::class.java
+                    )
+                    intent.putExtra("PHONE_NUMBER", phoneNumber)
+                    intent.putExtra("APELATIVO", apelativo)
+                    intent.putExtra("PASSWORD", password)
+                    intent.putExtra("VERIFICATION_CODE", code)
+
+                    startActivity(intent)
+                } else {
+                    var errorDetail = "El código ingresado es incorrecto o ha expirado."
+                    try {
+                        val errorJson = response.errorBody()?.string()
+                        if (!errorJson.isNullOrBlank()) {
+                            val json = org.json.JSONObject(errorJson)
+                            if (json.has("detail")) {
+                                errorDetail = json.getString("detail")
+                            }
+                        }
+                    } catch (_: Exception) {}
+
+                    com.google.android.material.dialog.MaterialAlertDialogBuilder(this@VerificationActivity)
+                        .setTitle("Código incorrecto")
+                        .setMessage(errorDetail)
+                        .setPositiveButton("Reintentar") { _, _ ->
+                            edtCode1.text?.clear()
+                            edtCode2.text?.clear()
+                            edtCode3.text?.clear()
+                            edtCode4.text?.clear()
+                            edtCode5.text?.clear()
+                            edtCode6.text?.clear()
+                            edtCode1.requestFocus()
+                        }
+                        .show()
+                }
+            } catch (e: Exception) {
+                hideLoading()
+                btnVerify.isEnabled = true
+                Toast.makeText(
+                    this@VerificationActivity,
+                    "Error de conexión al verificar el código",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun resendCode() {

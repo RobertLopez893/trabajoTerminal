@@ -25,6 +25,11 @@ interface AuthApiService {
         @Body request: SmsSendRequest
     ): Response<DefaultResponse>
 
+    @POST("/api/auth/verificar-codigo-sms")
+    suspend fun verifySmsCode(
+        @Body request: com.example.animoon.data.model.SmsVerifyRequest
+    ): Response<DefaultResponse>
+
     @POST("/api/auth/registro-final")
     suspend fun finalRegister(
         @Body request: FinalRegisterRequest

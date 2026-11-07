@@ -17,6 +17,12 @@ class SmsSendRequest(BaseModel):
     telefono: constr(pattern=r'^\d{10}$')
 
 
+class SmsVerifyRequest(BaseModel):
+    telefono: constr(pattern=r'^\d{10}$')
+    codigo_verificacion: str = Field(..., min_length=6, max_length=6)
+    nickname: str = Field(default="", max_length=50)
+
+
 class FinalRegisterRequest(BaseModel):
     nickname: str = Field(..., min_length=3, max_length=50)
     telefono: constr(pattern=r'^\d{10}$')

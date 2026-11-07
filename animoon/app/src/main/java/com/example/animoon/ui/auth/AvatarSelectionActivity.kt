@@ -497,12 +497,24 @@ class AvatarSelectionActivity : BaseActivity() {
 
                 else {
                     hideLoading()
-                    Toast.makeText(
-                        this@AvatarSelectionActivity,
-                        "Error al completar el registro",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    var errorDetail = "No fue posible completar el registro. Por favor verifica tus datos e inténtalo nuevamente."
+                    try {
+                        val errorJson = res.errorBody()?.string()
+                        if (!errorJson.isNullOrBlank()) {
+                            val json = org.json.JSONObject(errorJson)
+                            if (json.has("detail")) {
+                                errorDetail = json.getString("detail")
+                            }
+                        }
+                    } catch (_: Exception) {}
 
+                    com.google.android.material.dialog.MaterialAlertDialogBuilder(this@AvatarSelectionActivity)
+                        .setTitle("Error al registrar cuenta")
+                        .setMessage(errorDetail)
+                        .setPositiveButton("Aceptar") { _, _ ->
+                            updateContinueButton()
+                        }
+                        .show()
 
                     updateContinueButton()
                 }
@@ -514,13 +526,14 @@ class AvatarSelectionActivity : BaseActivity() {
             // =====================================================
 
             catch (e: Exception) {
-
-                Toast.makeText(
-                    this@AvatarSelectionActivity,
-                    "Error de conexión",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+                hideLoading()
+                com.google.android.material.dialog.MaterialAlertDialogBuilder(this@AvatarSelectionActivity)
+                    .setTitle("Error de conexión")
+                    .setMessage("No se pudo conectar con el servidor. Revisa tu conexión a internet.")
+                    .setPositiveButton("Aceptar") { _, _ ->
+                        updateContinueButton()
+                    }
+                    .show()
 
                 updateContinueButton()
             }

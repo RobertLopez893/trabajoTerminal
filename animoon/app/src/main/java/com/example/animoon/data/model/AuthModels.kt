@@ -15,6 +15,12 @@ data class SmsSendRequest(
     val telefono: String
 )
 
+data class SmsVerifyRequest(
+    val telefono: String,
+    val codigo_verificacion: String,
+    val nickname: String? = null
+)
+
 data class FinalRegisterRequest(
     val nickname: String,
     val telefono: String,

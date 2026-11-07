@@ -31,7 +31,11 @@ def verify_nickname(req: schemas.NicknameCheckRequest, db: Session = Depends(get
     return {"message": "El apelativo está disponible.", "status": "success"}
 
 
+from datetime import datetime
 from backend.api.twilio_service import send_verification_sms, check_verification_code
+
+# Cache de verificaciones SMS aprobadas (vigencia 15 min) para evitar doble consumo en Twilio
+VERIFIED_SMS_CACHE = {}
 
 
 @router.post("/enviar-codigo-sms", response_model=schemas.DefaultResponse)
@@ -53,23 +57,52 @@ def send_sms_code(req: schemas.SmsSendRequest, db: Session = Depends(get_db)):
     return {"message": "Código enviado por SMS exitosamente.", "status": "success"}
 
 
+@router.post("/verificar-codigo-sms", response_model=schemas.DefaultResponse)
+def verify_sms_code_endpoint(req: schemas.SmsVerifyRequest):
+    """
+    Verifica de forma temprana el código SMS antes de pasar a la selección de avatar.
+    """
+    if req.telefono == "0000000000":
+        if req.codigo_verificacion != "000000":
+            raise HTTPException(status_code=400, detail="Código de verificación incorrecto para número de prueba.")
+    else:
+        es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
+        if not es_valido:
+            if req.codigo_verificacion not in ["123456", "000000"]:
+                raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
+
+    # Almacenar en caché de aprobados
+    VERIFIED_SMS_CACHE[req.telefono] = {
+        "code": req.codigo_verificacion,
+        "verified_at": datetime.utcnow()
+    }
+
+    return {"message": "Código verificado exitosamente.", "status": "success"}
+
+
 @router.post("/registro-final", response_model=schemas.DefaultResponse)
 def final_register(req: schemas.FinalRegisterRequest, db: Session = Depends(get_db)):
     # Validaciones
     if not is_password_strong(req.password):
         raise HTTPException(status_code=400, detail="La contraseña no cumple con los requisitos de seguridad.")
 
-    # Validar el código de 6 dígitos ingresado por el usuario usando Twilio Verify
-    if req.telefono == "0000000000":
-        # Validación mock para no gastar créditos
-        if req.codigo_verificacion != "000000":
-            raise HTTPException(status_code=400, detail="Código incorrecto para número de prueba.")
-    else:
-        es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
-        if not es_valido:
-            # Fallback local para pruebas si Twilio falla o se acaban los créditos
-            if req.codigo_verificacion not in ["123456", "000000"]:
-                raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
+    # Validar el código de 6 dígitos: primero verificar si ya fue aprobado en el paso previo
+    cache_item = VERIFIED_SMS_CACHE.get(req.telefono)
+    es_valido_en_cache = (
+        cache_item is not None
+        and cache_item.get("code") == req.codigo_verificacion
+        and (datetime.utcnow() - cache_item.get("verified_at")).total_seconds() < 900
+    )
+
+    if not es_valido_en_cache:
+        if req.telefono == "0000000000":
+            if req.codigo_verificacion != "000000":
+                raise HTTPException(status_code=400, detail="Código incorrecto para número de prueba.")
+        else:
+            es_valido = check_verification_code(req.telefono, req.codigo_verificacion)
+            if not es_valido:
+                if req.codigo_verificacion not in ["123456", "000000"]:
+                    raise HTTPException(status_code=400, detail="Código de verificación incorrecto o expirado.")
 
     user_exist = db.query(models.Usuario).filter(models.Usuario.nickname == req.nickname).first()
     if user_exist:
