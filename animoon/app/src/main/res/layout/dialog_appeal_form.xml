@@ -51,25 +51,6 @@
                 tools:text="Cuenta: @CometaAzul" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilAppealNickname"
-                style="@style/Widget.Animoon.TextInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="Apelativo de tu cuenta"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etAppealNickname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:textColor="@color/animoon_text_primary" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilAppealJustification"
                 style="@style/Widget.Animoon.TextInput"
                 android:layout_width="match_parent"

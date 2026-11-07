@@ -150,8 +150,6 @@ object BannedAccountDialog {
         formDialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         val tvAccountBadge = formDialog.findViewById<TextView>(R.id.tvAppealAccountBadge)
-        val tilNickname = formDialog.findViewById<TextInputLayout>(R.id.tilAppealNickname)
-        val etNickname = formDialog.findViewById<TextInputEditText>(R.id.etAppealNickname)
         val tilJustification = formDialog.findViewById<TextInputLayout>(R.id.tilAppealJustification)
         val etJustification = formDialog.findViewById<TextInputEditText>(R.id.etAppealJustification)
         val pbLoading = formDialog.findViewById<ProgressBar>(R.id.pbAppealLoading)
@@ -161,14 +159,14 @@ object BannedAccountDialog {
         // Limitar campo a exactamente 250 caracteres (RF-AP-04)
         etJustification.filters = arrayOf(InputFilter.LengthFilter(250))
 
-        if (!prefilledNickname.isNullOrBlank()) {
+        val effectiveNick = prefilledNickname?.trim()?.takeIf { it.isNotBlank() }
+            ?: TokenManager.getNickname()?.trim().orEmpty()
+
+        if (effectiveNick.isNotBlank()) {
             tvAccountBadge.visibility = View.VISIBLE
-            tvAccountBadge.text = "Cuenta: @$prefilledNickname"
-            tilNickname.visibility = View.GONE
-            etNickname.setText(prefilledNickname)
+            tvAccountBadge.text = "Cuenta: @$effectiveNick"
         } else {
             tvAccountBadge.visibility = View.GONE
-            tilNickname.visibility = View.VISIBLE
         }
 
         btnCancel.setOnClickListener {
@@ -176,19 +174,16 @@ object BannedAccountDialog {
         }
 
         btnSubmit.setOnClickListener {
-            val nick = if (!prefilledNickname.isNullOrBlank()) {
-                prefilledNickname.trim()
-            } else {
-                etNickname.text?.toString()?.trim().orEmpty()
-            }
-
+            val nick = effectiveNick
             val justificacion = etJustification.text?.toString()?.trim().orEmpty()
 
             if (nick.isBlank()) {
-                tilNickname.error = "Ingresa el apelativo de tu cuenta"
+                Toast.makeText(
+                    activity,
+                    "No se pudo determinar el apelativo de la cuenta. Inicia sesión para reintentar.",
+                    Toast.LENGTH_LONG
+                ).show()
                 return@setOnClickListener
-            } else {
-                tilNickname.error = null
             }
 
             if (justificacion.length < 5) {

@@ -210,8 +210,10 @@ class ChatActivity : BaseActivity() {
         if (isFinishing || isDestroyed) return
         bloquearEntradaChat()
 
-        // Matar inmediatamente la sesión local y desconectar sockets
-        com.example.animoon.data.network.TokenManager.clearToken()
+        // Obtener el nickname antes de desconectar o limpiar la sesión
+        val nicknameActual = TokenManager.getNickname()
+
+        // Desconectar sockets inmediatamente
         ChatWebSocketManager.disconnect()
         com.example.animoon.data.network.WebSocketManager.disconnect()
 
@@ -221,7 +223,7 @@ class ChatActivity : BaseActivity() {
             activity = this,
             motivo = detalle,
             isChatBan = true,
-            nickname = TokenManager.getNickname()
+            nickname = nicknameActual
         )
     }
 
