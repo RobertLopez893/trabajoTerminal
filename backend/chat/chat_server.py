@@ -78,7 +78,7 @@ def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, target_id: 
         db.close()
 
 
-def crear_bloque_en_db(chat_id: str, total_mensajes: int = 20) -> dict:
+def crear_bloque_en_db(chat_id: str, total_mensajes: int = 10) -> dict:
     """
     Registra el BloqueAnalisis en PostgreSQL con estado 'PENDIENTE'.
     """
@@ -134,9 +134,9 @@ async def broadcast_to_room(chat_id, message_dict, sender_ws):
 LUA_PUSH_AND_CUT = """
 local len = redis.call('RPUSH', KEYS[1], ARGV[1])
 redis.call('EXPIRE', KEYS[1], 900)
-if len >= 20 then
-    local msgs = redis.call('LRANGE', KEYS[1], 0, 19)
-    redis.call('LTRIM', KEYS[1], 20, -1)
+if len >= 10 then
+    local msgs = redis.call('LRANGE', KEYS[1], 0, 9)
+    redis.call('LTRIM', KEYS[1], 10, -1)
     return {len, msgs}
 else
     return {len, {}}
@@ -147,7 +147,7 @@ end
 async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, orden: int):
     """
     Agrega el mensaje en texto plano al buffer de Redis con TTL 900s.
-    Si alcanza 20 mensajes, corta el bloque atómicamente, crea registro en DB y encola en queue:beto_jobs.
+    Si alcanza 10 mensajes, corta el bloque atómicamente, crea registro en DB y encola en queue:beto_jobs.
     """
     if not redis_client:
         return
@@ -161,16 +161,16 @@ async def procesar_buffer_redis(chat_id: str, sender_id: str, plaintext: str, or
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
 
-        # Ejecución atómica en Redis: RPUSH + EXPIRE + corte de 20 mensajes en 1 sola operación
+        # Ejecución atómica en Redis: RPUSH + EXPIRE + corte de 10 mensajes en 1 sola operación
         resultado = await redis_client.eval(LUA_PUSH_AND_CUT, 1, buffer_key, json.dumps(msg_payload))
         longitud = resultado[0]
         mensajes_raw = resultado[1]
 
-        logger.info(f"[REDIS BUFFER] Sala: {chat_id} | Mensajes acumulados: {longitud}/20")
+        logger.info(f"[REDIS BUFFER] Sala: {chat_id} | Mensajes acumulados: {longitud}/10")
 
-        # Si se extrajo un bloque completo de 20 mensajes
+        # Si se extrajo un bloque completo de 10 mensajes
         if mensajes_raw:
-            logger.info(f"[REDIS BUFFER] ¡Umbral de 20 mensajes alcanzado en sala '{chat_id}'! Extrayendo bloque...")
+            logger.info(f"[REDIS BUFFER] ¡Umbral de 10 mensajes alcanzado en sala '{chat_id}'! Extrayendo bloque...")
             mensajes_bloque = [json.loads(m) for m in mensajes_raw]
 
             # Crear registro en PostgreSQL en estado PENDIENTE

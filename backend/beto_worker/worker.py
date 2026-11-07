@@ -3,7 +3,7 @@
 MICROSERVICIO CONSUMIDOR DE ANÁLISIS NLP: BETO WORKER (FASE 3)
 =============================================================================
 Este servicio es un proceso consumidor independiente que:
-1. Extrae bloques de 20 mensajes de la cola 'queue:beto_jobs' (Redis BRPOP).
+1. Extrae bloques de 10 mensajes de la cola 'queue:beto_jobs' (Redis BRPOP).
 2. Evalúa las ventanas de conversación utilizando BETO ONNX (inference.py).
 3. Actualiza el estado del 'BloqueAnalisis' en PostgreSQL operacional.
 4. Si se detecta Grooming (Nivel 2):
