@@ -72,20 +72,34 @@ open class MainActivity : BaseActivity() {
 
         val worldLayer = findViewById<ConstraintLayout>(R.id.worldLayer)
         worldLayer?.post {
-            val centerX = worldLayer.width / 2f
-            val centerY = worldLayer.height / 2f
-            if (centerX > 0 && centerY > 0) {
+            val width = worldLayer.width.toFloat()
+            val height = worldLayer.height.toFloat()
+            if (width > 0 && height > 0) {
+                // Posicionar en el centro de la zona caminable (y = 70% de la pantalla)
+                val clamped = com.example.animoon.ui.world.WorldBoundsValidator.clampPoint(currentZone, 0.50f, 0.70f)
+                val targetX = clamped.x * width
+                val targetY = clamped.y * height
                 WebSocketManager.sendMessage(
-                    com.example.animoon.data.model.MoveMessage(centerX, centerY)
+                    com.example.animoon.data.model.MoveMessage(targetX, targetY)
                 )
             }
         }
 
         worldLayer?.setOnTouchListener { _, event ->
             if (event.action == android.view.MotionEvent.ACTION_UP) {
-                com.example.animoon.data.network.WebSocketManager.sendMessage(
-                    com.example.animoon.data.model.MoveMessage(event.x, event.y)
-                )
+                val width = worldLayer.width.toFloat()
+                val height = worldLayer.height.toFloat()
+                if (width > 0 && height > 0) {
+                    val normX = (event.x / width).coerceIn(0f, 1f)
+                    val normY = (event.y / height).coerceIn(0f, 1f)
+                    // Validar y sujetar a la zona de colisión transitable
+                    val clamped = com.example.animoon.ui.world.WorldBoundsValidator.clampPoint(currentZone, normX, normY)
+                    val targetX = clamped.x * width
+                    val targetY = clamped.y * height
+                    com.example.animoon.data.network.WebSocketManager.sendMessage(
+                        com.example.animoon.data.model.MoveMessage(targetX, targetY)
+                    )
+                }
             }
             true
         }
@@ -194,7 +208,14 @@ open class MainActivity : BaseActivity() {
     // =========================================================
 
     
+    private data class PlayerMovementState(
+        var targetX: Float = Float.NaN,
+        var targetY: Float = Float.NaN,
+        var waddleAnimator: android.animation.Animator? = null
+    )
+
     private val playerViews = mutableMapOf<String, android.view.View>()
+    private val playerMoveStates = mutableMapOf<String, PlayerMovementState>()
 
     private fun renderPlayersInZone(players: List<com.example.animoon.data.model.PlayerState>) {
         val worldLayer = findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.worldLayer)
@@ -209,16 +230,28 @@ open class MainActivity : BaseActivity() {
         val currentIds = players.map { it.usuarioId }.toSet()
         val toRemove = playerViews.keys.filter { it !in currentIds }
         for (id in toRemove) {
+            playerMoveStates[id]?.waddleAnimator?.cancel()
+            playerMoveStates.remove(id)
             worldLayer.removeView(playerViews[id])
             playerViews.remove(id)
         }
 
         for (player in players) {
-            // Si las coordenadas son 0 y conocemos el tamaño de la capa, centramos por defecto
-            val px = if (player.x <= 0f && worldLayer.width > 0) worldLayer.width / 2f else player.x
-            val py = if (player.y <= 0f && worldLayer.height > 0) worldLayer.height / 2f else player.y
+            // Asegurar que las coordenadas del jugador respeten los límites del escenario
+            val rawX = if (player.x <= 0f && worldLayer.width > 0) worldLayer.width / 2f else player.x
+            val rawY = if (player.y <= 0f && worldLayer.height > 0) worldLayer.height * 0.70f else player.y
 
+            val normX = if (worldLayer.width > 0) (rawX / worldLayer.width).coerceIn(0f, 1f) else 0.5f
+            val normY = if (worldLayer.height > 0) (rawY / worldLayer.height).coerceIn(0f, 1f) else 0.7f
+            val clampedNorm = com.example.animoon.ui.world.WorldBoundsValidator.clampPoint(currentZone, normX, normY)
+            val px = if (worldLayer.width > 0) clampedNorm.x * worldLayer.width else rawX
+            val py = if (worldLayer.height > 0) clampedNorm.y * worldLayer.height else rawY
+
+            val moveState = playerMoveStates.getOrPut(player.usuarioId) { PlayerMovementState() }
+
+            var isNewPlayer = false
             val playerView = playerViews[player.usuarioId] ?: run {
+                isNewPlayer = true
                 val newView = android.widget.LinearLayout(this)
                 newView.orientation = android.widget.LinearLayout.VERTICAL
                 newView.gravity = android.view.Gravity.CENTER
@@ -256,18 +289,95 @@ open class MainActivity : BaseActivity() {
                 worldLayer.addView(newView)
                 playerViews[player.usuarioId] = newView
                 
-                // Posición inicial centrada
+                // Posición inicial directa (sin animación de caminata al aparecer)
                 newView.translationX = px - halfSpriteWidth
                 newView.translationY = py - halfSpriteHeight
+                moveState.targetX = px
+                moveState.targetY = py
                 
                 newView
             }
-            
-            // Actualizar posición con animación suave
+
+            if (isNewPlayer) {
+                continue
+            }
+
+            // Si el objetivo es el mismo al que ya está caminando, no reiniciar la animación
+            if (!moveState.targetX.isNaN() &&
+                kotlin.math.abs(moveState.targetX - px) < 3f &&
+                kotlin.math.abs(moveState.targetY - py) < 3f
+            ) {
+                continue
+            }
+
+            val currentX = playerView.translationX + halfSpriteWidth
+            val currentY = playerView.translationY + halfSpriteHeight
+            val dx = px - currentX
+            val dy = py - currentY
+            val distance = kotlin.math.hypot(dx.toDouble(), dy.toDouble()).toFloat()
+
+            val viewGroup = playerView as? android.view.ViewGroup
+            val avatarImg = viewGroup?.getChildAt(0)
+
+            // Si la distancia es mínima, posicionar directamente
+            if (distance < 6f * density) {
+                moveState.targetX = px
+                moveState.targetY = py
+                moveState.waddleAnimator?.cancel()
+                moveState.waddleAnimator = null
+                avatarImg?.rotation = 0f
+                avatarImg?.translationY = 0f
+                playerView.translationX = px - halfSpriteWidth
+                playerView.translationY = py - halfSpriteHeight
+                continue
+            }
+
+            moveState.targetX = px
+            moveState.targetY = py
+
+            // 1. Orientación horizontal: girar sprite según hacia dónde camina
+            if (dx < -4f * density) {
+                avatarImg?.scaleX = -1f // Mirar a la izquierda
+            } else if (dx > 4f * density) {
+                avatarImg?.scaleX = 1f  // Mirar a la derecha
+            }
+
+            // 2. Velocidad de caminata constante: ~220 dp por segundo
+            val speedPxPerSec = 220f * density
+            val moveDuration = ((distance / speedPxPerSec) * 1000L).toLong().coerceIn(200L, 5000L)
+
+            // 3. Animación de "pasitos / bamboleo" (Waddle y rebote rítmico)
+            moveState.waddleAnimator?.cancel()
+            if (avatarImg != null) {
+                val rotAnim = android.animation.ObjectAnimator.ofFloat(avatarImg, "rotation", -5f, 5f).apply {
+                    duration = 150
+                    repeatMode = android.animation.ValueAnimator.REVERSE
+                    repeatCount = android.animation.ValueAnimator.INFINITE
+                }
+                val hopAnim = android.animation.ObjectAnimator.ofFloat(avatarImg, "translationY", 0f, -4f * density).apply {
+                    duration = 75
+                    repeatMode = android.animation.ValueAnimator.REVERSE
+                    repeatCount = android.animation.ValueAnimator.INFINITE
+                }
+                val animSet = android.animation.AnimatorSet().apply {
+                    playTogether(rotAnim, hopAnim)
+                    start()
+                }
+                moveState.waddleAnimator = animSet
+            }
+
+            // 4. Traslado suave a velocidad constante
             playerView.animate()
                 .translationX(px - halfSpriteWidth)
                 .translationY(py - halfSpriteHeight)
-                .setDuration(150)
+                .setDuration(moveDuration)
+                .setInterpolator(android.view.animation.LinearInterpolator())
+                .withEndAction {
+                    moveState.waddleAnimator?.cancel()
+                    moveState.waddleAnimator = null
+                    avatarImg?.rotation = 0f
+                    avatarImg?.translationY = 0f
+                }
                 .start()
         }
     }
@@ -542,6 +652,15 @@ open class MainActivity : BaseActivity() {
                 }
             }
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        for (state in playerMoveStates.values) {
+            state.waddleAnimator?.cancel()
+        }
+        playerMoveStates.clear()
+        playerViews.clear()
     }
 }
 
