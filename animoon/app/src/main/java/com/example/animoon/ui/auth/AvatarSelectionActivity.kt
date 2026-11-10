@@ -514,6 +514,9 @@ class AvatarSelectionActivity : BaseActivity() {
                         .setPositiveButton("Aceptar") { _, _ ->
                             updateContinueButton()
                         }
+                        .setNegativeButton("Volver a corregir") { _, _ ->
+                            finish()
+                        }
                         .show()
 
                     updateContinueButton()

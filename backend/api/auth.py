@@ -14,12 +14,14 @@ argon_hasher = ArgonHasher()
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 
+SPECIAL_PASSWORD_CHARS = set("!@#$%^&*(),.?\":{}|<>_-+=[]\\;'/`~")
+
 def is_password_strong(password: str) -> bool:
     if len(password) < 8: return False
     if not re.search(r"[a-z]", password): return False
     if not re.search(r"[A-Z]", password): return False
     if not re.search(r"[0-9]", password): return False
-    if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password): return False
+    if not any(c in SPECIAL_PASSWORD_CHARS for c in password): return False
     return True
 
 

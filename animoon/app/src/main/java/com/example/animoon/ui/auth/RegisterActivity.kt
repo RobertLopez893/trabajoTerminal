@@ -16,11 +16,22 @@ import com.example.animoon.ui.base.BaseActivity
 import com.example.animoon.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 
 class RegisterActivity : BaseActivity() {
     override val observarSesionExpirada: Boolean = false
+
+    companion object {
+        private const val SPECIAL_CHARACTERS = "!@#$%^&*(),.?\":{}|<>_-+=[]\\;'/`~"
+    }
+
+    private lateinit var tilRegisterApelativo: TextInputLayout
+    private lateinit var tilTutorPhone: TextInputLayout
+    private lateinit var tilRegisterPassword: TextInputLayout
+    private lateinit var tilConfirmPassword: TextInputLayout
 
     private lateinit var etRegisterApelativo: TextInputEditText
     private lateinit var etTutorPhone: TextInputEditText
@@ -46,6 +57,18 @@ class RegisterActivity : BaseActivity() {
      * definidos en activity_register.xml.
      */
     private fun initViews() {
+
+        tilRegisterApelativo =
+            findViewById(R.id.tilRegisterApelativo)
+
+        tilTutorPhone =
+            findViewById(R.id.tilTutorPhone)
+
+        tilRegisterPassword =
+            findViewById(R.id.tilRegisterPassword)
+
+        tilConfirmPassword =
+            findViewById(R.id.tilConfirmPassword)
 
         etRegisterApelativo =
             findViewById(R.id.etRegisterApelativo)
@@ -167,6 +190,44 @@ class RegisterActivity : BaseActivity() {
 
             validateRegisterData()
         }
+
+        etRegisterApelativo.doAfterTextChanged {
+            tilRegisterApelativo.error = null
+        }
+
+        etTutorPhone.doAfterTextChanged {
+            tilTutorPhone.error = null
+        }
+
+        etRegisterPassword.doAfterTextChanged {
+            tilRegisterPassword.error = null
+        }
+
+        etConfirmPassword.doAfterTextChanged {
+            tilConfirmPassword.error = null
+        }
+    }
+
+    private fun validatePasswordSecurity(password: String): String? {
+        if (password.isEmpty()) {
+            return "Ingresa una contraseña"
+        }
+        if (password.length < 8) {
+            return "La contraseña debe tener al menos 8 caracteres"
+        }
+        if (!password.any { it.isUpperCase() }) {
+            return "Debe incluir al menos una letra mayúscula (A-Z)"
+        }
+        if (!password.any { it.isLowerCase() }) {
+            return "Debe incluir al menos una letra minúscula (a-z)"
+        }
+        if (!password.any { it.isDigit() }) {
+            return "Debe incluir al menos un número (0-9)"
+        }
+        if (!password.any { it in SPECIAL_CHARACTERS }) {
+            return "Debe incluir al menos un símbolo especial (ej. !@#$%*)"
+        }
+        return null
     }
 
     /**
@@ -197,13 +258,19 @@ class RegisterActivity : BaseActivity() {
                 ?.toString()
                 .orEmpty()
 
+        // Limpiar errores previos
+        tilRegisterApelativo.error = null
+        tilTutorPhone.error = null
+        tilRegisterPassword.error = null
+        tilConfirmPassword.error = null
+
         // -----------------------------------------
         // APelativo
         // -----------------------------------------
 
         if (apelativo.isEmpty()) {
 
-            etRegisterApelativo.error =
+            tilRegisterApelativo.error =
                 "Ingresa un apelativo"
 
             etRegisterApelativo.requestFocus()
@@ -217,7 +284,7 @@ class RegisterActivity : BaseActivity() {
 
         if (phone.isEmpty()) {
 
-            etTutorPhone.error =
+            tilTutorPhone.error =
                 "Ingresa el número del tutor"
 
             etTutorPhone.requestFocus()
@@ -229,7 +296,7 @@ class RegisterActivity : BaseActivity() {
             !phone.all { it.isDigit() }
         ) {
 
-            etTutorPhone.error =
+            tilTutorPhone.error =
                 "Ingresa un número de 10 dígitos"
 
             etTutorPhone.requestFocus()
@@ -238,23 +305,13 @@ class RegisterActivity : BaseActivity() {
         }
 
         // -----------------------------------------
-        // CONTRASEÑA
+        // CONTRASEÑA Y FILTROS DE SEGURIDAD
         // -----------------------------------------
 
-        if (password.isEmpty()) {
+        val passwordError = validatePasswordSecurity(password)
+        if (passwordError != null) {
 
-            etRegisterPassword.error =
-                "Ingresa una contraseña"
-
-            etRegisterPassword.requestFocus()
-
-            return
-        }
-
-        if (password.length < 8) {
-
-            etRegisterPassword.error =
-                "La contraseña debe tener al menos 8 caracteres"
+            tilRegisterPassword.error = passwordError
 
             etRegisterPassword.requestFocus()
 
@@ -267,7 +324,7 @@ class RegisterActivity : BaseActivity() {
 
         if (confirmPassword.isEmpty()) {
 
-            etConfirmPassword.error =
+            tilConfirmPassword.error =
                 "Confirma la contraseña"
 
             etConfirmPassword.requestFocus()
@@ -277,7 +334,7 @@ class RegisterActivity : BaseActivity() {
 
         if (password != confirmPassword) {
 
-            etConfirmPassword.error =
+            tilConfirmPassword.error =
                 "Las contraseñas no coinciden"
 
             etConfirmPassword.requestFocus()

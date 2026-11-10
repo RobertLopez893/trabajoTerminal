@@ -150,8 +150,10 @@
                         android:textSize="15sp" />
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilRegisterApelativo"
                         style="@style/AnimoonRegistrationInput"
                         android:hint="Apelativo del niño"
+                        app:errorEnabled="true"
                         app:helperText="Elige un apodo; evita utilizar tu nombre completo.">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -164,9 +166,11 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTutorPhone"
                         style="@style/AnimoonRegistrationInput"
                         android:hint="Teléfono del tutor"
                         app:prefixText="+52 "
+                        app:errorEnabled="true"
                         app:helperText="Enviaremos un código por SMS a este número.">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -180,9 +184,12 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilRegisterPassword"
                         style="@style/AnimoonRegistrationInput"
                         android:hint="Contraseña"
-                        app:helperText="Utiliza al menos 8 caracteres."
+                        app:errorEnabled="true"
+                        app:helperText="Mín. 8 caracteres (mayúscula, minúscula, número y símbolo)."
+                        app:helperTextEnabled="true"
                         app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -195,8 +202,10 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilConfirmPassword"
                         style="@style/AnimoonRegistrationInput"
                         android:hint="Confirmar contraseña"
+                        app:errorEnabled="true"
                         app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
