@@ -89,3 +89,27 @@ class MensajeResponse(BaseModel):
 def get_chat_history(chat_id: str, db: Session = Depends(get_db)):
     mensajes = db.query(Mensaje).filter(Mensaje.chat_id == chat_id).order_by(Mensaje.sent_at.asc()).all()
     return mensajes
+
+
+class ClearHistoryResponse(BaseModel):
+    message: str
+    chat_id: str
+    deleted_count: int
+
+
+@router.delete("/history/{chat_id}", response_model=ClearHistoryResponse)
+@router.delete("/{chat_id}", response_model=ClearHistoryResponse)
+def clear_chat_history(chat_id: str, db: Session = Depends(get_db)):
+    """
+    Elimina los mensajes de una sala de chat al salir de ella (chat efímero).
+    Garantiza que no persistan conversaciones en texto/cifrado operativo,
+    resguardando la privacidad del menor.
+    """
+    borrados = db.query(Mensaje).filter(Mensaje.chat_id == chat_id).delete(synchronize_session=False)
+    db.commit()
+    return ClearHistoryResponse(
+        message=f"Historial efímero eliminado con éxito ({borrados} mensajes).",
+        chat_id=chat_id,
+        deleted_count=borrados
+    )
+

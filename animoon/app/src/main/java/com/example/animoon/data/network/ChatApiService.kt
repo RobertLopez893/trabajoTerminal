@@ -2,6 +2,7 @@ package com.example.animoon.data.network
 
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.DELETE
 import retrofit2.http.Path
 import com.example.animoon.network.EncryptedMessagePayload
 
@@ -15,9 +16,21 @@ data class MensajeResponse(
     val orden_global: Int
 )
 
+data class ClearHistoryResponse(
+    val message: String,
+    val chat_id: String,
+    val deleted_count: Int
+)
+
 interface ChatApiService {
     @GET("/ws/chat/history/{chat_id}")
     suspend fun getChatHistory(
         @Path("chat_id") chatId: String
     ): Response<List<MensajeResponse>>
+
+    @DELETE("/ws/chat/history/{chat_id}")
+    suspend fun clearChatHistory(
+        @Path("chat_id") chatId: String
+    ): Response<ClearHistoryResponse>
 }
+

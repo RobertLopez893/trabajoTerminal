@@ -9,6 +9,7 @@ import org.json.JSONObject
 import com.example.animoon.data.network.TokenManager
 import com.example.animoon.ui.profile.AvatarDrawableResolver
 import com.example.animoon.data.network.ApiClient
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -115,33 +116,8 @@ class ChatActivity : BaseActivity() {
             withContext(Dispatchers.Main) {
                 // Conectar WebSocket despues de configurar
                 ChatWebSocketManager.connect(currentChatId, myUserId, targetUserId)
-            }
-            
-            // Cargar historial
-            try {
-                val historyRes = ApiClient.chatService.getChatHistory(currentChatId)
-                if (historyRes.isSuccessful && historyRes.body() != null) {
-                    val history = historyRes.body()!!
-                    val items = history.mapNotNull { msg ->
-                        try {
-                            val text = AESGCMCipher.decrypt(msg.contenido_cifrado_aes_gcm, msg.iv_nonce, msg.aes_gcm_tag)
-                            val esMio = (msg.emisor_usuario_id == myUserId)
-                            val avatarRes = if (esMio) avatarPropio else avatarOtro
-                            ChatItem(text, esMio, avatarRes)
-                        } catch (e: Exception) {
-                            null
-                        }
-                    }
-                    withContext(Dispatchers.Main) {
-                        adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. Diviertete con cuidado.", false, com.example.animoon.R.drawable.ic_hud_settings))
-                        items.forEach { adapter.agregar(it) }
-                        if (items.isNotEmpty()) {
-                            rvMessages.scrollToPosition(items.size)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
+                // Chat efímero: La sesión inicia en limpio sin persistir historiales de sesiones anteriores
+                adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. Diviertete con cuidado.", false, com.example.animoon.R.drawable.ic_hud_settings))
             }
         }
 
@@ -189,12 +165,26 @@ class ChatActivity : BaseActivity() {
         findViewById<MaterialButton>(R.id.btnChatSend)?.isEnabled = false
     }
 
+    private fun purgarHistorialEfimero() {
+        val chatId = currentChatId
+        if (chatId.isNotEmpty()) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    ApiClient.chatService.clearChatHistory(chatId)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
     private fun mostrarDialogoSalidaSegura(mensaje: String, motivo: String?) {
         if (isFinishing || isDestroyed) return
         bloquearEntradaChat()
 
-        // Desconectar sockets inmediatamente
+        // Desconectar sockets inmediatamente y purgar chat efímero
         ChatWebSocketManager.disconnect()
+        purgarHistorialEfimero()
 
         com.example.animoon.ui.common.SafeExitDialog.show(
             activity = this,
@@ -211,8 +201,9 @@ class ChatActivity : BaseActivity() {
         // Obtener el nickname antes de desconectar o limpiar la sesión
         val nicknameActual = TokenManager.getNickname()
 
-        // Desconectar sockets inmediatamente
+        // Desconectar sockets inmediatamente y purgar chat efímero
         ChatWebSocketManager.disconnect()
+        purgarHistorialEfimero()
         com.example.animoon.data.network.WebSocketManager.disconnect()
 
         val detalle = if (razon.isNotBlank()) razon else "Incumplimiento de las normas de convivencia y seguridad infantil."
@@ -249,5 +240,6 @@ class ChatActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         ChatWebSocketManager.disconnect()
+        purgarHistorialEfimero()
     }
 }

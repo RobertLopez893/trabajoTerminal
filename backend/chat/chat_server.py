@@ -78,6 +78,24 @@ def save_message_to_db(chat_id: str, sender_id: str, enc_data: dict, target_id: 
         db.close()
 
 
+def delete_messages_for_room_sync(chat_id: str):
+    """
+    Elimina los mensajes de la tabla Mensaje de PostgreSQL al vaciarse la sala (chat efimero).
+    Garantiza que no persistan conversaciones en texto o cifradas en la base operativa.
+    """
+    db = SessionLocal()
+    try:
+        borrados = db.query(Mensaje).filter(Mensaje.chat_id == chat_id).delete(synchronize_session=False)
+        db.commit()
+        if borrados > 0:
+            logger.info(f"[DB] Sala vacia '{chat_id}': Se eliminaron {borrados} mensajes efimeros de PostgreSQL.")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"[DB ERROR] Error al purgar mensajes efimeros de sala '{chat_id}': {e}")
+    finally:
+        db.close()
+
+
 def crear_bloque_en_db(chat_id: str, total_mensajes: int = 10) -> dict:
     """
     Registra el BloqueAnalisis en PostgreSQL con estado 'PENDIENTE'.
@@ -341,6 +359,7 @@ async def handle_client(websocket):
             chat_rooms[current_chat_id].discard(websocket)
             if not chat_rooms[current_chat_id]:
                 del chat_rooms[current_chat_id]
+                await asyncio.to_thread(delete_messages_for_room_sync, current_chat_id)
         if current_chat_id and current_chat_id in chat_user_sockets:
             if current_user_id and current_user_id in chat_user_sockets[current_chat_id]:
                 del chat_user_sockets[current_chat_id][current_user_id]
