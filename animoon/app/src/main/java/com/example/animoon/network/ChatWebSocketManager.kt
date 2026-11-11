@@ -112,6 +112,20 @@ object ChatWebSocketManager : WebSocketListener() {
         }
     }
 
+    override fun onOpen(webSocket: WebSocket, response: Response) {
+        super.onOpen(webSocket, response)
+        Log.d(TAG, "Chat WebSocket conectado. Enviando handshake JOIN a sala $currentChatId")
+        if (currentChatId.isNotEmpty() && myUserId.isNotEmpty()) {
+            val joinPayload = org.json.JSONObject().apply {
+                put("action", "JOIN")
+                put("chat_id", currentChatId)
+                put("sender_id", myUserId)
+                put("target_id", targetUserId)
+            }
+            webSocket.send(joinPayload.toString())
+        }
+    }
+
     override fun onMessage(webSocket: WebSocket, text: String) {
         super.onMessage(webSocket, text)
         Log.d(TAG, "Chat WS Recibido: $text")

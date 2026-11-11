@@ -310,21 +310,22 @@ async def handle_client(websocket):
                 chat_id = data.get("chat_id")
                 sender_id = data.get("sender_id", "Usuario_Desconocido")
                 target_id = data.get("target_id")
+                action = data.get("action")
                 enc_data = data.get("encrypted_message")
-                
-                if not chat_id or not sender_id or not enc_data:
-                    logger.warning(f"[-] Mensaje rechazado: Falta chat_id, sender_id o encrypted_message.")
+
+                if not chat_id or not sender_id:
+                    logger.warning(f"[-] Mensaje rechazado: Falta chat_id o sender_id.")
                     continue
-                
+
                 # Validar inmediatamente si el usuario está suspendido
                 if redis_client and await redis_client.sismember("banned_users", sender_id):
-                    logger.warning(f"🚫 [SEGURIDAD] Usuario suspendido '{sender_id}' intentó enviar mensaje. Cerrando socket.")
+                    logger.warning(f"🚫 [SEGURIDAD] Usuario suspendido '{sender_id}' intentó interactuar. Cerrando socket.")
                     await websocket.close(code=4003, reason="Cuenta suspendida por seguridad")
                     return
 
                 current_user_id = sender_id
 
-                # Registrar el socket en la sala si no estaba
+                # Registrar el socket en la sala de inmediato al unirse o enviar mensaje
                 if current_chat_id != chat_id:
                     if current_chat_id and current_chat_id in chat_rooms:
                         chat_rooms[current_chat_id].discard(websocket)
@@ -334,10 +335,19 @@ async def handle_client(websocket):
                         chat_rooms[chat_id] = set()
                     chat_rooms[chat_id].add(websocket)
 
-                # Registrar también en el diccionario de usuarios
+                # Registrar también en el diccionario de usuarios de la sala
                 if chat_id not in chat_user_sockets:
                     chat_user_sockets[chat_id] = {}
                 chat_user_sockets[chat_id][sender_id] = websocket
+
+                # Handshake de bienvenida a la sala (JOIN)
+                if action == "JOIN":
+                    logger.info(f"[+] Usuario '{sender_id}' unido activamente a la sala '{chat_id}'. Conexiones activas: {len(chat_rooms[chat_id])}")
+                    continue
+
+                if not enc_data:
+                    logger.warning(f"[-] Mensaje rechazado: Falta encrypted_message.")
+                    continue
 
                 logger.info(f"\n--- MENSAJE RECIBIDO (Sala: {chat_id} | Emisor: {sender_id}) ---")
                 
