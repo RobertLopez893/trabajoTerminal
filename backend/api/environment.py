@@ -1,15 +1,46 @@
 import json
+import os
 from typing import Dict, Any
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, HTTPException, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
+import redis.asyncio as aioredis
+
 from backend.database.db import get_db
 from backend.database import models
 from backend.api.jwt_manager import verify_access_token, get_token_hash
+from backend.api.deps import get_current_user
 
 router = APIRouter(prefix="/api/env", tags=["environment"])
 
 import asyncio
 from collections import defaultdict
+
+REDIS_URL = os.getenv("REDIS_URL", "redis://redis:6379/0")
+
+async def listen_chat_invitations(conn_manager):
+    """Escucha invitaciones de chat desde Redis y las envía por WS al jugador en el mundo."""
+    try:
+        r = aioredis.from_url(REDIS_URL, decode_responses=True)
+        pubsub = r.pubsub()
+        await pubsub.subscribe("channel:chat_invitations")
+        async for raw_event in pubsub.listen():
+            if raw_event["type"] == "message":
+                try:
+                    data = json.loads(raw_event["data"])
+                    target_id = data.get("target_user_id")
+                    if target_id:
+                        await conn_manager.send_chat_invitation(
+                            target_user_id=target_id,
+                            sender_id=data.get("from_user_id"),
+                            sender_nickname=data.get("from_nickname", "Un jugador"),
+                            sender_species=data.get("from_species", "gato"),
+                            sender_color=data.get("from_color", "azul")
+                        )
+                except Exception:
+                    pass
+    except Exception:
+        pass
 
 class ConnectionManager:
     def __init__(self):
@@ -21,10 +52,31 @@ class ConnectionManager:
             "lado_oscuro_de_la_luna": {}
         }
         self.loop_task = None
+        self.invitations_task = None
 
     def start_loop_if_needed(self):
         if self.loop_task is None:
             self.loop_task = asyncio.create_task(self.game_loop())
+            self.invitations_task = asyncio.create_task(listen_chat_invitations(self))
+
+    async def send_chat_invitation(self, target_user_id: str, sender_id: str, sender_nickname: str, sender_species: str, sender_color: str) -> bool:
+        """Busca al usuario objetivo en cualquiera de las zonas y le envía el evento de invitación."""
+        for zona, usuarios in self.zonas.items():
+            if target_user_id in usuarios:
+                ws = usuarios[target_user_id].get("websocket")
+                if ws:
+                    try:
+                        await ws.send_json({
+                            "type": "chat_invitation",
+                            "from_user_id": sender_id,
+                            "from_nickname": sender_nickname,
+                            "from_species": sender_species,
+                            "from_color": sender_color
+                        })
+                        return True
+                    except Exception:
+                        pass
+        return False
 
     async def game_loop(self):
         CHUNK_SIZE = 10000
@@ -243,5 +295,34 @@ def get_active_users():
                 "y": data.get("y")
             })
     return {"status": "success", "zonas": resultado}
+
+
+class ChatInviteRequest(BaseModel):
+    target_user_id: str
+
+
+@router.post("/invite-chat")
+async def invite_to_chat(
+    req: ChatInviteRequest,
+    current_user: models.Usuario = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Envía una invitación/notificación de chat a otro usuario en el mundo en tiempo real.
+    """
+    avatar_record = db.query(models.Avatar).filter(models.Avatar.usuario_id == current_user.id).first()
+    avatar_cfg = avatar_record.avatar_config_json if avatar_record else {}
+    species = avatar_cfg.get("especie", "gato")
+    color = avatar_cfg.get("color", "azul")
+
+    notified = await manager.send_chat_invitation(
+        target_user_id=req.target_user_id,
+        sender_id=current_user.id,
+        sender_nickname=current_user.nickname,
+        sender_species=species,
+        sender_color=color
+    )
+    return {"status": "success", "notified": notified}
+
 
 

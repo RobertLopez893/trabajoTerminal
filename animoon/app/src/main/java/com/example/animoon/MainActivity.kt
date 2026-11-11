@@ -112,6 +112,15 @@ open class MainActivity : BaseActivity() {
             }
         }
 
+        // Escuchar invitaciones de chat en tiempo real
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                WebSocketManager.chatInvitations.collectLatest { invite ->
+                    mostrarAlertaInvitacionChat(invite)
+                }
+            }
+        }
+
                 // MI PERFIL
         findViewById<MaterialButton>(
             R.id.btnMyProfile
@@ -654,8 +663,34 @@ open class MainActivity : BaseActivity() {
         )
     }
 
+    private var activeChatInviteDialog: android.app.Dialog? = null
+
+    private fun mostrarAlertaInvitacionChat(invite: com.example.animoon.data.network.ChatInvitation) {
+        if (isFinishing || isDestroyed) return
+        activeChatInviteDialog?.dismiss()
+
+        activeChatInviteDialog = com.example.animoon.ui.common.ChatInvitationDialog.show(
+            activity = this,
+            invitation = invite,
+            onAccept = {
+                val chatIntent = Intent(this, com.example.animoon.ui.chat.ChatActivity::class.java).apply {
+                    putExtra("EXTRA_TARGET_ID", invite.fromUserId)
+                    putExtra("EXTRA_TARGET_NICKNAME", invite.fromNickname)
+                    putExtra("EXTRA_TARGET_SPECIES", invite.fromSpecies)
+                    putExtra("EXTRA_TARGET_COLOR", invite.fromColor)
+                }
+                startActivity(chatIntent)
+            },
+            onReject = {
+                // Rechazado: el jugador sigue en el mundo normalmente
+            }
+        )
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        activeChatInviteDialog?.dismiss()
+        activeChatInviteDialog = null
         for (state in playerMoveStates.values) {
             state.waddleAnimator?.cancel()
         }

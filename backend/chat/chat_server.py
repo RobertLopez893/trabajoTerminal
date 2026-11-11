@@ -96,6 +96,24 @@ def delete_messages_for_room_sync(chat_id: str):
         db.close()
 
 
+def get_user_profile_data_sync(user_id: str):
+    """Obtiene apodo y datos de avatar para invitaciones de chat."""
+    db = SessionLocal()
+    try:
+        from backend.database.models import Usuario, Avatar
+        u = db.query(Usuario).filter(Usuario.id == user_id).first()
+        av = db.query(Avatar).filter(Avatar.usuario_id == user_id).first()
+        nick = u.nickname if u else "Un jugador"
+        cfg = av.avatar_config_json if (av and av.avatar_config_json) else {}
+        spec = cfg.get("especie", "gato")
+        col = cfg.get("color", "azul")
+        return nick, spec, col
+    except Exception:
+        return "Un jugador", "gato", "azul"
+    finally:
+        db.close()
+
+
 def crear_bloque_en_db(chat_id: str, total_mensajes: int = 10) -> dict:
     """
     Registra el BloqueAnalisis en PostgreSQL con estado 'PENDIENTE'.
@@ -349,6 +367,22 @@ async def handle_client(websocket):
 
                 # 3. Empujar al buffer de Redis (Out-of-Band, no afecta velocidad de chat)
                 await procesar_buffer_redis(chat_id, sender_id, plaintext, nuevo_orden)
+
+                # 4. Si el destinatario no esta en la sala de chat, alertarlo en el mundo virtual
+                if target_id and redis_client:
+                    sockets_en_sala = chat_user_sockets.get(chat_id, {})
+                    if target_id not in sockets_en_sala:
+                        sender_nick, sender_spec, sender_col = await asyncio.to_thread(get_user_profile_data_sync, sender_id)
+                        invitacion = {
+                            "target_user_id": target_id,
+                            "from_user_id": sender_id,
+                            "from_nickname": sender_nick,
+                            "from_species": sender_spec,
+                            "from_color": sender_col,
+                            "chat_id": chat_id
+                        }
+                        await redis_client.publish("channel:chat_invitations", json.dumps(invitacion))
+                        logger.info(f"[NOTIF] Invitacion de chat enviada a Redis para '{target_id}' de '{sender_nick}'")
                 
             except json.JSONDecodeError:
                 logger.error(f"[-] Error decodificando JSON del cliente {client_address}")

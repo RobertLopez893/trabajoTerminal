@@ -116,6 +116,14 @@ class ProfileActivity : BaseActivity() {
                         chatButton.visibility = if (isOwnProfile) View.GONE else View.VISIBLE
                         
                         chatButton.setOnClickListener {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                try {
+                                    ApiClient.envService.inviteToChat(
+                                        com.example.animoon.data.network.ChatInviteRequest(profile.id)
+                                    )
+                                } catch (e: Exception) {}
+                            }
+
                             val chatIntent = Intent(this@ProfileActivity, com.example.animoon.ui.chat.ChatActivity::class.java).apply {
                                 putExtra("EXTRA_TARGET_ID", profile.id)
                                 putExtra("EXTRA_TARGET_NICKNAME", profile.nickname)

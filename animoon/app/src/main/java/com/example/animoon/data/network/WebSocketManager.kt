@@ -8,9 +8,19 @@ import com.google.gson.JsonObject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import okhttp3.*
 import okio.ByteString
+
+data class ChatInvitation(
+    val fromUserId: String,
+    val fromNickname: String,
+    val fromSpecies: String,
+    val fromColor: String
+)
 
 object WebSocketManager : WebSocketListener() {
     private const val TAG = "WebSocketManager"
@@ -26,6 +36,10 @@ object WebSocketManager : WebSocketListener() {
     // Estado observable de los jugadores en la zona actual
     private val _playersInZone = MutableStateFlow<List<PlayerState>>(emptyList())
     val playersInZone: StateFlow<List<PlayerState>> = _playersInZone.asStateFlow()
+
+    // Flujo observable de invitaciones/notificaciones de chat entrantes en tiempo real
+    private val _chatInvitations = MutableSharedFlow<ChatInvitation>(extraBufferCapacity = 16)
+    val chatInvitations: SharedFlow<ChatInvitation> = _chatInvitations.asSharedFlow()
 
     fun connect(zonaInicial: String = "base_principal", initialX: Float = 0f, initialY: Float = 0f) {
         val token = TokenManager.getToken()
@@ -159,6 +173,14 @@ object WebSocketManager : WebSocketListener() {
                     _playersInZone.update { current ->
                         current.filter { it.usuarioId != msg.usuarioId }
                     }
+                }
+                "chat_invitation" -> {
+                    val fromUserId = jsonObject.get("from_user_id")?.asString ?: ""
+                    val fromNickname = jsonObject.get("from_nickname")?.asString ?: "Un jugador"
+                    val fromSpecies = jsonObject.get("from_species")?.asString ?: "gato"
+                    val fromColor = jsonObject.get("from_color")?.asString ?: "azul"
+                    Log.d(TAG, "Notificación de chat recibida de $fromNickname ($fromUserId)")
+                    _chatInvitations.tryEmit(ChatInvitation(fromUserId, fromNickname, fromSpecies, fromColor))
                 }
                 else -> {
                     Log.w(TAG, "Tipo de mensaje desconocido: $type")
