@@ -114,7 +114,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
-                        android:text="Escribe tu apelativo y contraseña."
+                        android:text="Escribe tu apodo y contraseña."
                         android:textColor="#655879"
                         android:textSize="15sp" />
 
@@ -124,7 +124,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:hint="Apelativo"
+                        android:hint="Apodo"
                         app:boxBackgroundMode="outline"
                         app:boxBackgroundColor="#FFFFFF">
 

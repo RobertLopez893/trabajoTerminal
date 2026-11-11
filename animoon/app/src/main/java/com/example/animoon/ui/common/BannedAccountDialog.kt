@@ -180,7 +180,7 @@ object BannedAccountDialog {
             if (nick.isBlank()) {
                 Toast.makeText(
                     activity,
-                    "No se pudo determinar el apelativo de la cuenta. Inicia sesión para reintentar.",
+                    "No se pudo determinar el apodo de la cuenta. Inicia sesión para reintentar.",
                     Toast.LENGTH_LONG
                 ).show()
                 return@setOnClickListener

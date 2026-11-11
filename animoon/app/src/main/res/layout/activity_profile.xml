@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/animoon_space_small"
                             android:gravity="center"
-                            android:text="Apelativo"
+                            android:text="Apodo"
                             android:textAppearance="@style/TextAppearance.Animoon.BodySecondary" />
 
                         <TextView

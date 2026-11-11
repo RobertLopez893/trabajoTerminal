@@ -265,13 +265,13 @@ class RegisterActivity : BaseActivity() {
         tilConfirmPassword.error = null
 
         // -----------------------------------------
-        // APelativo
+        // Apodo
         // -----------------------------------------
 
         if (apelativo.isEmpty()) {
 
             tilRegisterApelativo.error =
-                "Ingresa un apelativo"
+                "Ingresa un apodo"
 
             etRegisterApelativo.requestFocus()
 
@@ -359,16 +359,16 @@ class RegisterActivity : BaseActivity() {
 
         // Llamadas al API (Corrutina)
         btnSendSms.isEnabled = false
-        showLoading("Comprobando apelativo...")
+        showLoading("Comprobando apodo...")
         lifecycleScope.launch {
             try {
-                // 1. Verificar apelativo
+                // 1. Verificar apodo
                 val nicknameReq = com.example.animoon.data.model.NicknameCheckRequest(apelativo)
                 val nicknameRes = com.example.animoon.data.network.ApiClient.authService.verifyNickname(nicknameReq)
                 
                 if (!nicknameRes.isSuccessful) {
                     hideLoading()
-                    Toast.makeText(this@RegisterActivity, "El apelativo ya está en uso", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@RegisterActivity, "El apodo ya está en uso", Toast.LENGTH_SHORT).show()
                     btnSendSms.isEnabled = true
                     return@launch
                 }

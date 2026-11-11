@@ -151,8 +151,8 @@ class PrivacyNoticeActivity : BaseActivity() {
                     "En ANIMOON los niños juegan de forma anónima:\n\n" +
                             "• NUNCA pedimos ni guardamos el nombre real de tu hijo, su edad exacta, " +
                             "fotografías, dirección, escuela ni ubicación GPS.\n" +
-                            "• Dentro del mundo virtual, tu hijo solo será conocido por un Apelativo " +
-                            "(un apodo divertido que no debe incluir su nombre real) y su Avatar " +
+                            "• Dentro del mundo virtual, tu hijo solo será conocido por un Apodo " +
+                            "(un nombre divertido que no debe incluir su nombre real) y su Avatar " +
                             "(su personaje animal)."
             ),
             PrivacySection(

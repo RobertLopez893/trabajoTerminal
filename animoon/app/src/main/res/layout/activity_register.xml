@@ -152,7 +152,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilRegisterApelativo"
                         style="@style/AnimoonRegistrationInput"
-                        android:hint="Apelativo del niño"
+                        android:hint="Apodo del niño"
                         app:errorEnabled="true"
                         app:helperText="Elige un apodo; evita utilizar tu nombre completo.">
 
