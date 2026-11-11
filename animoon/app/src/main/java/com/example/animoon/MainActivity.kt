@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.example.animoon.data.model.PlayerState
@@ -644,10 +645,29 @@ open class MainActivity : BaseActivity() {
 
         navigatingToZone = true
 
-        WebSocketManager.switchZone(zone.id)
+        // Diálogo de carga espacial al trasladarse de escenario (~2.2 segundos)
+        val transitionDialog = Dialog(this).apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            setContentView(R.layout.dialog_zone_transition)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            findViewById<android.widget.TextView>(R.id.tvTransitionTitle)?.text = "Viajando a ${zone.title}... 🚀"
+            findViewById<android.widget.TextView>(R.id.tvTransitionSubtitle)?.text = "Preparando nuevo entorno lunar..."
+            show()
+        }
 
-        startActivity(Intent(this, destination))
-        finish()
+        lifecycleScope.launch {
+            delay(2200) // Pantalla de carga de ~2.2 segundos
+            WebSocketManager.switchZone(zone.id)
+            try {
+                if (!isFinishing && !isDestroyed) {
+                    transitionDialog.dismiss()
+                }
+            } catch (ignored: Exception) {}
+            startActivity(Intent(this@MainActivity, destination))
+            finish()
+        }
     }
 
     private fun configurarRegresoDelMundo() {
@@ -667,12 +687,45 @@ open class MainActivity : BaseActivity() {
 
     private fun mostrarAlertaInvitacionChat(invite: com.example.animoon.data.network.ChatInvitation) {
         if (isFinishing || isDestroyed) return
+
+        // Mostrar el circulito discreto en la parte superior del HUD
+        val bubble = findViewById<android.view.View>(R.id.chatBubbleNotification)
+        if (bubble != null) {
+            val imgAvatar = findViewById<android.widget.ImageView>(R.id.imgChatBubbleAvatar)
+            val avatarRes = com.example.animoon.ui.profile.AvatarDrawableResolver.resolve(invite.fromSpecies, invite.fromColor)
+                ?: R.drawable.avatar_fox_orange
+            imgAvatar?.setImageResource(avatarRes)
+
+            bubble.visibility = android.view.View.VISIBLE
+            bubble.scaleX = 0f
+            bubble.scaleY = 0f
+            bubble.alpha = 0f
+            bubble.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setDuration(350)
+                .setInterpolator(android.view.animation.OvershootInterpolator())
+                .start()
+
+            // Al tocar ("pushear") el circulito, se abre el diálogo emergente completo
+            bubble.setOnClickListener {
+                mostrarPopupInvitacion(invite, bubble)
+            }
+        } else {
+            // En caso de que la vista no exista en el layout actual, abrir diálogo directamente
+            mostrarPopupInvitacion(invite, null)
+        }
+    }
+
+    private fun mostrarPopupInvitacion(invite: com.example.animoon.data.network.ChatInvitation, bubble: android.view.View?) {
         activeChatInviteDialog?.dismiss()
 
         activeChatInviteDialog = com.example.animoon.ui.common.ChatInvitationDialog.show(
             activity = this,
             invitation = invite,
             onAccept = {
+                bubble?.visibility = android.view.View.GONE
                 val chatIntent = Intent(this, com.example.animoon.ui.chat.ChatActivity::class.java).apply {
                     putExtra("EXTRA_TARGET_ID", invite.fromUserId)
                     putExtra("EXTRA_TARGET_NICKNAME", invite.fromNickname)
@@ -682,7 +735,10 @@ open class MainActivity : BaseActivity() {
                 startActivity(chatIntent)
             },
             onReject = {
-                // Rechazado: el jugador sigue en el mundo normalmente
+                // Al rechazar, animamos y ocultamos el circulito
+                bubble?.animate()?.scaleX(0f)?.scaleY(0f)?.alpha(0f)?.setDuration(250)?.withEndAction {
+                    bubble.visibility = android.view.View.GONE
+                }?.start()
             }
         )
     }

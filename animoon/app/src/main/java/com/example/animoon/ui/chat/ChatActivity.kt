@@ -189,6 +189,10 @@ class ChatActivity : BaseActivity() {
         com.example.animoon.ui.common.SafeExitDialog.show(
             activity = this,
             onDismissAction = {
+                val intent = Intent(this, com.example.animoon.MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+                startActivity(intent)
                 finish()
             }
         )

@@ -45,6 +45,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- NOTIFICACIÓN DISCRETA DE CHAT (CIRCULITO) -->
+        <FrameLayout
+            android:id="@+id/chatBubbleNotification"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/btnDemoProfiles"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="28dp"
+                app:cardBackgroundColor="#2A1B4E"
+                app:strokeColor="#FFD166"
+                app:strokeWidth="2.5dp"
+                app:cardElevation="6dp">
+
+                <ImageView
+                    android:id="@+id/imgChatBubbleAvatar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/avatar_fox_orange" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="top|end"
+                android:background="@drawable/bg_hud_circle"
+                android:gravity="center"
+                android:text="💬"
+                android:textSize="11sp" />
+        </FrameLayout>
+
         <!-- Nombre de la zona: informativo -->
 
         <com.google.android.material.button.MaterialButton

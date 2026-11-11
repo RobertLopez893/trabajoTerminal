@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Animoon.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardBackgroundColor="#21153B"
+    app:strokeColor="#C9B6EF"
+    app:strokeWidth="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="28dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:contentDescription="Moonie viajando"
+            android:scaleType="fitCenter"
+            android:src="@drawable/moonie_happy" />
+
+        <TextView
+            android:id="@+id/tvTransitionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Viajando de escenario... 🚀"
+            android:textAppearance="@style/TextAppearance.Animoon.Title"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvTransitionSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="Preparando el nuevo entorno lunar..."
+            android:textAppearance="@style/TextAppearance.Animoon.BodySecondary"
+            android:textColor="#BDB4D0"
+            android:textSize="14sp" />
+
+        <ProgressBar
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:indeterminateTint="#FFD166" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
