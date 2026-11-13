@@ -198,7 +198,8 @@ open class BaseActivity : AppCompatActivity() {
                 sessionDialog?.dismiss()
 
                 TokenManager.clearToken()
-
+                com.example.animoon.data.network.WebSocketManager.disconnect()
+                com.example.animoon.network.ChatWebSocketManager.disconnect()
 
                 val loginIntent =
                     Intent(
@@ -224,7 +225,8 @@ open class BaseActivity : AppCompatActivity() {
         } catch (e: Exception) {
 
             TokenManager.clearToken()
-
+            com.example.animoon.data.network.WebSocketManager.disconnect()
+            com.example.animoon.network.ChatWebSocketManager.disconnect()
 
             val loginIntent =
                 Intent(

@@ -342,7 +342,19 @@ async def handle_client(websocket):
 
                 # Handshake de bienvenida a la sala (JOIN)
                 if action == "JOIN":
+                    if len(chat_rooms[chat_id]) <= 1:
+                        # Chat efímero: Si es la primera persona en unirse, purgar historial previo en PostgreSQL
+                        await asyncio.to_thread(delete_messages_for_room_sync, chat_id)
                     logger.info(f"[+] Usuario '{sender_id}' unido activamente a la sala '{chat_id}'. Conexiones activas: {len(chat_rooms[chat_id])}")
+                    continue
+
+                if action == "LEAVE":
+                    if current_chat_id and current_chat_id in chat_rooms:
+                        chat_rooms[current_chat_id].discard(websocket)
+                        if not chat_rooms[current_chat_id]:
+                            del chat_rooms[current_chat_id]
+                            await asyncio.to_thread(delete_messages_for_room_sync, current_chat_id)
+                    logger.info(f"[-] Usuario '{sender_id}' salió de la sala '{chat_id}'.")
                     continue
 
                 if not enc_data:

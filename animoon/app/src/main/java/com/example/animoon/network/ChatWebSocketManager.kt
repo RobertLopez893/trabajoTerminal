@@ -79,9 +79,22 @@ object ChatWebSocketManager : WebSocketListener() {
     }
 
     fun disconnect() {
-        webSocket?.close(1000, "User disconnected from chat")
+        try {
+            if (webSocket != null && currentChatId.isNotEmpty() && myUserId.isNotEmpty()) {
+                val leavePayload = org.json.JSONObject().apply {
+                    put("action", "LEAVE")
+                    put("chat_id", currentChatId)
+                    put("sender_id", myUserId)
+                }
+                webSocket?.send(leavePayload.toString())
+            }
+            webSocket?.close(1000, "User disconnected from chat")
+            webSocket?.cancel()
+        } catch (ignored: Exception) {}
         webSocket = null
         currentChatId = ""
+        myUserId = ""
+        targetUserId = ""
         Log.d(TAG, "Chat desconectado")
     }
 

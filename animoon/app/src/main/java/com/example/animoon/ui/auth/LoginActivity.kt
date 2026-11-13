@@ -28,6 +28,11 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        // Limpiar cualquier residuo de sesion anterior y desconectar sockets
+        com.example.animoon.data.network.TokenManager.clearToken()
+        com.example.animoon.data.network.WebSocketManager.disconnect()
+        com.example.animoon.network.ChatWebSocketManager.disconnect()
+
         val etApelativo = findViewById<TextInputEditText>(R.id.etLoginApelativo)
         val etPassword = findViewById<TextInputEditText>(R.id.etLoginPassword)
 

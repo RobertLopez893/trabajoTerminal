@@ -448,6 +448,7 @@ open class MainActivity : BaseActivity() {
                 // Borrar token local y cerrar WebSocket
                 TokenManager.clearToken()
                 com.example.animoon.data.network.WebSocketManager.disconnect()
+                com.example.animoon.network.ChatWebSocketManager.disconnect()
 
 
                 Toast.makeText(

@@ -270,6 +270,8 @@ class SettingsActivity : BaseActivity() {
             }
 
             TokenManager.clearToken()
+            com.example.animoon.data.network.WebSocketManager.disconnect()
+            com.example.animoon.network.ChatWebSocketManager.disconnect()
             LocalNotificationManager.cancelLocalNotifications(
                 this@SettingsActivity
             )

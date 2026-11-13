@@ -120,31 +120,8 @@ class ChatActivity : BaseActivity() {
                 adapter.agregar(ChatItem("Bienvenido al chat seguro de Animoon. Diviertete con cuidado.", false, com.example.animoon.R.drawable.ic_hud_settings))
             }
 
-            // Recuperar mensajes de la sesión activa (por si el compañero envió mensaje antes de que abriéramos el chat)
-            try {
-                val historyRes = ApiClient.chatService.getChatHistory(currentChatId)
-                if (historyRes.isSuccessful && historyRes.body() != null) {
-                    val history = historyRes.body()!!
-                    val items = history.mapNotNull { msg ->
-                        try {
-                            val text = AESGCMCipher.decrypt(msg.contenido_cifrado_aes_gcm, msg.iv_nonce, msg.aes_gcm_tag)
-                            val esMio = (msg.emisor_usuario_id == myUserId)
-                            val avatarRes = if (esMio) avatarPropio else avatarOtro
-                            ChatItem(text, esMio, avatarRes)
-                        } catch (e: Exception) {
-                            null
-                        }
-                    }
-                    if (items.isNotEmpty()) {
-                        withContext(Dispatchers.Main) {
-                            items.forEach { adapter.agregar(it) }
-                            rvMessages.scrollToPosition(adapter.itemCount - 1)
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            // Chat 100% Efímero: Purgar preventivamente mensajes huérfanos anteriores de la sala en backend
+            purgarHistorialEfimero()
         }
 
         // Boton de privacidad (candado)

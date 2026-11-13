@@ -33,6 +33,8 @@ object WebSocketManager : WebSocketListener() {
     var currentZone: String = "base_principal"
         private set
 
+    private var connectedToken: String? = null
+
     // Estado observable de los jugadores en la zona actual
     private val _playersInZone = MutableStateFlow<List<PlayerState>>(emptyList())
     val playersInZone: StateFlow<List<PlayerState>> = _playersInZone.asStateFlow()
@@ -45,11 +47,12 @@ object WebSocketManager : WebSocketListener() {
         val token = TokenManager.getToken()
         if (token.isNullOrEmpty()) {
             Log.e(TAG, "No se puede conectar al WebSocket: Token no encontrado")
+            disconnect()
             return
         }
 
-        // Si ya hay una conexión activa y saludable
-        if (webSocket != null && isConnected) {
+        // Si ya hay una conexión activa y saludable CON EL MISMO TOKEN de usuario
+        if (webSocket != null && isConnected && connectedToken == token) {
             if (currentZone != zonaInicial) {
                 Log.d(TAG, "Reutilizando conexión WS: cambiando de $currentZone a $zonaInicial")
                 switchZone(zonaInicial, initialX, initialY)
@@ -62,14 +65,10 @@ object WebSocketManager : WebSocketListener() {
             return
         }
 
-        // Si había una conexión previa no conectada, limpiarla
-        if (webSocket != null && !isConnected) {
-            try {
-                webSocket?.cancel()
-            } catch (ignored: Exception) {}
-            webSocket = null
-        }
+        // Si el usuario/token cambió o no está conectado, limpiar cualquier conexión previa
+        disconnect()
 
+        connectedToken = token
         currentZone = zonaInicial
         _playersInZone.value = emptyList()
 
@@ -103,8 +102,10 @@ object WebSocketManager : WebSocketListener() {
 
     fun disconnect() {
         isConnected = false
+        connectedToken = null
         try {
             webSocket?.close(1000, "User disconnected")
+            webSocket?.cancel()
         } catch (ignored: Exception) {}
         webSocket = null
         _playersInZone.value = emptyList()
@@ -195,6 +196,7 @@ object WebSocketManager : WebSocketListener() {
         super.onClosed(webSocket, code, reason)
         Log.d(TAG, "Conexión WebSocket cerrada: $code / $reason")
         isConnected = false
+        connectedToken = null
         this.webSocket = null
         _playersInZone.value = emptyList()
     }
@@ -203,6 +205,7 @@ object WebSocketManager : WebSocketListener() {
         super.onFailure(webSocket, t, response)
         Log.e(TAG, "Error en WebSocket: ${t.message}")
         isConnected = false
+        connectedToken = null
         this.webSocket = null
         _playersInZone.value = emptyList()
 
