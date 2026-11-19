@@ -240,6 +240,20 @@ def verify_parent_code(
         expires_in_seconds=900
     )
 
+def generar_resumen_para_padres(tipo_evento: Optional[str]) -> str:
+    if "GROOMING" in (tipo_evento or "").upper():
+        return (
+            "Desafortunadamente, el menor se vio afectado por una interacción "
+            "en la que se detectaron indicios de un posible intento de grooming "
+            "por parte de otro usuario. "
+            "El menor no es responsable de la conducta de esa persona."
+        )
+
+    return (
+        "Se detectó una interacción potencialmente riesgosa de otro usuario "
+        "con el menor. Revisa el detalle de la conversación y las "
+        "recomendaciones de acompañamiento."
+    )
 
 @router.get("/dashboard", response_model=schemas.ParentDashboardResponse)
 def get_parent_dashboard(
@@ -268,7 +282,7 @@ def get_parent_dashboard(
         elif "GROOMING" in (log.tipo_evento or ""):
             titulo = "Alerta de interacción riesgosa"
 
-        resumen = log.descripcion or "El modelo de seguridad BETO identificó patrones de riesgo en un chat."
+        resumen = generar_resumen_para_padres(log.tipo_evento)
         
         alert_items.append(
             schemas.ParentAlertItem(
@@ -403,7 +417,7 @@ def get_parent_incident_detail(
         id=str(alerta.id),
         dateLabel=fecha_str,
         title=titulo,
-        summary=log.descripcion or "Conversación sospechosa detectada y contenida automáticamente.",
+        summary=generar_resumen_para_padres(log.tipo_evento),
         confidence_score=score,
         fase_detectada=fase,
         messages=mensajes_formateados,
