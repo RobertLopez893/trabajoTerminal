@@ -31,14 +31,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="DEMOSTRACIÓN · Casos ficticios y decisiones locales"
-        android:textColor="#B69AF5"
-        android:textSize="13sp" />
-
     <ProgressBar
         android:id="@+id/progressAdmin"
         style="?android:attr/progressBarStyleHorizontal"
