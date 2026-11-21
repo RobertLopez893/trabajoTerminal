@@ -350,6 +350,22 @@ def get_parent_incident_detail(
                 log.tag_autenticacion
             )
 
+            # Determinar dinámicamente si Usuario A o Usuario B corresponde al menor
+            usuario_a_es_menor = False
+            if log.bloque_id_ref:
+                bloque_chat = db.query(models.BloqueAnalisis).filter(models.BloqueAnalisis.id == log.bloque_id_ref).first()
+                if bloque_chat and bloque_chat.chat_id:
+                    chat_obj = db.query(models.Chat).filter(models.Chat.id == bloque_chat.chat_id).first()
+                    if chat_obj:
+                        if chat_obj.usuario_a_id == child_user.id:
+                            usuario_a_es_menor = True
+                        elif chat_obj.usuario_b_id == child_user.id:
+                            usuario_a_es_menor = False
+                        elif chat_obj.usuario_a_id == log.usuario_id_ref:
+                            usuario_a_es_menor = False
+                        elif chat_obj.usuario_b_id == log.usuario_id_ref:
+                            usuario_a_es_menor = True
+
             fragmentos = evidencia_descifrada.split(" | ")
             t_base = log.timestamp_evento or datetime.utcnow()
             
@@ -369,15 +385,25 @@ def get_parent_incident_detail(
                 # Identificar si el mensaje proviene del menor tutelado
                 emisor_lower = emisor_raw.lower()
                 child_nick_lower = child_user.nickname.lower()
+                child_id_lower = child_user.id.lower()
+                agresor_id_lower = (log.usuario_id_ref or "").lower()
 
-                if emisor_lower == child_nick_lower or emisor_lower == child_user.id.lower() or "menor" in emisor_lower:
+                if (
+                    emisor_lower == child_nick_lower
+                    or emisor_lower == child_id_lower
+                    or "menor" in emisor_lower
+                    or "victima" in emisor_lower
+                ):
                     es_del_menor = True
-                elif any(k in emisor_lower for k in ["atacante", "agresor", "sospechoso", "depredador", "otro"]):
+                elif (
+                    any(k in emisor_lower for k in ["atacante", "agresor", "sospechoso", "depredador", "otro", "externo"])
+                    or (agresor_id_lower and emisor_lower == agresor_id_lower)
+                ):
                     es_del_menor = False
                 elif "usuario a" in emisor_lower:
-                    es_del_menor = True
+                    es_del_menor = usuario_a_es_menor
                 elif "usuario b" in emisor_lower:
-                    es_del_menor = False
+                    es_del_menor = not usuario_a_es_menor
                 else:
                     es_del_menor = (emisor_lower == child_nick_lower)
 

@@ -134,6 +134,55 @@ class TestParentAPIUnit(unittest.TestCase):
         self.assertIn("Pásame tu número", detail.messages[1].text)
         self.assertIn("Escucha con calma", detail.guidance)
 
+    def test_incident_detail_usuario_a_groomer_attribution(self):
+        # Simulación estándar BETO: Usuario A es el agresor, Usuario B es la víctima
+        raw_evidence = "Usuario A: Pásame fotos sin ropa | Usuario B: No quiero déjame en paz"
+        enc_ev = self.aes.encrypt(raw_evidence)
+
+        mock_log = LogAuditoria(
+            id=2,
+            usuario_id_ref="agresor-uuid",
+            bloque_id_ref=None,
+            tipo_evento="DETECCION_GROOMING_NIVEL_2",
+            descripcion="Grooming detectado",
+            evidencia_cifrada=enc_ev["ciphertext_b64"],
+            iv_nonce=enc_ev["nonce_b64"],
+            tag_autenticacion=enc_ev["tag_b64"],
+            hash_integridad="hash",
+            timestamp_evento=datetime.utcnow()
+        )
+
+        mock_alerta = AlertaUsuario(
+            id=11,
+            usuario_receptor_id_ref=self.mock_user.id,
+            usuario_victima_id_ref=self.mock_user.id,
+            log_id_ref=2,
+            estado="ENVIADA",
+            enviada_at=datetime.utcnow()
+        )
+
+        mock_db_audit = MagicMock()
+        mock_db_audit.query.return_value.filter.return_value.first.side_effect = [mock_alerta, mock_log]
+        mock_db = MagicMock()
+
+        detail = parents.get_parent_incident_detail(
+            alert_id=11,
+            child_user=self.mock_user,
+            db=mock_db,
+            db_audit=mock_db_audit
+        )
+
+        self.assertEqual(len(detail.messages), 2)
+        # Usuario A debe ser el agresor (NO el menor)
+        self.assertEqual(detail.messages[0].author, "Otro jugador")
+        self.assertFalse(detail.messages[0].fromChild)
+        self.assertIn("Pásame fotos", detail.messages[0].text)
+
+        # Usuario B debe ser el menor tutelado
+        self.assertEqual(detail.messages[1].author, "ExploradorLunar")
+        self.assertTrue(detail.messages[1].fromChild)
+        self.assertIn("No quiero", detail.messages[1].text)
+
 
 if __name__ == "__main__":
     unittest.main()
