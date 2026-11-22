@@ -226,7 +226,7 @@ The platform has been audited through an exhaustive quality assurance regimen:
   - Sub-second containment reaction times (< 200 ms) from threat identification to connection drop.
   - Automated 300 DPI publication charts capturing throughput, latency percentiles, and security timing.
 
-- **Field Testing with Schoolchildren (Colegio Thales de Mileto):**
+- **Field Testing with Schoolchildren (Escuela General Vicente Guerrero):**
   - Empirical usability sessions with elementary students validating vocabulary comprehension, 2D navigation intuitiveness, cybersecurity minigame engagement, and positive reception of the Moonie character.
 
 ---
