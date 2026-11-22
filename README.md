@@ -109,9 +109,9 @@ Construyendo el futuro paso a paso bajo la normativa **ISO/IEC 12207**:
 
 - [x] **Iteración 0:** Formulación, Análisis y Diseño conceptual.
 - [x] **Iteración 1:** Entrenamiento del modelo NLP y arquitectura base.
-- [ ] **Iteración 2:** Módulos de Registro, Login y Seguridad de datos (En progreso).
-- [ ] **Iteración 3:** Creación del Mundo Virtual: Chat y Minijuegos.
-- [ ] **Iteración 4:** Integración total, Pruebas y Pulido final.
+- [x] **Iteración 2:** Módulos de Registro, Login y Seguridad de datos (En progreso).
+- [x] **Iteración 3:** Creación del Mundo Virtual: Chat y Minijuegos.
+- [x] **Iteración 4:** Integración total, Pruebas y Pulido final.
 
 ---
 
