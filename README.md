@@ -255,7 +255,6 @@ Developed as a degree requirement for obtaining the title of **Computer Systems 
 ### Project Directors:
 * 🎓 **M. en C. Ariel López Rojas** — *arilopez@ipn.mx*
 * 🎓 **Dra. en C. Olga Kolesnikova** — *kolesnikova@cic.ipn.mx*  
-  *(Doctora en Ciencias de la Computación)*
 
 <br>
 
